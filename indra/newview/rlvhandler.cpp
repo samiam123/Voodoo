@@ -34,6 +34,8 @@
 #include "llviewerobjectlist.h"
 #include "llviewerregion.h"
 #include "llviewerwindow.h"
+#include "llagentcamera.h"
+#include "llagentwearables.h"
 
 #include "rlvhandler.h"
 #include "rlvinventory.h"
@@ -739,7 +741,7 @@ bool RlvHandler::redirectChatOrEmote(const std::string& strUTF8Text) const
 			LLUUID idCompositeItem;
 			if ((type = LLWearable::typeNameToType(strComposite)) != WT_INVALID)
 			{
-				idCompositeItem = gAgent.getWearableItem(type);
+				idCompositeItem = gAgentWearables.getWearableItemID(type);
 			}
 			else if ((idxAttachPt = getAttachPointIndex(strComposite, true)) != 0)
 			{
@@ -839,7 +841,7 @@ bool RlvHandler::redirectChatOrEmote(const std::string& strUTF8Text) const
 						LLViewerInventoryCategory* pFolder;
 						if ( (!isWearable(wtType)) ||
 							 ( (gAgent.getWearable(wtType)) && (!isRemovable(wtType)) ) || 
-							 ( (gRlvHandler.getCompositeInfo(gAgent.getWearableItem(wtType), NULL, &pFolder)) &&
+							 ( (gRlvHandler.getCompositeInfo(gAgentWearables.getWearableItemID(wtType), NULL, &pFolder)) &&
 							   (pFolder->getUUID() != pItem->getParentUUID()) && (!gRlvHandler.canTakeOffComposite(pFolder)) ) )
 						{
 							return false;
@@ -1153,7 +1155,7 @@ ERlvCmdRet RlvHandler::processAddRemCommand(const RlvCommand& rlvCmd)
 					// Get rid of the build floater if it's open [copy/paste from toggle_build_mode()]
 					if (gFloaterTools->getVisible())
 					{
-						gAgent.resetView(FALSE);
+						gAgentCamera.resetView(FALSE);
 						gFloaterTools->close();
 						gViewerWindow->showCursor();
 					}
@@ -1430,7 +1432,7 @@ ERlvCmdRet RlvHandler::processForceCommand(const RlvCommand& rlvCmd) const
 			{
 				VERIFY_OPTION(rlvCmd.getOption().empty());
 				LLVOAvatar* pAvatar = gAgent.getAvatarObject();
-				if ( (pAvatar) && (pAvatar->mIsSitting) && (!hasBehaviourExcept(RLV_BHVR_UNSIT, rlvCmd.getObjectID())) )
+				if ( (pAvatar) && (pAvatar->isSitting()) && (!hasBehaviourExcept(RLV_BHVR_UNSIT, rlvCmd.getObjectID())) )
 				{
 					gAgent.setControlFlags(AGENT_CONTROL_STAND_UP);
 					send_agent_update(TRUE, TRUE);	// See behaviour notes on why we have to force an agent update here
@@ -1577,7 +1579,7 @@ ERlvCmdRet RlvHandler::onForceSit(const RlvCommand& rlvCmd) const
 		return RLV_RET_FAILED_LOCK;
 	else if ( (hasBehaviour(RLV_BHVR_STANDTP)) && (gAgent.getAvatarObject()) )
 	{
-		if (gAgent.getAvatarObject()->mIsSitting)
+		if (gAgent.getAvatarObject()->isSitting())
 			return RLV_RET_FAILED_LOCK;
 		m_posSitSource = gAgent.getPositionGlobal();
 	}
@@ -1692,7 +1694,7 @@ ERlvCmdRet RlvHandler::processReplyCommand(const RlvCommand& rlvCmd) const
 			{
 				// NOTE: RLV 1.16.1 returns a NULL UUID if we're not sitting
 				LLVOAvatar* pAvatar = gAgent.getAvatarObject(); LLUUID idSitObj;
-				if ( (pAvatar) && (pAvatar->mIsSitting) )
+				if ( (pAvatar) && (pAvatar->isSitting()) )
 				{
 					// LLVOAvatar inherits from 2 classes so make sure we get the right vfptr
 					LLViewerObject* pAvatarObj = dynamic_cast<LLViewerObject*>(pAvatar), *pParent;
@@ -2002,7 +2004,7 @@ ERlvCmdRet RlvHandler::onGetOutfit(const RlvCommand& rlvCmd, std::string& strRep
 		{
 			// We never hide body parts, even if they're "locked" and we're hiding locked layers
 			// (nor do we hide a layer if the issuing object is the only one that has this layer locked)
-			bool fWorn = (gAgent.getWearable(wtRlvTypes[idxType])) && 
+			bool fWorn = (gAgentWearables.getWearable(wtRlvTypes[idxType])) && 
 				( (!RlvSettings::getHideLockedLayers()) || 
 				  (LLAssetType::AT_BODYPART == LLWearable::typeToAssetType(wtRlvTypes[idxType])) ||
 				  (RlvForceWear::isForceRemovable(wtRlvTypes[idxType], true, rlvCmd.getObjectID())) );
@@ -2030,7 +2032,7 @@ ERlvCmdRet RlvHandler::onGetOutfitNames(const RlvCommand& rlvCmd, std::string& s
 		switch (rlvCmd.getBehaviourType())
 		{
 			case RLV_BHVR_GETOUTFITNAMES:		// Every layer that's worn
-				fAdd = (gAgent.getWearable(wtType) != NULL);
+				fAdd = (gAgentWearables.getWearable(wtType) != NULL);
 				break;
 /*
 			case RLV_BHVR_GETADDOUTFITNAMES:	// Every layer that can be worn on (but ignore any locks set by the issuer)

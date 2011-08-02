@@ -41,6 +41,7 @@
 #include "llmorphview.h"
 #include "llfloatertools.h"
 #include "llagent.h"
+#include "llagentwearables.h"
 #include "lltoolmorph.h"
 #include "llvoavatar.h"
 #include "llradiogroup.h"
@@ -75,7 +76,7 @@
 #include "llviewercontrol.h"
 #include "lluictrlfactory.h"
 
-#include "llfilepicker.h"
+#include "statemachine/aifilepicker.h"
 #include "hippogridmanager.h"
 
 using namespace LLVOAvatarDefines;
@@ -587,7 +588,7 @@ void LLPanelEditWearable::setSubpart( ESubpart subpart )
 		LLVOAvatar* avatar = gAgent.getAvatarObject();
 		ESex avatar_sex = avatar->getSex();
 		LLViewerInventoryItem* item;
-		item = (LLViewerInventoryItem*)gAgent.getWearableInventoryItem(mType);
+		item = (LLViewerInventoryItem*)gAgentWearables.getWearableInventoryItem(mType);
 		U32 perm_mask = 0x0;
 		BOOL is_complete = FALSE;
 		bool can_export = false;
@@ -653,27 +654,27 @@ void LLPanelEditWearable::onBtnTakeOff( void* userdata )
 {
 	LLPanelEditWearable* self = (LLPanelEditWearable*) userdata;
 	
-	LLWearable* wearable = gAgent.getWearable( self->mType );
+	LLWearable* wearable = gAgentWearables.getWearable( self->mType );
 	if( !wearable )
 	{
 		return;
 	}
 
-	gAgent.removeWearable( self->mType );
+	gAgentWearables.removeWearable( self->mType );
 }
 
 // static
 void LLPanelEditWearable::onBtnSave( void* userdata )
 {
 	LLPanelEditWearable* self = (LLPanelEditWearable*) userdata;
-	gAgent.saveWearable( self->mType );
+	gAgentWearables.saveWearable( self->mType );
 }
 
 // static
 void LLPanelEditWearable::onBtnSaveAs( void* userdata )
 {
 	LLPanelEditWearable* self = (LLPanelEditWearable*) userdata;
-	LLWearable* wearable = gAgent.getWearable( self->getType() );
+	LLWearable* wearable = gAgentWearables.getWearable( self->getType() );
 	if( wearable )
 	{
 		LLWearableSaveAsDialog* save_as_dialog = new LLWearableSaveAsDialog( wearable->getName(), onSaveAsCommit, self );
@@ -689,7 +690,7 @@ void LLPanelEditWearable::onSaveAsCommit( LLWearableSaveAsDialog* save_as_dialog
 	LLVOAvatar* avatar = gAgent.getAvatarObject();
 	if( avatar )
 	{
-		gAgent.saveWearableAs( self->getType(), save_as_dialog->getItemName(), FALSE );
+		gAgentWearables.saveWearableAs( self->getType(), save_as_dialog->getItemName(), FALSE );
 	}
 }
 
@@ -698,7 +699,7 @@ void LLPanelEditWearable::onSaveAsCommit( LLWearableSaveAsDialog* save_as_dialog
 void LLPanelEditWearable::onBtnRevert( void* userdata )
 {
 	LLPanelEditWearable* self = (LLPanelEditWearable*) userdata;
-	gAgent.revertWearable( self->mType );
+	gAgentWearables.revertWearable( self->mType );
 }
 
 // static
@@ -737,7 +738,7 @@ bool LLPanelEditWearable::onSelectAutoWearOption(const LLSD& notification, const
 
 bool LLPanelEditWearable::textureIsInvisible(ETextureIndex te)
 {
-	if (gAgent.getWearable(mType))
+	if (gAgentWearables.getWearable(mType))
 	{
 		LLVOAvatar *avatar = gAgent.getAvatarObject();
 		if (avatar)
@@ -873,7 +874,7 @@ void LLPanelEditWearable::addTextureDropTarget( ETextureIndex te, const std::str
 	LLVOAvatar* avatar = gAgent.getAvatarObject();
 	if (avatar)
 	{
-		LLWearable* wearable = gAgent.getWearable(mType);
+		LLWearable* wearable = gAgentWearables.getWearable(mType);
 		if (wearable && mType == WT_ALPHA)
 		{
 			const LLTextureEntry* current_te = avatar->getTE(te);
@@ -903,7 +904,7 @@ void LLPanelEditWearable::onTextureCommit( LLUICtrl* ctrl, void* userdata )
 			image = LLViewerTextureManager::getFetchedTexture(IMG_DEFAULT_AVATAR);
 		}
 		self->mTextureList[ctrl->getName()] = te;
-		if (gAgent.getWearable(self->mType))
+		if (gAgentWearables.getWearable(self->mType))
 		{
 			avatar->setLocTexTE(te, image, TRUE);
 			avatar->wearableUpdated(self->mType, FALSE);
@@ -955,14 +956,14 @@ void LLPanelEditWearable::draw()
 		return;
 	}
 
-	LLWearable* wearable = gAgent.getWearable( mType );
+	LLWearable* wearable = gAgentWearables.getWearable( mType );
 	BOOL has_wearable = (wearable != NULL );
 	BOOL is_dirty = isDirty();
 	BOOL is_modifiable = FALSE;
 	BOOL is_copyable = FALSE;
 	BOOL is_complete = FALSE;
 	LLViewerInventoryItem* item;
-	item = (LLViewerInventoryItem*)gAgent.getWearableInventoryItem(mType);
+	item = (LLViewerInventoryItem*)gAgentWearables.getWearableInventoryItem(mType);
 	if(item)
 	{
 		const LLPermissions& perm = item->getPermissions();
@@ -1038,7 +1039,7 @@ void LLPanelEditWearable::draw()
 		childSetTextArg("title_loading", "[DESC]", std::string(LLWearable::typeToTypeLabel( mType )));
 			
 		std::string path;
-		const LLUUID& item_id = gAgent.getWearableItem( wearable->getType() );
+		const LLUUID& item_id = gAgentWearables.getWearableItemID( wearable->getType() );
 		gInventory.appendPath(item_id, path);
 		childSetVisible("path", TRUE);
 		childSetTextArg("path", "[PATH]", path);
@@ -1051,7 +1052,7 @@ void LLPanelEditWearable::draw()
 		childSetTextArg("title", "[DESC]", wearable->getName() );
 
 		std::string path;
-		const LLUUID& item_id = gAgent.getWearableItem( wearable->getType() );
+		const LLUUID& item_id = gAgentWearables.getWearableItemID( wearable->getType() );
 		gInventory.appendPath(item_id, path);
 		childSetVisible("path", TRUE);
 		childSetTextArg("path", "[PATH]", path);
@@ -1198,7 +1199,7 @@ void LLPanelEditWearable::setVisible(BOOL visible)
 
 BOOL LLPanelEditWearable::isDirty() const
 {
-	LLWearable* wearable = gAgent.getWearable( mType );
+	LLWearable* wearable = gAgentWearables.getWearable( mType );
 	if( !wearable )
 	{
 		return FALSE;
@@ -1223,7 +1224,7 @@ void LLPanelEditWearable::onCommitSexChange( LLUICtrl*, void* userdata )
 		return;
 	}
 
-	if( !gAgent.isWearableModifiable(self->mType))
+	if( !gAgentWearables.isWearableModifiable(self->mType))
 	{
 		return;
 	}
@@ -1850,14 +1851,20 @@ void LLFloaterCustomize::setCurrentWearableType( EWearableType type )
 // reX: new function
 void LLFloaterCustomize::onBtnImport( void* userdata )
 {
-	LLFilePicker& file_picker = LLFilePicker::instance();
-	if( !file_picker.getOpenFile( LLFilePicker::FFLOAD_XML ) )
-		{
-			// User canceled import.
-			return;
-		}
+	AIFilePicker* filepicker = AIFilePicker::create();
+	filepicker->open(FFLOAD_XML);
+	filepicker->run(boost::bind(&LLFloaterCustomize::onBtnImport_continued, filepicker));
+}
 
-	const std::string filename = file_picker.getFirstFile();
+void LLFloaterCustomize::onBtnImport_continued(AIFilePicker* filepicker)
+{
+	if (!filepicker->hasFilename())
+	{
+		// User canceled import.
+		return;
+	}
+
+	const std::string filename = filepicker->getFilename();
 
 	FILE* fp = LLFile::fopen(filename, "rb");
 
@@ -1904,8 +1911,14 @@ void LLFloaterCustomize::onBtnImport( void* userdata )
 // reX: new function
 void LLFloaterCustomize::onBtnExport( void* userdata )
 {
-	LLFilePicker& file_picker = LLFilePicker::instance();
-	if( !file_picker.getSaveFile( LLFilePicker::FFSAVE_XML ) )
+	AIFilePicker* filepicker = AIFilePicker::create();
+	filepicker->open("", FFSAVE_XML);
+	filepicker->run(boost::bind(&LLFloaterCustomize::onBtnExport_continued, filepicker));
+}
+
+void LLFloaterCustomize::onBtnExport_continued(AIFilePicker* filepicker)
+{
+	if (!filepicker->hasFilename())
 	{
 		// User canceled export.
 		return;
@@ -1914,17 +1927,17 @@ void LLFloaterCustomize::onBtnExport( void* userdata )
 	LLViewerInventoryItem* item;
 	BOOL is_modifiable;
 
-	const std::string filename = file_picker.getFirstFile();
+	const std::string filename = filepicker->getFilename();
 
 	FILE* fp = LLFile::fopen(filename, "wb");
 
 	for( S32 i=0; i < WT_COUNT; i++ )
 	{
 		is_modifiable = FALSE;
-		LLWearable* old_wearable = gAgent.getWearable((EWearableType)i);
+		LLWearable* old_wearable = gAgentWearables.getWearable((EWearableType)i);
 		if( old_wearable )
 		{
-			item = (LLViewerInventoryItem*)gAgent.getWearableInventoryItem((EWearableType)i);
+			item = (LLViewerInventoryItem*)gAgentWearables.getWearableInventoryItem((EWearableType)i);
 			if(item)
 			{
 				const LLPermissions& perm = item->getPermissions();
@@ -1945,10 +1958,10 @@ void LLFloaterCustomize::onBtnExport( void* userdata )
 	for( S32 i=0; i < WT_COUNT; i++ )
 	{
 		is_modifiable = FALSE;
-		LLWearable* old_wearable = gAgent.getWearable((EWearableType)i);
+		LLWearable* old_wearable = gAgentWearables.getWearable((EWearableType)i);
 		if( old_wearable )
 		{
-			item = (LLViewerInventoryItem*)gAgent.getWearableInventoryItem((EWearableType)i);
+			item = (LLViewerInventoryItem*)gAgentWearables.getWearableInventoryItem((EWearableType)i);
 			if(item)
 			{
 				const LLPermissions& perm = item->getPermissions();
@@ -1973,7 +1986,7 @@ void LLFloaterCustomize::onBtnExport( void* userdata )
 void LLFloaterCustomize::onBtnOk( void* userdata )
 {
 	LLFloaterCustomize* floater = (LLFloaterCustomize*) userdata;
-	gAgent.saveAllWearables();
+	gAgentWearables.saveAllWearables();
 
 	LLVOAvatar* avatar = gAgent.getAvatarObject();
 	if ( avatar )
@@ -2000,7 +2013,7 @@ void LLFloaterCustomize::onBtnMakeOutfit( void* userdata )
 
 		for( S32 i = 0; i < WT_COUNT; i++ )
 		{
-			BOOL enabled = (gAgent.getWearable( (EWearableType) i ) != NULL);
+			BOOL enabled = (gAgentWearables.getWearable( (EWearableType) i ) != NULL);
 			BOOL selected = (enabled && (WT_SHIRT <= i) && (i < WT_COUNT)); // only select clothing by default
 			if (gAgent.isTeen()
 				&& !edit_wearable_for_teens((EWearableType)i))
@@ -2027,7 +2040,7 @@ void LLFloaterCustomize::onMakeOutfitCommit( LLMakeOutfitDialog* dialog, void* u
 
 		dialog->getIncludedItems( wearables_to_include, attachments_to_include );
 
-		gAgent.makeNewOutfit( dialog->getFolderName(), wearables_to_include, attachments_to_include, dialog->getRenameClothing() );
+		gAgentWearables.makeNewOutfit( dialog->getFolderName(), wearables_to_include, attachments_to_include, dialog->getRenameClothing() );
 	}
 }
 
@@ -2497,7 +2510,6 @@ void LLFloaterCustomize::initWearablePanels()
 		panel->addSubpart("Breast Sway", SUBPART_PHYSICS_BREASTS_LEFTRIGHT, part);
 
 		part = new LLSubpart();
-		part->mSex = SEX_FEMALE;
 		part->mTargetJoint = "mTorso";
 		part->mEditGroup = "physics_belly_updown";
 		part->mTargetOffset.setVec(0.f, 0.f, -.05f);
@@ -2734,13 +2746,13 @@ bool LLFloaterCustomize::onSaveDialog(const LLSD& notification, const LLSD& resp
 	switch( option )
 	{
 	case 0:  // "Save"
-		gAgent.saveWearable( cur );
+		gAgentWearables.saveWearable( cur );
 		proceed = TRUE;
 		break;
 
 	case 1:  // "Don't Save"
 		{
-			gAgent.revertWearable( cur );
+			gAgentWearables.revertWearable( cur );
 			proceed = TRUE;
 		}
 		break;
@@ -2776,7 +2788,7 @@ void LLFloaterCustomize::fetchInventory()
 	LLUUID item_id;
 	for(S32 type = (S32)WT_SHAPE; type < (S32)WT_COUNT; ++type)
 	{
-		item_id = gAgent.getWearableItem((EWearableType)type);
+		item_id = gAgentWearables.getWearableItemID((EWearableType)type);
 		if(item_id.notNull())
 		{
 			ids.push_back(item_id);
@@ -2802,7 +2814,7 @@ void LLFloaterCustomize::updateInventoryUI()
 		panel = mWearablePanelList[i];
 		if(panel)
 		{
-			item = (LLViewerInventoryItem*)gAgent.getWearableInventoryItem(panel->getType());
+			item = (LLViewerInventoryItem*)gAgentWearables.getWearableInventoryItem(panel->getType());
 		}
 		if(item)
 		{
@@ -2829,13 +2841,6 @@ void LLFloaterCustomize::updateInventoryUI()
 		}
 	}
 
-	// OGPX : In place because Assets are not currently supported in OGPX. 
-	//    This was originally added as part of OGP9 svn branch because the viewer deeply deeply 
-	//     assumes that there *will* be an inventory there. If you never get an inventory, 
-	//     Make Outfit breaks badly. 
-	// OGPX TODO: When assets/inventory are supported, the check below can be removed.
-	// OGPX test if (!gSavedSettings.getString("CmdLineRegionURI").empty()) {all_complete = FALSE;}
-
 	childSetEnabled("Make Outfit", all_complete);
 }
 
@@ -2844,7 +2849,7 @@ void LLFloaterCustomize::updateScrollingPanelUI()
 	LLPanelEditWearable* panel = mWearablePanelList[sCurrentWearableType];
 	if(panel)
 	{
-		LLViewerInventoryItem* item = (LLViewerInventoryItem*)gAgent.getWearableInventoryItem(panel->getType());
+		LLViewerInventoryItem* item = (LLViewerInventoryItem*)gAgentWearables.getWearableInventoryItem(panel->getType());
 		if(item)
 		{
 			U32 perm_mask = item->getPermissions().getMaskOwner();

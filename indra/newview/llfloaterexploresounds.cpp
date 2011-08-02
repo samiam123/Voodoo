@@ -6,6 +6,7 @@
 #include "lluictrlfactory.h"
 #include "llscrolllistctrl.h"
 #include "llagent.h"
+#include "llagentcamera.h"
 #include "llviewerwindow.h"
 #include "llviewerobjectlist.h"
 #include "llviewerregion.h"
@@ -110,9 +111,9 @@ class LLSoundHistoryItemCompare
 public:
 	bool operator() (LLSoundHistoryItem first, LLSoundHistoryItem second)
 	{
-		if(first.mPlaying)
+		if(first.isPlaying())
 		{
-			if(second.mPlaying)
+			if(second.isPlaying())
 			{
 				return (first.mTimeStarted > second.mTimeStarted);
 			}
@@ -121,7 +122,7 @@ public:
 				return true;
 			}
 		}
-		else if(second.mPlaying)
+		else if(second.isPlaying())
 		{
 			return false;
 		}
@@ -205,17 +206,12 @@ BOOL LLFloaterExploreSounds::tick()
 
 		LLSD& playing_column = element["columns"][0];
 		playing_column["column"] = "playing";
-		if (item.mIsLooped)
+		if(item.isPlaying())
 		{
-			playing_column["value"] = " Looping";
-		}
-		else if(item.mPlaying)
-		{
-			playing_column["value"] = " Playing";
+			playing_column["value"] = item.mIsLooped ? " Looping" : " Playing";
 		}
 		else
 		{
-			
 			S32 time = (LLTimer::getElapsedSeconds() - item.mTimeStopped);
 			S32 hours = time / 3600;
 			S32 mins = time / 60;
@@ -340,9 +336,9 @@ void LLFloaterExploreSounds::handle_look_at(void* user_data)
 	cam += pos_global;
 	cam += LLVector3d(0.f, 0.f, 3.0f);
 
-	gAgent.setFocusOnAvatar(FALSE, FALSE);
-	gAgent.setCameraPosAndFocusGlobal(cam, pos_global, item.mSourceID);
-	gAgent.setCameraAnimating(FALSE);
+	gAgentCamera.setFocusOnAvatar(FALSE, FALSE);
+	gAgentCamera.setCameraPosAndFocusGlobal(cam, pos_global, item.mSourceID);
+	gAgentCamera.setCameraAnimating(FALSE);
 }
 
 // static
@@ -358,23 +354,15 @@ void LLFloaterExploreSounds::handle_stop(void* user_data)
 	{
 		LLSoundHistoryItem item = floater->getItem((*selection_iter)->getValue());
 		if(item.mID.isNull()) continue;
-		if(item.mPlaying)
+		if(item.isPlaying())
 		{
-			if(item.mAudioSource)
-			{
-				S32 type = item.mType;
-				item.mAudioSource->setType(LLAudioEngine::AUDIO_TYPE_UI);
-				if(item.mAudioSource)
-					item.mAudioSource->play(LLUUID::null);
-				if(item.mAudioSource)
-					item.mAudioSource->setType(type);
-			}
+			item.mAudioSource->play(LLUUID::null);
 		}
 	}
 }
+
 void LLFloaterExploreSounds::blacklistSound(void* user_data)
 {
-	
 	LLFloaterBlacklist::show();
 	LLFloaterExploreSounds* floater = (LLFloaterExploreSounds*)user_data;
 	LLScrollListCtrl* list = floater->getChild<LLScrollListCtrl>("sound_list");

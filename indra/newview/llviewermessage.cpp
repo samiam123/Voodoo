@@ -49,7 +49,6 @@
 #include "llchat.h"
 #include "lldbstrings.h"
 #include "lleconomy.h"
-#include "llfilepicker.h"
 #include "llfocusmgr.h"
 #include "llfollowcamparams.h"
 #include "llinstantmessage.h"
@@ -64,10 +63,11 @@
 #include "llxfermanager.h"
 #include "message.h"
 #include "sound_ids.h"
-#include "lltimer.h"
+#include "lleventtimer.h"
 #include "llmd5.h"
 
 #include "llagent.h"
+#include "llagentcamera.h"
 #include "llcallingcard.h"
 #include "llconsole.h"
 #include "llvieweraudio.h"
@@ -1746,7 +1746,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 	bool typing_init = false;
 	if( dialog == IM_TYPING_START && !is_muted )
 	{
-		if(!gIMMgr->hasSession(computed_session_id) && gSavedPerAccountSettings.getBOOL("AscentInstantMessageAnnounceIncoming"))
+		if(!gIMMgr->hasSession(computed_session_id) && gSavedSettings.getBOOL("AscentInstantMessageAnnounceIncoming"))
 		{
 			typing_init = true;
 			gIMMgr->addMessage(
@@ -1800,7 +1800,7 @@ void process_improved_im(LLMessageSystem *msg, void **user_data)
 // [/RLVa:KB]
 	{
 		if((dialog == IM_NOTHING_SPECIAL && !is_auto_response) ||
-			(dialog == IM_TYPING_START && gSavedPerAccountSettings.getBOOL("AscentInstantMessageAnnounceIncoming"))
+			(dialog == IM_TYPING_START && gSavedSettings.getBOOL("AscentInstantMessageAnnounceIncoming"))
 			)
 		{
 			BOOL has = gIMMgr->hasSession(computed_session_id);
@@ -3024,6 +3024,10 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 	LLViewerObject*	chatter;
 
 	msg->getString("ChatData", "FromName", from_name);
+    if (from_name.empty())
+    {
+        from_name = "(no name)";
+    }
 	chat.mFromName = from_name;
 	
 	msg->getUUID("ChatData", "SourceID", from_id);
@@ -3091,7 +3095,7 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 		// RELEASE-RLVa: if this code changes, remember to change the code down below as well
 		if ( (chat.mSourceType == CHAT_SOURCE_OBJECT && chat.mChatType != CHAT_TYPE_DEBUG_MSG) && 
 			 (gSavedSettings.getBOOL("EffectScriptChatParticles")) && 
-			 ((!rlv_handler_t::isEnabled()) || (CHAT_TYPE_OWNER != chat.mChatType)) )
+			 (CHAT_TYPE_OWNER != chat.mChatType) )
 // [/RLVa:KB]
 		{
 			LLPointer<LLViewerPartSourceChat> psc = new LLViewerPartSourceChat(chatter->getPositionAgent());
@@ -3425,8 +3429,9 @@ void process_chat_from_simulator(LLMessageSystem *msg, void **user_data)
 #endif //shy_mod
 // [RLVa:KB] - Alternate: Snowglobe-1.2.4 | Checked: 2009-07-10 (RLVa-1.0.0g)
 				// Copy/paste from above
-				if ( (chatter) && (chat.mSourceType == CHAT_SOURCE_OBJECT && chat.mChatType != CHAT_TYPE_DEBUG_MSG) && 
-					 (gSavedSettings.getBOOL("EffectScriptChatParticles")) )
+				if ( chatter && (chat.mSourceType == CHAT_SOURCE_OBJECT && chat.mChatType != CHAT_TYPE_DEBUG_MSG) && 
+					 (gSavedSettings.getBOOL("EffectScriptChatParticles")) && 
+					 (CHAT_TYPE_OWNER != chat.mChatType) ) 
 				{
 					LLPointer<LLViewerPartSourceChat> psc = new LLViewerPartSourceChat(chatter->getPositionAgent());
 					psc->setSourceObject(chatter);
@@ -3699,19 +3704,6 @@ void process_teleport_finish(LLMessageSystem* msg, void**)
 	effectp->setColor(LLColor4U(gAgent.getEffectColor()));
 	LLHUDManager::getInstance()->sendEffects();
 
-	// OGPX : when using agent domain, we get tp finish with ip of 0.0.0.0 and port 0. 
-	//    try bailing out early if tp state is PLACE_AVATAR (so legacy should still execute rest of this path)
-	//    not really wild about this, but it's a way to test if we can get TP working w/o receiving TP finish
-	//    TODO: can be removed *when* agent domain no longer sends tp finish
-	//
-    // OGPX TODO: see if we can nuke TELEPORT_PLACE_AVATAR state once TeleportFinish is 
-	//    completely removed from all SL and OS region code
-
-	if (gAgent.getTeleportState() == LLAgent::TELEPORT_PLACE_AVATAR )
-	{
-		llinfos << "Got teleport location message when doing agentd TP" << llendl;
-		return;
-	}
 	U32 location_id;
 	U32 sim_ip;
 	U16 sim_port;
@@ -3764,7 +3756,7 @@ void process_teleport_finish(LLMessageSystem* msg, void**)
 	gAgent.updateCamera();
 
 	// likewise make sure the camera is behind the avatar
-	gAgent.resetView(TRUE);
+	gAgentCamera.resetView(TRUE);
 	LLVector3 shift_vector = regionp->getPosRegionFromGlobal(gAgent.getRegion()->getOriginGlobal());
 	gAgent.setRegion(regionp);
 	gObjectList.shiftObjects(shift_vector);
@@ -3772,7 +3764,7 @@ void process_teleport_finish(LLMessageSystem* msg, void**)
 	if (gAgent.getAvatarObject())
 	{
 		gAgent.getAvatarObject()->clearChatText();
-		gAgent.slamLookAt(look_at);
+		gAgentCamera.slamLookAt(look_at);
 	}
 	gAgent.setPositionAgent(pos);
 	gAssetStorage->setUpstream(sim);
@@ -3780,10 +3772,18 @@ void process_teleport_finish(LLMessageSystem* msg, void**)
 */
 
 	//Reset the windlight profile to default
-	LLWLParamManager::instance()->mAnimator.mIsRunning = false;
-	LLWLParamManager::instance()->mAnimator.mUseLindenTime = false;
-	LLWLParamManager::instance()->loadPreset("Default", true);
-	LLWaterParamManager::instance()->loadPreset("Default",true);
+	//LLWLParamManager::instance()->mAnimator.mIsRunning = false;
+	//LLWLParamManager::instance()->mAnimator.mUseLindenTime = false;
+	LLWLParamSet wl_backup;
+	if(LLWLParamManager::instance()->getParamSet("LightShare-Backup", wl_backup)) {
+		LLWLParamManager::instance()->propagateParameters();
+		LLWLParamManager::instance()->removeParamSet("LightShare-Backup", true);
+	}
+	LLWaterParamSet backup;
+	if(LLWaterParamManager::instance()->getParamSet("LightShare-Backup", backup)) {
+		LLWaterParamManager::instance()->propagateParameters();
+		LLWaterParamManager::instance()->removeParamSet("LightShare-Backup", true);
+	}
 
 	// now, use the circuit info to tell simulator about us!
 	LL_INFOS("Messaging") << "process_teleport_finish() Enabling "
@@ -3896,10 +3896,8 @@ void process_agent_movement_complete(LLMessageSystem* msg, void**)
 	gCacheName->setUpstream(msg->getSender());
 	gViewerThrottle.sendToSim();
 	gViewerWindow->sendShapeToSim();
-	// if this is an AgentMovementComplete message that happened as the result of a teleport,
-	// then we need to do things like chat the URL and reset the camera.
-	bool is_teleport = (gAgent.getTeleportState() & (LLAgent::TELEPORT_MOVING | LLAgent::TELEPORT_PLACE_AVATAR)); //OGPX
-	llinfos << " is_teleport =" << is_teleport << llendl;
+
+	bool is_teleport = gAgent.getTeleportState() == LLAgent::TELEPORT_MOVING;
 
 	if( is_teleport )
 	{
@@ -3910,9 +3908,9 @@ void process_agent_movement_complete(LLMessageSystem* msg, void**)
 			look_at = LLViewerCamera::getInstance()->getAtAxis();
 		}
 		// Force the camera back onto the agent, don't animate.
-		gAgent.setFocusOnAvatar(TRUE, FALSE);
-		gAgent.slamLookAt(look_at);
-		gAgent.updateCamera();
+		gAgentCamera.setFocusOnAvatar(TRUE, FALSE);
+		gAgentCamera.slamLookAt(look_at);
+		gAgentCamera.updateCamera();
 
 		gAgent.setTeleportState( LLAgent::TELEPORT_START_ARRIVAL );
 
@@ -3935,11 +3933,6 @@ void process_agent_movement_complete(LLMessageSystem* msg, void**)
 			avatarp->clearChat();
 			avatarp->slamPosition();
 		}
-		// OGPX TODO: remove all usage of TELEPORT_PLACE_AVATAR state once Teleport UDP sequence finalized
-		if ( gAgent.getTeleportState() == LLAgent::TELEPORT_PLACE_AVATAR ) // unset TP state, agent domain is done. OGPX
-		{
-			gAgent.setTeleportState( LLAgent::TELEPORT_NONE );
-		}
 
 		// add teleport destination to the list of visited places
 		gFloaterTeleportHistory->addPendingEntry(regionp->getName(), (S16)agent_pos.mV[VX], (S16)agent_pos.mV[VY], (S16)agent_pos.mV[VZ]);
@@ -3948,6 +3941,17 @@ void process_agent_movement_complete(LLMessageSystem* msg, void**)
 	{
 		// This is likely just the initial logging in phase.
 		gAgent.setTeleportState( LLAgent::TELEPORT_NONE );
+
+		if(LLStartUp::getStartupState() < STATE_STARTED)
+		{	// This is initial log-in, not a region crossing:
+			// Set the camera looking ahead of the AV so send_agent_update() below 
+			// will report the correct location to the server.
+			LLVector3 look_at_point = look_at;
+			look_at_point = agent_pos + look_at_point.rotVec(gAgent.getQuat());
+
+			static LLVector3 up_direction(0.0f, 0.0f, 1.0f);
+			LLViewerCamera::getInstance()->lookAt(agent_pos, look_at_point, up_direction);
+		}
 	}
 
 	if ( LLTracker::isTracking(NULL) )
@@ -3967,7 +3971,7 @@ void process_agent_movement_complete(LLMessageSystem* msg, void**)
 			global_agent_pos[1] += y;
 			look_at = (LLVector3)beacon_pos - global_agent_pos;
 			look_at.normVec();
-			gAgent.slamLookAt(look_at);
+			gAgentCamera.slamLookAt(look_at);
 		}
 	}
 
@@ -4135,7 +4139,7 @@ void send_agent_update(BOOL force_send, BOOL send_reliable)
 	LLQuaternion body_rotation = gAgent.getFrameAgent().getQuaternion();
 	LLQuaternion head_rotation = gAgent.getHeadRotation();
 
-	camera_pos_agent = gAgent.getCameraPositionAgent();
+	camera_pos_agent = gAgentCamera.getCameraPositionAgent();
 
 	render_state = gAgent.getRenderState();
 
@@ -4262,7 +4266,7 @@ void send_agent_update(BOOL force_send, BOOL send_reliable)
 		msg->addVector3Fast(_PREHASH_CameraAtAxis, LLViewerCamera::getInstance()->getAtAxis());
 		msg->addVector3Fast(_PREHASH_CameraLeftAxis, LLViewerCamera::getInstance()->getLeftAxis());
 		msg->addVector3Fast(_PREHASH_CameraUpAxis, LLViewerCamera::getInstance()->getUpAxis());
-		msg->addF32Fast(_PREHASH_Far, gAgent.mDrawDistance);
+		msg->addF32Fast(_PREHASH_Far, gAgentCamera.mDrawDistance);
 		
 		msg->addU32Fast(_PREHASH_ControlFlags, control_flags);
 
@@ -4325,7 +4329,6 @@ void process_object_update(LLMessageSystem *mesgsys, void **user_data)
 
 	// Update the object...
 	gObjectList.processObjectUpdate(mesgsys, user_data, OUT_FULL);
-	stop_glerror();
 }
 
 void process_compressed_object_update(LLMessageSystem *mesgsys, void **user_data)
@@ -4343,7 +4346,6 @@ void process_compressed_object_update(LLMessageSystem *mesgsys, void **user_data
 
 	// Update the object...
 	gObjectList.processCompressedObjectUpdate(mesgsys, user_data, OUT_FULL_COMPRESSED);
-	stop_glerror();
 }
 
 void process_cached_object_update(LLMessageSystem *mesgsys, void **user_data)
@@ -4361,7 +4363,6 @@ void process_cached_object_update(LLMessageSystem *mesgsys, void **user_data)
 
 	// Update the object...
 	gObjectList.processCachedObjectUpdate(mesgsys, user_data, OUT_FULL_CACHED);
-	stop_glerror();
 }
 
 
@@ -4924,7 +4925,7 @@ void process_camera_constraint(LLMessageSystem *mesgsys, void **user_data)
 	LLVector4 cameraCollidePlane;
 	mesgsys->getVector4Fast(_PREHASH_CameraCollidePlane, _PREHASH_Plane, cameraCollidePlane);
 
-	gAgent.setCameraCollidePlane(cameraCollidePlane);
+	gAgentCamera.setCameraCollidePlane(cameraCollidePlane);
 }
 
 void near_sit_object(BOOL success, void *data)
@@ -4961,16 +4962,16 @@ void process_avatar_sit_response(LLMessageSystem *mesgsys, void **user_data)
 
 	if (avatar && dist_vec_squared(camera_eye, camera_at) > 0.0001f)
 	{
-		gAgent.setSitCamera(sitObjectID, camera_eye, camera_at);
+		gAgentCamera.setSitCamera(sitObjectID, camera_eye, camera_at);
 	}
 	
-	gAgent.mForceMouselook = force_mouselook;
+	gAgentCamera.setForceMouselook(force_mouselook);
 
 	LLViewerObject* object = gObjectList.findObject(sitObjectID);
 	if (object)
 	{
 		LLVector3 sit_spot = object->getPositionAgent() + (sitPosition * object->getRotation());
-		if (!use_autopilot || (avatar && avatar->mIsSitting && avatar->getRoot() == object->getRoot()))
+		if (!use_autopilot || (avatar && avatar->isSitting() && avatar->getRoot() == object->getRoot()))
 		{
 			//we're already sitting on this object, so don't autopilot
 		}
@@ -5280,6 +5281,10 @@ void process_money_balance_reply( LLMessageSystem* msg, void** )
 		LLSD args;
 		args["MESSAGE"] = desc;
 		LLNotifications::instance().add("SystemMessage", args);
+
+		// Also send notification to chat -- MC
+		LLChat chat(desc);
+		LLFloaterChat::addChat(desc);
 
 		// Once the 'recent' container gets large enough, chop some
 		// off the beginning.
@@ -5960,9 +5965,9 @@ void container_inventory_arrived(LLViewerObject* object,
 								 void* data)
 {
 	LL_DEBUGS("Messaging") << "container_inventory_arrived()" << LL_ENDL;
-	if( gAgent.cameraMouselook() )
+	if( gAgentCamera.cameraMouselook() )
 	{
-		gAgent.changeCameraToDefault();
+		gAgentCamera.changeCameraToDefault();
 	}
 
 	LLInventoryView* view = LLInventoryView::getActiveInventory();
@@ -6191,11 +6196,11 @@ void process_teleport_local(LLMessageSystem *msg,void**)
 	}
 
 	gAgent.setPositionAgent(pos);
-	gAgent.slamLookAt(look_at);
+	gAgentCamera.slamLookAt(look_at);
 
 	if ( !(gAgent.getTeleportKeepsLookAt() && LLViewerJoystick::getInstance()->getOverrideCamera()) && gSavedSettings.getBOOL("OptionRotateCamAfterLocalTP"))
 	{
-		gAgent.resetView(TRUE, TRUE);
+		gAgentCamera.resetView(TRUE, TRUE);
 	}
 
 	// send camera update to new region

@@ -75,7 +75,7 @@
 #include "llfirstuse.h"
 
 #include "lldrawpool.h"
-
+#include "hippolimits.h"
 
 
 
@@ -476,7 +476,7 @@ void LLPanelObject::getState( )
 	}
 
 	// can move or rotate only linked group with move permissions, or sub-object with move and modify perms
-	BOOL enable_move	= objectp->permMove() && !objectp->isAttachment() && (objectp->permModify() || !gSavedSettings.getBOOL("EditLinkedParts"));
+	BOOL enable_move	= objectp->permMove() && (!objectp->isAttachment() && objectp->permModify() || !gSavedSettings.getBOOL("EditLinkedParts"));
 	BOOL enable_scale	= objectp->permMove() && objectp->permModify();
 	BOOL enable_rotate	= objectp->permMove() && ( (objectp->permModify() && !objectp->isAttachment()) || !gSavedSettings.getBOOL("EditLinkedParts"));
 	BOOL enable_link	= objectp->permMove() && !objectp->isAttachment() && (objectp->permModify() || !gSavedSettings.getBOOL("EditLinkedParts"));
@@ -492,20 +492,11 @@ void LLPanelObject::getState( )
 		enable_rotate = FALSE;
 	}
 
-
-
-
-
-
-
-
-
-
 // [RLVa:KB] - Checked: 2009-07-10 (RLVa-1.0.0g)
 	if ( (rlv_handler_t::isEnabled()) && ((gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT)) || (gRlvHandler.hasBehaviour(RLV_BHVR_SITTP))) )
 	{
 		LLVOAvatar* pAvatar = gAgent.getAvatarObject();
-		if ( (pAvatar) && (pAvatar->mIsSitting) && (pAvatar->getRoot() == objectp->getRootEdit()) )
+		if ( (pAvatar) && (pAvatar->isSitting()) && (pAvatar->getRoot() == objectp->getRootEdit()) )
 			enable_move = enable_scale = enable_rotate = FALSE;
 	}
 // [/RLVa:KB]
@@ -1125,14 +1116,14 @@ void LLPanelObject::getState( )
 		//top_shear_x_visible		= FALSE;
 		//top_shear_y_visible		= FALSE;
 		//advanced_cut_visible	= TRUE;
-		//advanced_is_dimple		= TRUE;
+		advanced_is_dimple		= TRUE;
 		//twist_min				= OBJECT_TWIST_MIN;
 		//twist_max				= OBJECT_TWIST_MAX;
 		//twist_inc				= OBJECT_TWIST_INC;
 		// Just like the others except no radius
 		size_is_hole 			= TRUE;
 		skew_visible			= TRUE;
-		advanced_cut_visible	= TRUE;
+		//advanced_cut_visible	= TRUE;
 		taper_visible			= TRUE;
 		radius_offset_visible	= FALSE;
 		revolutions_visible		= TRUE;
@@ -1145,8 +1136,9 @@ void LLPanelObject::getState( )
 	case MI_TEST_PRISM:
 	case MI_TEST_HEMICYLINDER:
 		cut_visible				= FALSE;
-		advanced_cut_visible	= TRUE;
-		taper_visible			= FALSE;
+		//advanced_cut_visible	= TRUE;
+        advanced_is_slice       = TRUE;
+		//taper_visible			= FALSE;
 		radius_offset_visible	= FALSE;
 		revolutions_visible		= FALSE;
 		top_shear_x_visible		= FALSE;
@@ -1224,9 +1216,9 @@ void LLPanelObject::getState( )
 		mSpinScaleY->set( scale_y );
 		calcp->setVar(LLCalc::X_HOLE, scale_x);
 		calcp->setVar(LLCalc::Y_HOLE, scale_y);
-		mSpinScaleX->setMinValue(OBJECT_MIN_HOLE_SIZE);
+		mSpinScaleX->setMinValue(gHippoLimits->getMinHoleSize());
 		mSpinScaleX->setMaxValue(OBJECT_MAX_HOLE_SIZE_X);
-		mSpinScaleY->setMinValue(OBJECT_MIN_HOLE_SIZE);
+		mSpinScaleY->setMinValue(gHippoLimits->getMinHoleSize());
 		mSpinScaleY->setMaxValue(OBJECT_MAX_HOLE_SIZE_Y);
 		break;
 	default:
@@ -1270,7 +1262,7 @@ void LLPanelObject::getState( )
 	*/
 	{
 		mSpinHollow->setMinValue(0.f);
-		mSpinHollow->setMaxValue(95.f); //Not that nuts. -HgB
+		mSpinHollow->setMaxValue(gHippoLimits->getMaxHollow() * 100.0f);
 	}
 
 	// Update field enablement
@@ -1987,11 +1979,11 @@ void LLPanelObject::getVolumeParams(LLVolumeParams& volume_params)
 	{
 		scale_x = llclamp(
 			scale_x,
-			OBJECT_MIN_HOLE_SIZE,
+			gHippoLimits->getMinHoleSize(),
 			OBJECT_MAX_HOLE_SIZE_X);
 		scale_y = llclamp(
 			scale_y,
-			OBJECT_MIN_HOLE_SIZE,
+			gHippoLimits->getMinHoleSize(),
 			OBJECT_MAX_HOLE_SIZE_Y);
 
 		// Limit radius offset, based on taper and hole size y.
@@ -2199,7 +2191,8 @@ void LLPanelObject::sendPosition(BOOL btn_down)
 	// won't get dumped by the simulator.
 	LLVector3d new_pos_global = regionp->getPosGlobalFromRegion(newpos);
 
-	if ( LLWorld::getInstance()->positionRegionValidGlobal(new_pos_global) )
+	if (LLWorld::getInstance()->positionRegionValidGlobal(new_pos_global) ||
+        mObject->isAttachment())
 	{
 		// send only if the position is changed, that is, the delta vector is not zero
 		LLVector3d old_pos_global = mObject->getPositionGlobal();
@@ -2637,9 +2630,9 @@ void LLPanelObject::onPastePos(void* user_data)
 	
 	LLPanelObject* self = (LLPanelObject*) user_data;
 	LLCalc* calcp = LLCalc::getInstance();
-	mClipboardPos.mV[VX] = llclamp( mClipboardPos.mV[VX], 0.f, 256.f);
-	mClipboardPos.mV[VY] = llclamp( mClipboardPos.mV[VY], 0.f, 256.f);
-	mClipboardPos.mV[VZ] = llclamp( mClipboardPos.mV[VZ], 0.f, 4096.f);
+	mClipboardPos.mV[VX] = llclamp( mClipboardPos.mV[VX], -3.5f, 256.f);
+	mClipboardPos.mV[VY] = llclamp( mClipboardPos.mV[VY], -3.5f, 256.f);
+	mClipboardPos.mV[VZ] = llclamp( mClipboardPos.mV[VZ], -3.5f, 4096.f);
 	
 	self->mCtrlPosX->set( mClipboardPos.mV[VX] );
 	self->mCtrlPosY->set( mClipboardPos.mV[VY] );
@@ -2716,9 +2709,9 @@ void LLPanelObject::onPastePosClip(void* user_data)
 	std::string stringVec = wstring_to_utf8str(temp_string); 
 	if(!getvectorfromclip(stringVec, &mClipboardPos)) return;
 	
-	mClipboardPos.mV[VX] = llclamp(mClipboardPos.mV[VX], 0.f, 256.f);
-	mClipboardPos.mV[VY] = llclamp(mClipboardPos.mV[VY], 0.f, 256.f);
-	mClipboardPos.mV[VZ] = llclamp(mClipboardPos.mV[VZ], 0.f, 4096.f);
+	mClipboardPos.mV[VX] = llclamp(mClipboardPos.mV[VX], -3.5f, 256.f);
+	mClipboardPos.mV[VY] = llclamp(mClipboardPos.mV[VY], -3.5f, 256.f);
+	mClipboardPos.mV[VZ] = llclamp(mClipboardPos.mV[VZ], -3.5f, 4096.f);
 	
 	self->mCtrlPosX->set( mClipboardPos.mV[VX] );
 	self->mCtrlPosY->set( mClipboardPos.mV[VY] );

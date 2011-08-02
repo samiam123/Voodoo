@@ -42,6 +42,7 @@
 #include "llstring.h"
 
 #include "llagent.h"
+#include "llanimationstates.h"
 #include "llbbox.h"
 #include "llbutton.h"
 #include "llcheckboxctrl.h"
@@ -1485,7 +1486,7 @@ LLPreviewAnimation::LLPreviewAnimation(S32 width, S32 height) : LLViewerDynamicT
 	mDummyAvatar->updateGeometry(mDummyAvatar->mDrawable);
 	mDummyAvatar->startMotion(ANIM_AGENT_STAND, BASE_ANIM_TIME_OFFSET);
 	mDummyAvatar->hideSkirt();
-	gPipeline.markVisible(mDummyAvatar->mDrawable, *LLViewerCamera::getInstance());
+	//gPipeline.markVisible(mDummyAvatar->mDrawable, *LLViewerCamera::getInstance());
 
 	// stop extraneous animations
 	mDummyAvatar->stopMotion( ANIM_AGENT_HEAD_ROT, TRUE );

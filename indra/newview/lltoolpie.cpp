@@ -39,6 +39,7 @@
 #include "llparcel.h"
 
 #include "llagent.h"
+#include "llagentcamera.h"
 #include "llviewercontrol.h"
 #include "llfocusmgr.h"
 #include "llfirstuse.h"
@@ -204,7 +205,7 @@ BOOL LLToolPie::pickAndShowMenu(BOOL always_show)
 			// touch behavior down below...
 			break;
 		case CLICK_ACTION_SIT:
-			if ((gAgent.getAvatarObject() != NULL) && (!gAgent.getAvatarObject()->mIsSitting) 
+			if ((gAgent.getAvatarObject() != NULL) && (!gAgent.getAvatarObject()->isSitting()) 
 				&& (!gSavedSettings.getBOOL("DisableClickSit"))) // agent not already sitting
 			{
 				handle_sit_or_stand();
@@ -324,7 +325,7 @@ BOOL LLToolPie::pickAndShowMenu(BOOL always_show)
 			LLToolCamera::getInstance()->pickCallback(mPick);
 			if(gSavedSettings.getBOOL("ResetFocusOnSelfClick"))
 			{
-				gAgent.setFocusOnAvatar(TRUE, TRUE);
+				gAgentCamera.setFocusOnAvatar(TRUE, TRUE);
 			}
 
 			return TRUE;
@@ -552,9 +553,9 @@ ECursorType cursor_from_object(LLViewerObject* object)
 	switch(click_action)
 	{
 	case CLICK_ACTION_SIT:
-//		if ((gAgent.getAvatarObject() != NULL) && (!gAgent.getAvatarObject()->mIsSitting)) // not already sitting?
+//		if ((gAgent.getAvatarObject() != NULL) && (!gAgent.getAvatarObject()->isSitting())) // not already sitting?
 // [RLVa:KB] - Checked: 2009-12-22 (RLVa-1.1.0k) | Added: RLVa-1.1.0j
-		if ( ((gAgent.getAvatarObject() != NULL) && (!gAgent.getAvatarObject()->mIsSitting)) && // not already sitting?
+		if ( ((gAgent.getAvatarObject() != NULL) && (!gAgent.getAvatarObject()->isSitting())) && // not already sitting?
 			 ((!rlv_handler_t::isEnabled()) || (gRlvHandler.canSit(object, gViewerWindow->getHoverPick().mObjectOffset))) )
 // [/RLVa:KB]
 		{
@@ -755,7 +756,7 @@ BOOL LLToolPie::handleMouseUp(S32 x, S32 y, MASK mask)
 	}
 	mGrabMouseButtonDown = FALSE;
 	LLToolMgr::getInstance()->clearTransientTool();
-	gAgent.setLookAt(LOOKAT_TARGET_CONVERSATION, obj); // maybe look at object/person clicked on
+	gAgentCamera.setLookAt(LOOKAT_TARGET_CONVERSATION, obj); // maybe look at object/person clicked on
 	return LLTool::handleMouseUp(x, y, mask);
 }
 

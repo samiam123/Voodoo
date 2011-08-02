@@ -25,9 +25,11 @@
 //
 
 #include "llagent.h"
+#include "llagentwearables.h"
 #include "llviewerjointattachment.h"
 #include "llviewerobject.h"
 #include "llvoavatar.h"
+#include "lleventtimer.h"
 
 #include "rlvdefines.h"
 
@@ -400,7 +402,7 @@ inline bool RlvWearableLocks::canRemove(const LLInventoryItem* pItem) const
 {
 	// The specified item can be removed if its wearable can be removed
 	RLV_ASSERT( (pItem) && (LLInventoryType::IT_WEARABLE == pItem->getInventoryType()) );
-	const LLWearable* pWearable = (pItem) ? gAgent.getWearableFromWearableItem(pItem->getLinkedUUID()) : NULL;
+	const LLWearable* pWearable = (pItem) ? gAgentWearables.getWearableFromItemID(pItem->getLinkedUUID()) : NULL;
 	return (pWearable) && (!isLockedWearable(pWearable));
 }
 

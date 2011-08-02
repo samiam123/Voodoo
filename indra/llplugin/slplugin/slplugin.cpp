@@ -183,6 +183,13 @@ int APIENTRY WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 int main(int argc, char **argv)
 #endif
 {
+#ifdef CWDEBUG
+	Debug( libcw_do.margin().assign("SLPlugin ", 9) );
+	Debug(debug::init());
+	// Uncomment this to automatically open a terminal with gdb. Requires SNOW-173.
+	//Debug(attach_gdb());
+#endif
+
 	// Set up llerror logging
 	{
 		LLError::initForApplication(".");
@@ -286,7 +293,7 @@ int main(int argc, char **argv)
 			}
 			
 			// Check for a change in this process's frontmost window.
-			if(FrontWindow() != front_window)
+			if(FrontNonFloatingWindow() != front_window)
 			{
 				ProcessSerialNumber self = { 0, kCurrentProcess };
 				ProcessSerialNumber parent = { 0, kNoProcess };
@@ -312,7 +319,7 @@ int main(int argc, char **argv)
 					}
 				}
 								
-				if((FrontWindow() != NULL) && (front_window == NULL))
+				if((FrontNonFloatingWindow() != NULL) && (front_window == NULL))
 				{
 					// Opening the first window
 					
@@ -324,7 +331,7 @@ int main(int argc, char **argv)
 
 					if(layer_group)
 					{
-						SetWindowGroup(FrontWindow(), layer_group);
+						SetWindowGroup(FrontNonFloatingWindow(), layer_group);
 					}
 					
 					if(parent_is_front_process)
@@ -333,9 +340,9 @@ int main(int argc, char **argv)
 						(void) SetFrontProcess( &self );
 					}
 
-					ActivateWindow(FrontWindow(), true);					
+					ActivateWindow(FrontNonFloatingWindow(), true);					
 				}
-				else if((FrontWindow() == NULL) && (front_window != NULL))
+				else if((FrontNonFloatingWindow() == NULL) && (front_window != NULL))
 				{
 					// Closing the last window
 					
@@ -355,7 +362,7 @@ int main(int argc, char **argv)
 					window_hack_state = 2;
 				}
 
-				front_window = FrontWindow();
+				front_window = FrontNonFloatingWindow();
 
 			}
 		}

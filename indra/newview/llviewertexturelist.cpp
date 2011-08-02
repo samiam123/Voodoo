@@ -87,13 +87,16 @@ LLViewerTextureList::LLViewerTextureList()
 	: mForceResetTextureStats(FALSE),
 	mUpdateStats(FALSE),
 	mMaxResidentTexMemInMegaBytes(0),
-	mMaxTotalTextureMemInMegaBytes(0)
+	mMaxTotalTextureMemInMegaBytes(0),
+	mInitialized(FALSE)
 {
 }
 
 void LLViewerTextureList::init()
 {
+	mInitialized = TRUE ;
 	sNumImages = 0;
+	mUpdateStats = TRUE;
 	mMaxResidentTexMemInMegaBytes = 0;
 	mMaxTotalTextureMemInMegaBytes = 0 ;
 	if (gNoRender)
@@ -101,8 +104,6 @@ void LLViewerTextureList::init()
 		// Don't initialize GL stuff if we're not rendering.
 		return;
 	}
-	
-	mUpdateStats = TRUE;
 	
 	// Update how much texture RAM we're allowed to use.
 	updateMaxResidentTexMem(0); // 0 = use current
@@ -115,6 +116,10 @@ void LLViewerTextureList::doPreloadImages()
 {
 	LL_DEBUGS("ViewerImages") << "Preloading images..." << LL_ENDL;
 	
+	llassert_always(mInitialized) ;
+	llassert_always(mImageList.empty()) ;
+	llassert_always(mUUIDMap.empty()) ;
+
 	// Set the "missing asset" image
 	LLViewerFetchedTexture::sMissingAssetImagep = LLViewerTextureManager::getFetchedTextureFromFile("missing_asset.tga", MIPMAP_NO, LLViewerFetchedTexture::BOOST_UI);
 	
@@ -265,8 +270,8 @@ void LLViewerTextureList::shutdown()
 		if (++count >= max_count)
 			break;
 	}
-	
-	if (count > 0 && !gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, "").empty())
+
+	if (count > 0 && !gDirUtilp->getLindenUserDir(true).empty())
 	{
 		std::string filename = gDirUtilp->getExpandedFilename(LL_PATH_PER_SL_ACCOUNT, get_texture_list_name());
 		llofstream file;
@@ -286,6 +291,8 @@ void LLViewerTextureList::shutdown()
 	mUUIDMap.clear();
 	
 	mImageList.clear();
+
+	mInitialized = FALSE ; //prevent loading textures again.
 }
 
 void LLViewerTextureList::dump()
@@ -312,6 +319,7 @@ void LLViewerTextureList::destroyGL(BOOL save_state)
 
 void LLViewerTextureList::restoreGL()
 {
+	llassert_always(mInitialized) ;
 	LLImageGL::restoreGL();
 }
 
@@ -332,6 +340,11 @@ LLViewerFetchedTexture* LLViewerTextureList::getImageFromFile(const std::string&
 												   LLGLenum primary_format, 
 												   const LLUUID& force_id)
 {
+	if(!mInitialized)
+	{
+		return NULL ;
+	}
+
 	std::string full_path = gDirUtilp->findSkinnedFilename("textures", filename);
 	if (full_path.empty())
 	{
@@ -352,6 +365,11 @@ LLViewerFetchedTexture* LLViewerTextureList::getImageFromUrl(const std::string& 
 												   LLGLenum primary_format, 
 												   const LLUUID& force_id)
 {
+	
+	if(!mInitialized)
+	{
+		return NULL ;
+	}
 	if (gNoRender)
 	{
 		// Never mind that this ignores image_set_id;
@@ -418,6 +436,11 @@ LLViewerFetchedTexture* LLViewerTextureList::getImage(const LLUUID &image_id,
 												   LLGLenum primary_format,
 												   LLHost request_from_host)
 {
+	if(!mInitialized)
+	{
+		return NULL ;
+	}
+
 	// Return the image with ID image_id
 	// If the image is not found, creates new image and
 	// enqueues a request for transmission
@@ -846,7 +869,7 @@ F32 LLViewerTextureList::updateImagesFetchTextures(F32 max_time)
 	for (entries_list_t::iterator iter3 = entries.begin();
 		 iter3 != entries.end(); )
 	{
-		LLPointer<LLViewerFetchedTexture> imagep = *iter3++;
+		LLViewerFetchedTexture* imagep = *iter3++;
 		
 		bool fetching = imagep->updateFetch();
 		if (fetching)
@@ -1071,8 +1094,12 @@ const S32 MAX_VIDEO_RAM = 512; // 512MB max for performance reasons.
 S32 LLViewerTextureList::getMinVideoRamSetting()
 {
 	S32 system_ram = (S32)BYTES_TO_MEGA_BYTES(gSysMemory.getPhysicalMemoryClamped());
-	//min texture mem sets to 64M if total physical mem is more than 1.5GB
-	return (system_ram > 1500) ? 64 : MIN_VIDEO_RAM_IN_MEGA_BYTES ;
+	if (system_ram > 2000)
+		return 128;
+	else if (system_ram > 1000)
+		return 64;
+	else
+		return MIN_VIDEO_RAM_IN_MEGA_BYTES;
 }
 
 //static

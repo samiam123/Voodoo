@@ -37,6 +37,7 @@
 #include "llinventory.h"
 
 #include "llagent.h"
+#include "llagentcamera.h"
 #include "llassetuploadresponders.h"
 #include "llviewerwindow.h"
 #include "llbutton.h"
@@ -61,7 +62,7 @@
 #include "lllineeditor.h"
 #include "lluictrlfactory.h"
 // <edit>
-#include "llfilepicker.h"
+#include "statemachine/aifilepicker.h"
 // </edit>
 
 ///----------------------------------------------------------------------------
@@ -152,7 +153,7 @@ LLPreviewNotecard::LLPreviewNotecard(const std::string& name,
 		editor->setHandleEditKeysDirectly(TRUE);
 	}
 
-	gAgent.changeCameraToDefault();
+	gAgentCamera.changeCameraToDefault();
 }
 
 LLPreviewNotecard::~LLPreviewNotecard()
@@ -717,17 +718,18 @@ void LLPreviewNotecard::saveAs()
 	if(item)
 	{
 	//	gAssetStorage->getAssetData(item->getAssetUUID(), LLAssetType::AT_NOTECARD, LLPreviewNotecard::gotAssetForSave, this, TRUE);
-		default_filename = LLDir::getScrubbedFileName(item->getName());
+		default_filename = LLDir::getScrubbedFileName(item->getName()) + ".notecard";
 	}
 
-	LLFilePicker& file_picker = LLFilePicker::instance();
-	if( !file_picker.getSaveFile( LLFilePicker::FFSAVE_NOTECARD, default_filename ) )
-	{
-		// User canceled or we failed to acquire save file.
+	AIFilePicker* filepicker = AIFilePicker::create();
+	filepicker->open(default_filename, FFSAVE_NOTECARD);
+	filepicker->run(boost::bind(&LLPreviewNotecard::saveAs_continued, this, filepicker));
+}
+
+void LLPreviewNotecard::saveAs_continued(AIFilePicker* filepicker)
+{
+	if (!filepicker->hasFilename())
 		return;
-	}
-	// remember the user-approved/edited file name.
-	std::string filename = file_picker.getFirstFile();
 
 	LLViewerTextEditor* editor = getChild<LLViewerTextEditor>("Notecard Editor");
 
@@ -738,8 +740,9 @@ void LLPreviewNotecard::saveAs()
 		return;
 	}
 
-	S32 size = buffer.length() + 1;
+	S32 size = buffer.length();
 
+	std::string filename = filepicker->getFilename();
 	std::ofstream export_file(filename.c_str(), std::ofstream::binary);
 	export_file.write(buffer.c_str(), size);
 	export_file.close();

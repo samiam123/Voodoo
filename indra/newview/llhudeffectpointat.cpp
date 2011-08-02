@@ -38,6 +38,7 @@
 #include "llrender.h"
 
 #include "llagent.h"
+#include "llagentcamera.h"
 #include "lldrawable.h"
 #include "llviewerobjectlist.h"
 #include "llvoavatar.h"
@@ -53,7 +54,7 @@ const S32 PKT_SIZE = 57;
 // throttle
 const F32 MAX_SENDS_PER_SEC = 4.f;
 
-const F32 MIN_DELTAPOS_FOR_UPDATE = 0.05f;
+const F32 MIN_DELTAPOS_FOR_UPDATE_SQUARED = 0.05f * 0.05f;
 
 // timeouts
 // can't use actual F32_MAX, because we add this to the current frametime
@@ -152,7 +153,7 @@ void LLHUDEffectPointAt::unpackData(LLMessageSystem *mesgsys, S32 blocknum)
 	mesgsys->getUUIDFast(_PREHASH_Effect, _PREHASH_ID, dataId, blocknum);
 
 	// ignore messages from ourselves
-	if (!gAgent.mPointAt.isNull() && dataId == gAgent.mPointAt->getID())
+	if (!gAgentCamera.mPointAt.isNull() && dataId == gAgentCamera.mPointAt->getID())
 	{
 		return;
 	}
@@ -251,7 +252,7 @@ BOOL LLHUDEffectPointAt::setPointAt(EPointAtType target_type, LLViewerObject *ob
 	BOOL targetTypeChanged = (target_type != mTargetType) ||
 		(object != mTargetObject);
 
-	BOOL targetPosChanged = (dist_vec(position, mLastSentOffsetGlobal) > MIN_DELTAPOS_FOR_UPDATE) && 
+	BOOL targetPosChanged = (dist_vec_squared(position, mLastSentOffsetGlobal) > MIN_DELTAPOS_FOR_UPDATE_SQUARED) && 
 		((current_time - mLastSendTime) > (1.f / MAX_SENDS_PER_SEC));
 
 	if (targetTypeChanged || targetPosChanged)

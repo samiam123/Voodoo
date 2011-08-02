@@ -39,6 +39,7 @@
 #include "pipeline.h"
 #include "llsky.h"
 
+#include "lldiriterator.h"
 #include "llsliderctrl.h"
 #include "llspinctrl.h"
 #include "llcheckboxctrl.h"
@@ -55,6 +56,7 @@
 #include "llviewerwindow.h"
 #include "lldrawpoolwater.h"
 #include "llagent.h"
+#include "llagentcamera.h"
 #include "llviewerregion.h"
 
 #include "llwlparammanager.h"
@@ -93,10 +95,11 @@ void LLWaterParamManager::loadAllPresets(const std::string& file_name)
 	LL_INFOS2("AppInit", "Shaders") << "Loading Default water settings from " << path_name << LL_ENDL;
 			
 	bool found = true;			
+	LLDirIterator app_settings_iter(path_name, "*.xml");
 	while(found) 
 	{
 		std::string name;
-		found = gDirUtilp->getNextFileInDir(path_name, "*.xml", name, false);
+		found = app_settings_iter.next(name);
 		if(found)
 		{
 
@@ -119,10 +122,11 @@ void LLWaterParamManager::loadAllPresets(const std::string& file_name)
 	LL_INFOS2("AppInit", "Shaders") << "Loading User water settings from " << path_name2 << LL_ENDL;
 			
 	found = true;			
+	LLDirIterator user_settings_iter(path_name2, "*.xml");
 	while(found) 
 	{
 		std::string name;
-		found = gDirUtilp->getNextFileInDir(path_name2, "*.xml", name, false);
+		found = user_settings_iter.next(name);
 		if(found)
 		{
 			name=name.erase(name.length()-4);
@@ -294,6 +298,11 @@ void LLWaterParamManager::update(LLViewerCamera * cam)
 
 		mWaterPlane = LLVector4(enorm.v[0], enorm.v[1], enorm.v[2], -ep.dot(enorm));
 
+		if((mWaterPlane.mV[3] >= 0.f) == LLViewerCamera::getInstance()->cameraUnderWater()) //Sign borkage..
+		{
+			mWaterPlane.scaleVec(LLVector4(-1.f,-1.f,-1.f,-1.f));
+		}
+
 		LLVector3 sunMoonDir;
 		if (gSky.getSunDirection().mV[2] > LLSky::NIGHTTIME_ELEVATION_COS) 	 
 		{ 	 
@@ -425,7 +434,7 @@ F32 LLWaterParamManager::getFogDensity(void)
 	
 	// modify if we're underwater
 	const F32 water_height = gAgent.getRegion() ? gAgent.getRegion()->getWaterHeight() : 0.f;
-	F32 camera_height = gAgent.getCameraPositionAgent().mV[2];
+	F32 camera_height = gAgentCamera.getCameraPositionAgent().mV[2];
 	if(camera_height <= water_height)
 	{
 		// raise it to the underwater fog density modifier

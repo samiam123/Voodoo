@@ -56,9 +56,11 @@ public:
 
 	// Import entry point
 	void importObject(bool upload=FALSE);
+	void importObject_continued(AIFilePicker* filepicker);
 
 	// Export entry point
 	void exportObject();
+	void exportObject_continued(AIFilePicker* filepicker);
 
 	// Update map from texture worker
 	void updateMap(LLUUID uploaded_asset);
@@ -105,7 +107,7 @@ private:
 	LLUUID validateTextureID(LLUUID asset_id);
 
 	// Convert a selection list of objects to LLSD
-	LLSD primsToLLSD(LLViewerObject::child_list_t child_list);
+	LLSD primsToLLSD(LLViewerObject::child_list_t child_list, bool is_attachment);
 
 	// Start the import process
 	void importFirstObject();
@@ -174,3 +176,4 @@ private:
 	LLVector3 mAgentPos;
 	LLQuaternion mAgentRot;
 };
+

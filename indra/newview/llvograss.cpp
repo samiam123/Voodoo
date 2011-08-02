@@ -37,7 +37,7 @@
 #include "imageids.h"
 #include "llviewercontrol.h"
 
-#include "llagent.h"
+#include "llagentcamera.h"
 #include "llviewerwindow.h"
 #include "lldrawable.h"
 #include "llface.h"
@@ -333,7 +333,7 @@ BOOL LLVOGrass::idleUpdate(LLAgent &agent, LLWorld &world, const F64 &time)
 void LLVOGrass::setPixelAreaAndAngle(LLAgent &agent)
 {
 	// This should be the camera's center, as soon as we move to all region-local.
-	LLVector3 relative_position = getPositionAgent() - agent.getCameraPositionAgent();
+	LLVector3 relative_position = getPositionAgent() - gAgentCamera.getCameraPositionAgent();
 	F32 range = relative_position.length();
 
 	F32 max_scale = getMaxScale();
@@ -465,7 +465,7 @@ void LLVOGrass::plantBlades()
 	face->setTexture(getTEImage(0));
 	face->setState(LLFace::GLOBAL);
 	face->setSize(mNumBlades * 8, mNumBlades * 12);
-	face->mVertexBuffer = NULL;
+	face->setVertexBuffer(NULL);
 	face->setTEOffset(0);
 	face->mCenterLocal = mPosition + mRegionp->getOriginAgent();
 	

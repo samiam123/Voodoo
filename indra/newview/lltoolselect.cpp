@@ -35,6 +35,7 @@
 #include "lltoolselect.h"
 
 #include "llagent.h"
+#include "llagentcamera.h"
 #include "llviewercontrol.h"
 #include "lldrawable.h"
 #include "llmanip.h"
@@ -55,9 +56,6 @@
 #include "rlvhandler.h"
 #include "llfloatertools.h"
 // [/RLVa:KB]
-
-// Globals
-extern BOOL gAllowSelectAvatar;
 
 const F32 SELECTION_ROTATION_TRESHOLD = 0.1f;
 
@@ -104,7 +102,7 @@ LLObjectSelectionHandle LLToolSelect::handleObjectSelection(const LLPickInfo& pi
 				if (gFloaterTools->getVisible())
 				{
 					// Copy/paste from toggle_build_mode()
-					gAgent.resetView(false);
+					gAgentCamera.resetView(false);
 					gFloaterTools->close();
 					gViewerWindow->showCursor();
 				}
@@ -125,7 +123,7 @@ LLObjectSelectionHandle LLToolSelect::handleObjectSelection(const LLPickInfo& pi
 			else if (gFloaterTools->getVisible())
 			{
 				// Copy/paste from toggle_build_mode()
-				gAgent.resetView(false);
+				gAgentCamera.resetView(false);
 				gFloaterTools->close();
 				gViewerWindow->showCursor();
 			}
@@ -137,7 +135,7 @@ LLObjectSelectionHandle LLToolSelect::handleObjectSelection(const LLPickInfo& pi
 	BOOL select_movable = gSavedSettings.getBOOL("SelectMovableOnly");
 	
 	// *NOTE: These settings must be cleaned up at bottom of function.
-	if (temp_select || gAllowSelectAvatar)
+	if (temp_select || LLSelectMgr::getInstance()->mAllowSelectAvatar)
 	{
 		gSavedSettings.setBOOL("SelectOwnedOnly", FALSE);
 		gSavedSettings.setBOOL("SelectMovableOnly", FALSE);
@@ -217,7 +215,7 @@ LLObjectSelectionHandle LLToolSelect::handleObjectSelection(const LLPickInfo& pi
 			LLSelectMgr::getInstance()->setAgentHUDZoom(target_zoom, current_zoom);
 		}
 
-		if (!gAgent.getFocusOnAvatar() &&										// if camera not glued to avatar
+		if (!gAgentCamera.getFocusOnAvatar() &&										// if camera not glued to avatar
 			LLVOAvatar::findAvatarFromAttachment(object) != gAgent.getAvatarObject() &&	// and it's not one of your attachments
 			object != gAgent.getAvatarObject())									// and it's not you
 		{
@@ -267,7 +265,7 @@ LLObjectSelectionHandle LLToolSelect::handleObjectSelection(const LLPickInfo& pi
 	} //if(!object)
 
 	// Cleanup temp select settings above.
-	if (temp_select || gAllowSelectAvatar)
+	if (temp_select || LLSelectMgr::getInstance()->mAllowSelectAvatar)
 	{
 		gSavedSettings.setBOOL("SelectOwnedOnly", select_owned);
 		gSavedSettings.setBOOL("SelectMovableOnly", select_movable);

@@ -38,6 +38,7 @@
 #include "llquaternion.h"
 
 #include "llagent.h"
+#include "llagentcamera.h"
 #include "llviewercontrol.h"
 #include "lldrawable.h"
 #include "llface.h"
@@ -340,7 +341,7 @@ void LLViewerCamera::setPerspective(BOOL for_selection,
 		}
 		else
 		{
-			z_far = gAgent.mDrawDistance;
+			z_far = gAgentCamera.mDrawDistance;
 		}
 	}
 	else
@@ -729,6 +730,10 @@ LLVector3 LLViewerCamera::roundToPixel(const LLVector3 &pos_agent)
 
 BOOL LLViewerCamera::cameraUnderWater() const
 {
+	if(!gAgent.getRegion())
+	{
+		return FALSE ;
+	}
 	return getOrigin().mV[VZ] < gAgent.getRegion()->getWaterHeight();
 }
 

@@ -1213,20 +1213,27 @@ void LLPanelAvatarPicks::onClickNew(void* data)
 }
 
 //Pick import and export - RK
+// static
 void LLPanelAvatarPicks::onClickImport(void* data)
 {
 	LLPanelAvatarPicks* self = (LLPanelAvatarPicks*)data;
-	LLPanelPick* panel_pick = new LLPanelPick(FALSE);
-	LLTabContainer* tabs =  self->getChild<LLTabContainer>("picks tab");
+	self->mPanelPick = new LLPanelPick(FALSE);
+	self->mPanelPick->importNewPick(&LLPanelAvatarPicks::onClickImport_continued, data);
+}
 
-	bool import = panel_pick->importNewPick();
-	if(tabs && import)
+// static
+void LLPanelAvatarPicks::onClickImport_continued(void* data, bool import)
+{
+	LLPanelAvatarPicks* self = (LLPanelAvatarPicks*)data;
+	LLTabContainer* tabs = self->getChild<LLTabContainer>("picks tab");
+	if(tabs && import && self->mPanelPick)
 	{
-		tabs->addTabPanel(panel_pick, panel_pick->getPickName());
+		tabs->addTabPanel(self->mPanelPick, self->mPanelPick->getPickName());
 		tabs->selectLastTab();
 	}
 }
 
+// static
 void LLPanelAvatarPicks::onClickExport(void* data)
 {
 	LLPanelAvatarPicks* self = (LLPanelAvatarPicks*)data;
@@ -1378,6 +1385,11 @@ BOOL LLPanelAvatar::postBuild(void)
 	childSetVisible("csr_btn", FALSE);
 	childSetEnabled("csr_btn", FALSE);
 
+	//This text never changes. We simply toggle visibility.
+	childSetVisible("online_yes", FALSE);
+	childSetColor("online_yes",LLColor4::green);
+	childSetValue("online_yes","Currently Online");
+
 	return TRUE;
 }
 
@@ -1436,12 +1448,7 @@ void LLPanelAvatar::setOnlineStatus(EOnlineStatus online_status)
 		online_status = ONLINE_STATUS_YES;
 	}
 	
-	if(online_status == ONLINE_STATUS_YES)
-	{
-		mPanelSecondLife->childSetVisible("online_yes", TRUE);
-		mPanelSecondLife->childSetColor("online_yes",LLColor4::green);
-		mPanelSecondLife->childSetValue("online_yes","Currently Online");
-	}
+	mPanelSecondLife->childSetVisible("online_yes", online_status == ONLINE_STATUS_YES);
 
 	// Since setOnlineStatus gets called after setAvatarID
 	// need to make sure that "Offer Teleport" doesn't get set
@@ -1682,6 +1689,10 @@ void LLPanelAvatar::resetGroupList()
 		LLScrollListCtrl* group_list = mPanelSecondLife->getChild<LLScrollListCtrl>("groups");
 		if (group_list)
 		{
+			const LLUUID selected_id	= group_list->getSelectedValue();
+			const S32	selected_idx	= group_list->getFirstSelectedIndex();
+			const S32	scroll_pos		= group_list->getScrollPos();
+
 			group_list->deleteAllItems();
 			
 			S32 count = gAgent.mGroups.count();
@@ -1710,18 +1721,19 @@ void LLPanelAvatar::resetGroupList()
 				row["id"] = id ;
 				row["columns"][0]["value"] = group_string;
 				row["columns"][0]["font"] = "SANSSERIF_SMALL";
-				if (group_data.mListInProfile)
-				{
-					row["columns"][0]["color"] = gColors.getColor("DefaultListText").getValue();
-				}
-				else
-				{
-					row["columns"][0]["color"] = gColors.getColor("ScrollUnselectedColor").getValue();
-				}
+				std::string font_style = group_data.mListInProfile ? "BOLD" : "NORMAL";
+				if(group_data.mID == gAgent.getGroupID())
+					font_style.append("|ITALIC");
+				row["columns"][0]["font-style"] = font_style;
 				row["columns"][0]["width"] = 0;
-				group_list->addElement(row);
+				group_list->addElement(row,ADD_SORTED);
 			}
-			group_list->sortByColumnIndex(0, TRUE);
+			if(selected_id.notNull())
+				group_list->selectByValue(selected_id);
+			if(selected_idx!=group_list->getFirstSelectedIndex()) //if index changed then our stored pos is pointless.
+				group_list->scrollToShowSelected();
+			else
+				group_list->setScrollPos(scroll_pos);
 		}
 	}
 }
@@ -2248,22 +2260,23 @@ void LLPanelAvatar::processAvatarGroupsReply(LLMessageSystem *msg, void**)
 						}
 					}
 					// Set normal color if not found or if group is visible in profile
-					if (!group_data || group_data->mListInProfile)
+					if (group_data)
 					{
-						row["columns"][0]["font-style"] = "BOLD";
+						std::string font_style = group_data->mListInProfile ? "BOLD" : "NORMAL";
+						if(group_data->mID == gAgent.getGroupID())
+							font_style.append("|ITALIC");
+						row["columns"][0]["font-style"] = font_style;
 					}
+					else
+						row["columns"][0]["font-style"] = "NORMAL";
 				}
 				
-
-
-
 				if (group_list)
 				{
-					group_list->addElement(row);
+					group_list->addElement(row,ADD_SORTED);
 				}
 			}
 		}
-		if(group_list) group_list->sortByColumnIndex(0, TRUE);
 	}
 }
 

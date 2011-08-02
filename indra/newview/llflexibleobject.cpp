@@ -39,7 +39,6 @@
 #include "llglheaders.h"
 #include "llrendersphere.h"
 #include "llviewerobject.h"
-#include "llimagegl.h"
 #include "llagent.h"
 #include "llsky.h"
 #include "llviewercamera.h"
@@ -318,11 +317,13 @@ BOOL LLVolumeImplFlexible::doIdleUpdate(LLAgent &agent, LLWorld &world, const F6
 		return FALSE; // (we are not initialized or updated)
 	}
 
-	if (force_update)
+	bool visible = mVO->mDrawable->isVisible();
+
+	if (force_update && visible)
 	{
 		gPipeline.markRebuild(mVO->mDrawable, LLDrawable::REBUILD_POSITION, FALSE);
 	}
-	else if	(mVO->mDrawable->isVisible() &&
+	else if	(visible &&
 		!mVO->mDrawable->isState(LLDrawable::IN_REBUILD_Q1) &&
 		mVO->getPixelArea() > 256.f)
 	{
@@ -365,7 +366,7 @@ void LLVolumeImplFlexible::doFlexibleUpdate()
 {
 	LLVolume* volume = mVO->getVolume();
 	LLPath *path = &volume->getPath();
-	if (mSimulateRes == 0)
+	if ((mSimulateRes == 0 || !mInitialized) && mVO->mDrawable->isVisible()) 
 	{
 		mVO->markForUpdate(TRUE);
 		if (!doIdleUpdate(gAgent, *LLWorld::getInstance(), 0.0))
@@ -374,7 +375,11 @@ void LLVolumeImplFlexible::doFlexibleUpdate()
 		}
 	}
 
-	llassert_always(mInitialized);
+	if(!mInitialized)
+	{
+		//the object is not visible
+		return ;
+	}
 	
 	S32 num_sections = 1 << mSimulateRes;
 
@@ -693,7 +698,11 @@ BOOL LLVolumeImplFlexible::doUpdateGeometry(LLDrawable *drawable)
 	}
 
 	volume->updateRelativeXform();
-	doFlexibleUpdate();
+
+	if (mRenderRes > -1)
+	{
+		doFlexibleUpdate();
+	}
 	
 	// Object may have been rotated, which means it needs a rebuild.  See SL-47220
 	BOOL	rotated = FALSE;

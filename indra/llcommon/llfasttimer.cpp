@@ -29,27 +29,21 @@
  * COMPLETENESS OR PERFORMANCE.
  * $/LicenseInfo$
  */
+
 #include "linden_common.h"
 
 #include "llfasttimer.h"
-
+#include "llmemory.h"
 #include "llprocessor.h"
 
-
 #if LL_WINDOWS
-#elif LL_LINUX || LL_SOLARIS
-#include <sys/time.h>
-#include <sched.h>
-#elif LL_DARWIN
-#include <sys/time.h>
-#include "lltimer.h"	// get_clock_count()
-#else 
-#error "architecture not supported"
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 #endif
+#include "lltimer.h"
 
 //////////////////////////////////////////////////////////////////////////////
 // statics
-
 
 LLFastTimer::EFastTimerType LLFastTimer::sCurType = LLFastTimer::FTM_OTHER;
 int LLFastTimer::sCurDepth = 0;
@@ -65,91 +59,12 @@ S32 LLFastTimer::sLastFrameIndex = -1;
 int LLFastTimer::sPauseHistory = 0;
 int LLFastTimer::sResetHistory = 0;
 
-F64 LLFastTimer::sCPUClockFrequency = 0.0;
+U64 LLFastTimer::sClockResolution = calc_clock_frequency(50U);	// Resolution of get_clock_count()
 
-#if LL_LINUX || LL_SOLARIS
-U64 LLFastTimer::sClockResolution = 1000000000; // 1e9, Nanosecond resolution
-#else 
-U64 LLFastTimer::sClockResolution = 1000000; // 1e6, Microsecond resolution
-#endif
-
-//////////////////////////////////////////////////////////////////////////////
-
-//
-// CPU clock/other clock frequency and count functions
-//
-
-#if LL_WINDOWS
-
-U64 get_cpu_clock_count()
-{   U32  hi,lo;
-
-    __asm   
-    {
-        _emit   0x0f
-        _emit   0x31
-        mov     lo,eax
-        mov     hi,edx
-    }
-
-	U64 ret = hi;
-	ret *= 4294967296L;
-	ret |= lo;
-    return ret;
-};
-
-#endif // LL_WINDOWS
-
-#if LL_LINUX || LL_SOLARIS
-// Try to use the MONOTONIC clock if available, this is a constant time counter
-// with nanosecond resolution (but not necessarily accuracy) and attempts are made
-// to synchronize this value between cores at kernel start. It should not be affected
-// by CPU frequency. If not available use the REALTIME clock, but this may be affected by
-// NTP adjustments or other user activity affecting the system time.
-U64 get_cpu_clock_count()
+U64 LLFastTimer::countsPerSecond() // counts per second for the *32-bit* timer
 {
-    struct timespec tp;
-
-#ifdef CLOCK_MONOTONIC
-    clock_gettime(CLOCK_MONOTONIC,&tp);
-#else
-    clock_gettime(CLOCK_REALTIME,&tp);
-#endif
-    return (tp.tv_sec*LLFastTimer::sClockResolution)+tp.tv_nsec;        
+	return sClockResolution >> 8;
 }
-#endif // (LL_LINUX || LL_SOLARIS))
-
-#if LL_DARWIN
-//
-// Mac implementation of CPU clock
-//
-// Just use gettimeofday implementation for now
-
-U64 get_cpu_clock_count()
-{
-	return get_clock_count();
-}
-#endif
-
-//////////////////////////////////////////////////////////////////////////////
-
-//static
-#if LL_DARWIN || LL_LINUX || LL_SOLARIS
-U64 LLFastTimer::countsPerSecond()
-{
-	return sClockResolution;
-}
-#else 
-U64 LLFastTimer::countsPerSecond()
-{
-	if (!sCPUClockFrequency)
-	{
-		CProcessor proc;
-		sCPUClockFrequency = proc.GetCPUFrequency(50);
-	}
-	return U64(sCPUClockFrequency);
-}
-#endif
 
 void LLFastTimer::reset()
 {
@@ -200,3 +115,21 @@ void LLFastTimer::reset()
 }
 
 //////////////////////////////////////////////////////////////////////////////
+//
+// Important note: These implementations must be FAST!
+//
+
+// shift off lower 8 bits for lower resolution but longer term timing
+// on 1Ghz machine, a 32-bit word will hold ~1000 seconds of timing
+
+//LL_COMMON_API U64 get_clock_count(); // in lltimer.cpp
+// On windows these use QueryPerformanceCounter, which is arguably fine and also works on amd architectures.
+U32 LLFastTimer::getCPUClockCount32()
+{
+	return get_clock_count() >> 8;
+}
+
+U64 LLFastTimer::getCPUClockCount64()
+{
+	return get_clock_count();
+}

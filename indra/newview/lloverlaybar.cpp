@@ -42,6 +42,7 @@
 #include "importtracker.h"
 #include "llrender.h"
 #include "llagent.h"
+#include "llagentcamera.h"
 #include "llbutton.h"
 #include "llchatbar.h"
 #include "llfocusmgr.h"
@@ -325,9 +326,9 @@ void LLOverlayBar::refresh()
 	BOOL sitting = FALSE;
 	if (gAgent.getAvatarObject())
 	{
-//		sitting = gAgent.getAvatarObject()->mIsSitting;
+//		sitting = gAgent.getAvatarObject()->isSitting();
 // [RLVa:KB] - Checked: 2009-07-10 (RLVa-1.0.0g)
-		sitting = gAgent.getAvatarObject()->mIsSitting && !gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT);
+		sitting = gAgent.getAvatarObject()->isSitting() && !gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT);
 // [/RLVa:KB]
 	}
 	button = getChild<LLButton>("Stand Up");
@@ -371,7 +372,7 @@ void LLOverlayBar::refresh()
 	// turn off the whole bar in mouselook
 	static BOOL last_mouselook = FALSE;
 
-	BOOL in_mouselook = gAgent.cameraMouselook();
+	BOOL in_mouselook = gAgentCamera.cameraMouselook();
 
 	if(last_mouselook != in_mouselook)
 	{
@@ -442,14 +443,14 @@ void LLOverlayBar::onClickResetView(void* data)
 //static
 void LLOverlayBar::onClickMouselook(void*)
 {
-	gAgent.changeCameraToMouselook();
+	gAgentCamera.changeCameraToMouselook();
 }
 
 //static
 void LLOverlayBar::onClickStandUp(void*)
 {
 // [RLVa:KB] - Checked: 2009-07-10 (RLVa-1.0.0g)
-	if ( (gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT)) && (gAgent.getAvatarObject()) && (gAgent.getAvatarObject()->mIsSitting) )
+	if ( (gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT)) && (gAgent.getAvatarObject()) && (gAgent.getAvatarObject()->isSitting()) )
 	{
 		return;
 	}

@@ -40,7 +40,7 @@
 #include "message.h"
 #include "v2math.h"
 
-#include "llagent.h"
+#include "llagentcamera.h"
 #include "lldrawable.h"
 #include "llface.h"
 #include "llsky.h"
@@ -136,7 +136,7 @@ F32 LLVOPartGroup::getPartSize(S32 idx)
 
 LLVector3 LLVOPartGroup::getCameraPosition() const
 {
-	return gAgent.getCameraPositionAgent();
+	return gAgentCamera.getCameraPositionAgent();
 }
 
 BOOL LLVOPartGroup::updateGeometry(LLDrawable *drawable)
@@ -457,7 +457,7 @@ void LLParticlePartition::getGeometry(LLSpatialGroup* group)
 		LLAlphaObject* object = (LLAlphaObject*) facep->getViewerObject();
 		facep->setGeomIndex(vertex_count);
 		facep->setIndicesIndex(index_count);
-		facep->mVertexBuffer = buffer;
+		facep->setVertexBuffer(buffer);
 		facep->setPoolType(LLDrawPool::POOL_ALPHA);
 		object->getGeometry(facep->getTEOffset(), verticesp, normalsp, texcoordsp, colorsp, indicesp);
 		
@@ -486,7 +486,9 @@ void LLParticlePartition::getGeometry(LLSpatialGroup* group)
 			U32 end = start + facep->getGeomCount()-1;
 			U32 offset = facep->getIndicesStart();
 			U32 count = facep->getIndicesCount();
-			LLDrawInfo* info = new LLDrawInfo(start,end,count,offset,facep->getTexture(), buffer, fullbright); 
+			LLDrawInfo* info = new LLDrawInfo(start,end,count,offset,facep->getTexture(),
+				//facep->getTexture(),
+				buffer, fullbright);
 			info->mExtents[0] = group->mObjectExtents[0];
 			info->mExtents[1] = group->mObjectExtents[1];
 			info->mVSize = vsize;

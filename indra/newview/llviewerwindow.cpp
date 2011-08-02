@@ -37,6 +37,8 @@
 #include <iostream>
 #include <fstream>
 
+#include "llagent.h"
+#include "llagentcamera.h"
 #include "llpanellogin.h"
 #include "llviewerkeyboard.h"
 #include "llviewerwindow.h"
@@ -89,7 +91,7 @@
 #include "llmaniptranslate.h"
 #include "llface.h"
 #include "llfeaturemanager.h"
-#include "llfilepicker.h"
+#include "statemachine/aifilepicker.h"
 #include "llfloater.h"
 #include "llfloateractivespeakers.h"
 #include "llfloaterbuildoptions.h"
@@ -364,7 +366,7 @@ public:
 			agent_left_text = llformat("AgentLeftAxis  %f %f %f",
 									   (F32)(tvector.mdV[VX]), (F32)(tvector.mdV[VY]), (F32)(tvector.mdV[VZ]));
 
-			tvector = gAgent.getCameraPositionGlobal();
+			tvector = gAgentCamera.getCameraPositionGlobal();
 			camera_center_text = llformat("CameraCenter %f %f %f",
 										  (F32)(tvector.mdV[VX]), (F32)(tvector.mdV[VY]), (F32)(tvector.mdV[VZ]));
 
@@ -522,8 +524,8 @@ public:
 			ypos += y_inc;
 		}
 		// only display these messages if we are actually rendering beacons at this moment
-		static const LLCachedControl<bool> beacon_always_on("BeaconAlwaysOn",false);
-		if (LLPipeline::getRenderBeacons(NULL) && beacon_always_on)
+		static const LLCachedControl<bool> beacons_visible("BeaconsVisible",false);
+		if (LLPipeline::getRenderBeacons(NULL) && beacons_visible)
 		{
 			if (LLPipeline::getRenderParticleBeacons(NULL))
 			{
@@ -553,7 +555,7 @@ public:
 				}
 			if (LLPipeline::getRenderSoundBeacons(NULL))
 			{
-				addText(xpos, ypos, "Viewing sound beacons (yellow)");
+				addText(xpos, ypos, "Viewing sound beacons (blue/cyan/green/yellow/red)");
 				ypos += y_inc;
 			}
 		}
@@ -970,7 +972,7 @@ BOOL LLViewerWindow::handleRightMouseDown(LLWindow *window,  LLCoordGL pos, MASK
 
 	// *HACK: this should be rolled into the composite tool logic, not
 	// hardcoded at the top level.
-	if (CAMERA_MODE_CUSTOMIZE_AVATAR != gAgent.getCameraMode() && LLToolMgr::getInstance()->getCurrentTool() != LLToolPie::getInstance())
+	if (CAMERA_MODE_CUSTOMIZE_AVATAR != gAgentCamera.getCameraMode() && LLToolMgr::getInstance()->getCurrentTool() != LLToolPie::getInstance())
 	{
 		// If the current tool didn't process the click, we should show
 		// the pie menu.  This can be done by passing the event to the pie
@@ -1296,7 +1298,10 @@ BOOL LLViewerWindow::handleActivate(LLWindow *window, BOOL activated)
 		}
 		
 		// SL-53351: Make sure we're not in mouselook when minimised, to prevent control issues
-		gAgent.changeCameraToDefault();
+		if (gAgentCamera.getCameraMode() == CAMERA_MODE_MOUSELOOK)
+		{
+			gAgentCamera.changeCameraToDefault();
+		}
 		
 		send_agent_pause();
 		
@@ -1313,7 +1318,7 @@ BOOL LLViewerWindow::handleActivate(LLWindow *window, BOOL activated)
 
 BOOL LLViewerWindow::handleActivateApp(LLWindow *window, BOOL activating)
 {
-	//if (!activating) gAgent.changeCameraToDefault();
+	//if (!activating) gAgentCamera.changeCameraToDefault();
 
 	LLViewerJoystick::getInstance()->setNeedsReset(true);
 	return FALSE;
@@ -1555,6 +1560,7 @@ LLViewerWindow::LLViewerWindow(
 		gSavedSettings.setBOOL("RenderVBOEnable", FALSE);
 	}
 	LLVertexBuffer::initClass(gSavedSettings.getBOOL("RenderVBOEnable"), gSavedSettings.getBOOL("RenderVBOMappingDisable"));
+	LL_INFOS("RenderInit") << "LLVertexBuffer initialization done." << LL_ENDL ;
 
 	if (LLFeatureManager::getInstance()->isSafe()
 		|| (gSavedSettings.getS32("LastFeatureVersion") != LLFeatureManager::getInstance()->getVersion())
@@ -2363,7 +2369,7 @@ void LLViewerWindow::draw()
 		// Draw tool specific overlay on world
 		LLToolMgr::getInstance()->getCurrentTool()->draw();
 
-		if( gAgent.cameraMouselook() )
+		if( gAgentCamera.cameraMouselook() )
 		{
 			drawMouselookInstructions();
 			stop_glerror();
@@ -2739,7 +2745,7 @@ void LLViewerWindow::handleScrollWheel(S32 clicks)
 	}
 
 	// Zoom the camera in and out behavior
-	gAgent.handleScrollWheel(clicks);
+	gAgentCamera.handleScrollWheel(clicks);
 
 	return;
 }
@@ -3308,7 +3314,7 @@ void LLViewerWindow::renderSelections( BOOL for_gl_pick, BOOL pick_parcel_walls,
 			glPushMatrix();
 			if (selection->getSelectType() == SELECT_TYPE_HUD)
 			{
-				F32 zoom = gAgent.mHUDCurZoom;
+				F32 zoom = gAgentCamera.mHUDCurZoom;
 				glScalef(zoom, zoom, zoom);
 			}
 
@@ -3385,7 +3391,7 @@ void LLViewerWindow::renderSelections( BOOL for_gl_pick, BOOL pick_parcel_walls,
 								 ((gRlvHandler.hasBehaviour(RLV_BHVR_UNSIT)) || (gRlvHandler.hasBehaviour(RLV_BHVR_SITTP))) )
 							{
 								LLVOAvatar* pAvatar = gAgent.getAvatarObject();
-								if ( (pAvatar) && (pAvatar->mIsSitting) && (pAvatar->getRoot() == object->getRootEdit()) )
+								if ( (pAvatar) && (pAvatar->isSitting()) && (pAvatar->getRoot() == object->getRootEdit()) )
 									moveable_object_selected = this_object_movable = FALSE;
 							}
 // [/RLVa:KB]
@@ -3437,7 +3443,7 @@ LLVector3d LLViewerWindow::clickPointInWorldGlobal(S32 x, S32 y_from_bot, LLView
 	// world at the location of the mouse click
 	LLVector3 mouse_direction_global = mouseDirectionGlobal( x, y_from_bot );
 
-	LLVector3d relative_object = clicked_object->getPositionGlobal() - gAgent.getCameraPositionGlobal();
+	LLVector3d relative_object = clicked_object->getPositionGlobal() - gAgentCamera.getCameraPositionGlobal();
 
 	// make mouse vector as long as object vector, so it touchs a point near
 	// where the user clicked on the object
@@ -3446,7 +3452,7 @@ LLVector3d LLViewerWindow::clickPointInWorldGlobal(S32 x, S32 y_from_bot, LLView
 	LLVector3d new_pos;
 	new_pos.setVec(mouse_direction_global);
 	// transform mouse vector back to world coords
-	new_pos += gAgent.getCameraPositionGlobal();
+	new_pos += gAgentCamera.getCameraPositionGlobal();
 
 	return new_pos;
 }
@@ -3818,7 +3824,7 @@ LLVector3 LLViewerWindow::mousePointHUD(const S32 x, const S32 y) const
 	F32 hud_x = -((F32)x - (F32)width/2.f)  / height;
 	F32 hud_y = ((F32)y - (F32)height/2.f) / height;
 
-	return LLVector3(0.f, hud_x/gAgent.mHUDCurZoom, hud_y/gAgent.mHUDCurZoom);
+	return LLVector3(0.f, hud_x/gAgentCamera.mHUDCurZoom, hud_y/gAgentCamera.mHUDCurZoom);
 }
 
 // Returns unit vector relative to camera in camera space
@@ -3861,7 +3867,7 @@ BOOL LLViewerWindow::mousePointOnPlaneGlobal(LLVector3d& point, const S32 x, con
 	LLVector3d	plane_normal_global_d;
 	plane_normal_global_d.setVec(plane_normal_global);
 	F64 plane_mouse_dot = (plane_normal_global_d * mouse_direction_global_d);
-	LLVector3d plane_origin_camera_rel = plane_point_global - gAgent.getCameraPositionGlobal();
+	LLVector3d plane_origin_camera_rel = plane_point_global - gAgentCamera.getCameraPositionGlobal();
 	F64	mouse_look_at_scale = (plane_normal_global_d * plane_origin_camera_rel)
 								/ plane_mouse_dot;
 	if (llabs(plane_mouse_dot) < 0.00001)
@@ -3875,7 +3881,7 @@ BOOL LLViewerWindow::mousePointOnPlaneGlobal(LLVector3d& point, const S32 x, con
 		mouse_look_at_scale = plane_origin_camera_rel.magVec() / (plane_origin_dir * mouse_direction_global_d);
 	}
 
-	point = gAgent.getCameraPositionGlobal() + mouse_look_at_scale * mouse_direction_global_d;
+	point = gAgentCamera.getCameraPositionGlobal() + mouse_look_at_scale * mouse_direction_global_d;
 
 	return mouse_look_at_scale > 0.0;
 }
@@ -3893,12 +3899,12 @@ BOOL LLViewerWindow::mousePointOnLandGlobal(const S32 x, const S32 y, LLVector3d
 	const F32	SECOND_PASS_STEP = 0.1f;	// meters
 	LLVector3d	camera_pos_global;
 
-	camera_pos_global = gAgent.getCameraPositionGlobal();
+	camera_pos_global = gAgentCamera.getCameraPositionGlobal();
 	LLVector3d		probe_point_global;
 	LLVector3		probe_point_region;
 
 	// walk forwards to find the point
-	for (mouse_dir_scale = FIRST_PASS_STEP; mouse_dir_scale < gAgent.mDrawDistance; mouse_dir_scale += FIRST_PASS_STEP)
+	for (mouse_dir_scale = FIRST_PASS_STEP; mouse_dir_scale < gAgentCamera.mDrawDistance; mouse_dir_scale += FIRST_PASS_STEP)
 	{
 		LLVector3d mouse_direction_global_d;
 		mouse_direction_global_d.setVec(mouse_direction_global * mouse_dir_scale);
@@ -3988,50 +3994,62 @@ BOOL LLViewerWindow::mousePointOnLandGlobal(const S32 x, const S32 y, LLVector3d
 }
 
 // Saves an image to the harddrive as "SnapshotX" where X >= 1.
-BOOL LLViewerWindow::saveImageNumbered(LLImageFormatted *image)
+void LLViewerWindow::saveImageNumbered(LLPointer<LLImageFormatted> image)
 {
 	if (!image)
 	{
-		return FALSE;
+		return;
 	}
 
-	LLFilePicker::ESaveFilter pick_type;
+	ESaveFilter pick_type;
 	std::string extension("." + image->getExtension());
 	if (extension == ".j2c")
-		pick_type = LLFilePicker::FFSAVE_J2C;
+		pick_type = FFSAVE_J2C;
 	else if (extension == ".bmp")
-		pick_type = LLFilePicker::FFSAVE_BMP;
+		pick_type = FFSAVE_BMP;
 	else if (extension == ".jpg")
-		pick_type = LLFilePicker::FFSAVE_JPEG;
+		pick_type = FFSAVE_JPEG;
 	else if (extension == ".png")
-		pick_type = LLFilePicker::FFSAVE_PNG;
+		pick_type = FFSAVE_PNG;
 	else if (extension == ".tga")
-		pick_type = LLFilePicker::FFSAVE_TGA;
+		pick_type = FFSAVE_TGA;
 	else
-		pick_type = LLFilePicker::FFSAVE_ALL; // ???
+		pick_type = FFSAVE_ALL; // ???
 	
 	// Get a base file location if needed.
 	if ( ! isSnapshotLocSet())		
 	{
 		std::string proposed_name( sSnapshotBaseName );
 
-		// getSaveFile will append an appropriate extension to the proposed name, based on the ESaveFilter constant passed in.
+		// AIFilePicker will append an appropriate extension to the proposed name, based on the ESaveFilter constant passed in.
 
 		// pick a directory in which to save
-		LLFilePicker& picker = LLFilePicker::instance();
-		if (!picker.getSaveFile(pick_type, proposed_name))
-		{
-			// Clicked cancel
-			return FALSE;
-		}
+		AIFilePicker* filepicker = AIFilePicker::create();				// Deleted in LLViewerWindow::saveImageNumbered_continued1
+		filepicker->open(proposed_name, pick_type, "", "snapshot");
+		filepicker->run(boost::bind(&LLViewerWindow::saveImageNumbered_continued1, this, image, extension, filepicker));
+		return;
+	}
 
+	// LLViewerWindow::sSnapshotBaseName and LLViewerWindow::sSnapshotDir already known. Go straight to saveImageNumbered_continued2.
+	saveImageNumbered_continued2(image, extension);
+}
+
+void LLViewerWindow::saveImageNumbered_continued1(LLPointer<LLImageFormatted> image, std::string const& extension, AIFilePicker* filepicker)
+{
+	if (filepicker->hasFilename())
+	{
 		// Copy the directory + file name
-		std::string filepath = picker.getFirstFile();
+		std::string filepath = filepicker->getFilename();
 
 		LLViewerWindow::sSnapshotBaseName = gDirUtilp->getBaseFileName(filepath, true);
 		LLViewerWindow::sSnapshotDir = gDirUtilp->getDirName(filepath);
-	}
 
+		saveImageNumbered_continued2(image, extension);
+	}
+}
+
+void LLViewerWindow::saveImageNumbered_continued2(LLPointer<LLImageFormatted> image, std::string const& extension)
+{
 	// Look for an unused file name
 	std::string filepath;
 	S32 i = 1;
@@ -4051,7 +4069,10 @@ BOOL LLViewerWindow::saveImageNumbered(LLImageFormatted *image)
 	}
 	while( -1 != err );  // search until the file is not found (i.e., stat() gives an error).
 
-	return image->save(filepath);
+	if (image->save(filepath))
+	{
+		playSnapshotAnimAndSound();
+	}
 }
 
 void LLViewerWindow::resetSnapshotLoc()
@@ -4329,6 +4350,21 @@ BOOL LLViewerWindow::rawSnapshot(LLImageRaw *raw, S32 image_width, S32 image_hei
 	image_width *= internal_scale;
 #endif //shy_mod
 
+	//Hack until hud ui works in high-res shots again (nameplates and hud attachments are buggered).
+	if ((image_width > window_width || image_height > window_height))
+	{
+		if(LLPipeline::sShowHUDAttachments)
+		{
+			hide_hud=true;
+			LLPipeline::sShowHUDAttachments = FALSE;
+		}
+		if(show_ui)
+		{
+			show_ui=false;
+			LLPipeline::toggleRenderDebugFeature((void*)LLPipeline::RENDER_DEBUG_FEATURE_UI);
+		}
+	}
+	
 	if(!keep_window_aspect) //image cropping
 	{		
 		F32 ratio = llmin( (F32)window_width / image_width , (F32)window_height / image_height) ;
@@ -4409,7 +4445,7 @@ BOOL LLViewerWindow::rawSnapshot(LLImageRaw *raw, S32 image_width, S32 image_hei
 		//rescale fonts
 		initFonts(scale_factor);
 		LLHUDText::reshape();
-	}
+		}
 	}
 
 	S32 output_buffer_offset_y = 0;
@@ -4520,7 +4556,7 @@ BOOL LLViewerWindow::rawSnapshot(LLImageRaw *raw, S32 image_width, S32 image_hei
 	gDepthDirty = TRUE;
 
 	// POST SNAPSHOT
-	if (!gPipeline.hasRenderDebugFeatureMask(LLPipeline::RENDER_DEBUG_FEATURE_UI))
+	if (prev_draw_ui != gPipeline.hasRenderDebugFeatureMask(LLPipeline::RENDER_DEBUG_FEATURE_UI))
 	{
 		LLPipeline::toggleRenderDebugFeature((void*)LLPipeline::RENDER_DEBUG_FEATURE_UI);
 	}
@@ -4572,7 +4608,7 @@ BOOL LLViewerWindow::rawSnapshot(LLImageRaw *raw, S32 image_width, S32 image_hei
 		gPipeline.resetDrawOrders();
 	}
 
-	if (high_res)
+	if (high_res && (show_ui || !hide_hud))
 	{
 		send_agent_resume();
 	}
@@ -5229,9 +5265,9 @@ bool LLViewerWindow::onAlert(const LLSD& notify)
 
 	// If we're in mouselook, the mouse is hidden and so the user can't click 
 	// the dialog buttons.  In that case, change to First Person instead.
-	if( gAgent.cameraMouselook() )
+	if( gAgentCamera.cameraMouselook() )
 	{
-		gAgent.changeCameraToDefault();
+		gAgentCamera.changeCameraToDefault();
 	}
 	return false;
 }
@@ -5442,7 +5478,7 @@ void LLPickInfo::fetchResults()
 			{
 				mPickType = PICK_OBJECT;
 			}
-			mObjectOffset = gAgent.calcFocusOffset(objectp, intersection, mPickPt.mX, mPickPt.mY);
+			mObjectOffset = gAgentCamera.calcFocusOffset(objectp, intersection, mPickPt.mX, mPickPt.mY);
 			mObjectID = objectp->mID;
 			mObjectFace = (te_offset == NO_FACE) ? -1 : (S32)te_offset;
 

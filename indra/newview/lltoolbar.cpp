@@ -41,6 +41,7 @@
 #include "llparcel.h"
 
 #include "llagent.h"
+#include "llagentcamera.h"
 #include "llbutton.h"
 #include "llfocusmgr.h"
 #include "llviewercontrol.h"
@@ -125,7 +126,6 @@ LLToolBar::LLToolBar()
 BOOL LLToolBar::postBuild()
 {
 	childSetCommitCallback("communicate_btn", onClickCommunicate, this);
-	childSetControlName("communicate_btn", "ShowCommunicate");
 
 	childSetAction("chat_btn", onClickChat, this);
 	childSetControlName("chat_btn", "ChatVisible");
@@ -134,7 +134,7 @@ BOOL LLToolBar::postBuild()
 	childSetControlName("appearance_btn", "");
 
 	childSetAction("radar_list_btn", onClickRadarList, this);
-	childSetControlName("radar_list_btn", "RadarListBtnState");
+	childSetControlName("radar_list_btn", "ShowRadar");
 
 	childSetAction("fly_btn", onClickFly, this);
 	childSetControlName("fly_btn", "FlyBtnState");
@@ -143,7 +143,7 @@ BOOL LLToolBar::postBuild()
 	childSetControlName("sit_btn", "SitBtnState");
 
 	childSetAction("snapshot_btn", onClickSnapshot, this);
-	childSetControlName("snapshot_btn", "");
+	childSetControlName("snapshot_btn", "SnapshotBtnState");
 
 	childSetAction("directory_btn", onClickDirectory, this);
 	childSetControlName("directory_btn", "ShowDirectory");
@@ -289,13 +289,13 @@ void LLToolBar::reshape(S32 width, S32 height, BOOL called_from_parent)
 void LLToolBar::refresh()
 {
 	BOOL show = gSavedSettings.getBOOL("ShowToolBar");
-	BOOL mouselook = gAgent.cameraMouselook();
+	BOOL mouselook = gAgentCamera.cameraMouselook();
 	setVisible(show && !mouselook);
 
 	BOOL sitting = FALSE;
 	if (gAgent.getAvatarObject())
 	{
-		sitting = gAgent.getAvatarObject()->mIsSitting;
+		sitting = gAgent.getAvatarObject()->isSitting();
 	}
 
 	childSetEnabled("fly_btn", (gAgent.canFly() || gAgent.getFlying() || gSavedSettings.getBOOL("AscentFlyAlwaysEnabled")) && !sitting );
@@ -467,9 +467,9 @@ void LLToolBar::onClickChat(void* user_data)
 // static
 void LLToolBar::onClickAppearance(void*)
 {
-	if (gAgent.areWearablesLoaded())
+	if (gAgentWearables.areWearablesLoaded())
 	{
-		gAgent.changeCameraToCustomizeAvatar();
+		gAgentCamera.changeCameraToCustomizeAvatar();
 	}
 }
 

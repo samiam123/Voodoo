@@ -96,6 +96,7 @@ void LLFloaterHardwareSettings::refreshEnabledState()
 	childSetMinValue("GrapicsCardTextureMemory", min_tex_mem);
 	childSetMaxValue("GrapicsCardTextureMemory", max_tex_mem);
 
+	mLastVBOState = LLVertexBuffer::sEnableVBOs;
 	if (!LLFeatureManager::getInstance()->isFeatureAvailable("RenderVBOEnable") ||
 		!gGLManager.mHasVertexBufferObject)
 	{
@@ -108,7 +109,7 @@ void LLFloaterHardwareSettings::refreshEnabledState()
 		childSetEnabled("vbo_stream", LLVertexBuffer::sEnableVBOs);
 	}
 
-	childSetEnabled("fbo",gGLManager.mHasFramebufferObject);
+	childSetEnabled("fbo",gGLManager.mHasFramebufferObject && !LLPipeline::sRenderDeferred);
 
 	// if no windlight shaders, turn off nighttime brightness, gamma, and fog distance
 	childSetEnabled("gamma", !gPipeline.canUseWindLightShaders());
@@ -158,6 +159,13 @@ void LLFloaterHardwareSettings::onClose(bool app_quitting)
 	}
 }
 
+// virtual
+void LLFloaterHardwareSettings::draw()
+{
+	if(mLastVBOState == !LLVertexBuffer::sEnableVBOs)
+		refreshEnabledState();
+	LLFloater::draw();
+}
 
 //============================================================================
 

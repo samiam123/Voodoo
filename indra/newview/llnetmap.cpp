@@ -44,6 +44,7 @@
 #include "llfloateravatarlist.h"
 
 #include "llagent.h"
+#include "llagentcamera.h"
 #include "llavatarnamecache.h"
 #include "llcallingcard.h"
 #include "llcolorscheme.h"
@@ -104,7 +105,7 @@ LLNetMap::LLNetMap(const std::string& name) :
 	mPixelsPerMeter = mScale / LLWorld::getInstance()->getRegionWidthInMeters();
 	mDotRadius = llmax(DOT_SCALE * mPixelsPerMeter, MIN_DOT_RADIUS);
 
-	mObjectImageCenterGlobal = gAgent.getCameraPositionGlobal();
+	mObjectImageCenterGlobal = gAgentCamera.getCameraPositionGlobal();
 	
 	// Register event listeners for popup menu
 	(new LLScaleMap())->registerListener(this, "MiniMap.ZoomLevel");
@@ -122,6 +123,8 @@ LLNetMap::LLNetMap(const std::string& name) :
 	(new mmsetblue())->registerListener(this, "MiniMap.setblue");
 	(new mmsetyellow())->registerListener(this, "MiniMap.setyellow");
 	(new mmsetcustom())->registerListener(this, "MiniMap.setcustom");
+	(new mmsetunmark())->registerListener(this, "MiniMap.setunmark");
+	(new mmenableunmark())->registerListener(this, "MiniMap.enableunmark");
 
 	LLUICtrlFactory::getInstance()->buildPanel(this, "panel_mini_map.xml");
 
@@ -175,18 +178,15 @@ void LLNetMap::translatePan( F32 delta_x, F32 delta_y )
 
 
 ///////////////////////////////////////////////////////////////////////////////////
-LLColor4 mm_mapcols[1024];
-LLUUID mm_mapkeys[1024];
-U32 mm_netmapnum;
+std::size_t hash_value(const LLUUID& uuid)
+{
+    return (std::size_t)uuid.getCRC32();
+}
+boost::unordered_map<const LLUUID,LLColor4> mm_MarkerColors;
 
-void LLNetMap::mm_setcolor(LLUUID key,LLColor4 col){
-	if(mm_netmapnum>1023){
-		llinfos << "Minimap color buffer filled, relog or something to clear it" << llendl;
-		return;
-	}
-	mm_mapcols[mm_netmapnum]=col;
-	mm_mapkeys[mm_netmapnum]=key;
-	mm_netmapnum+=1;
+void LLNetMap::mm_setcolor(LLUUID key,LLColor4 col)
+{
+	mm_MarkerColors[key] = col;
 }
 void LLNetMap::draw()
 {
@@ -251,7 +251,7 @@ void LLNetMap::draw()
 			LLViewerRegion* regionp = *iter;
 			// Find x and y position relative to camera's center.
 			LLVector3 origin_agent = regionp->getOriginAgent();
-			LLVector3 rel_region_pos = origin_agent - gAgent.getCameraPositionAgent();
+			LLVector3 rel_region_pos = origin_agent - gAgentCamera.getCameraPositionAgent();
 			F32 relative_x = (rel_region_pos.mV[0] / region_width) * mScale;
 			F32 relative_y = (rel_region_pos.mV[1] / region_width) * mScale;
 
@@ -308,7 +308,7 @@ void LLNetMap::draw()
 			mUpdateNow = FALSE;
 
 			// Locate the centre of the object layer, accounting for panning
-			LLVector3 new_center = globalPosToView(gAgent.getCameraPositionGlobal(), rotate_map);	
+			LLVector3 new_center = globalPosToView(gAgentCamera.getCameraPositionGlobal(), rotate_map);	
 			new_center.mV[0] -= mCurPanX;
 			new_center.mV[1] -= mCurPanY;
 			new_center.mV[2] = 0.f;
@@ -327,7 +327,7 @@ void LLNetMap::draw()
 		}
 
 		LLVector3 map_center_agent = gAgent.getPosAgentFromGlobal(mObjectImageCenterGlobal);
-		map_center_agent -= gAgent.getCameraPositionAgent();
+		map_center_agent -= gAgentCamera.getCameraPositionAgent();
 		map_center_agent.mV[VX] *= mScale/region_width;
 		map_center_agent.mV[VY] *= mScale/region_width;
 
@@ -375,7 +375,6 @@ void LLNetMap::draw()
 		std::vector<LLUUID> avatar_ids;
 		std::vector<LLVector3d> positions;
 		LLWorld::getInstance()->getAvatars(&avatar_ids, &positions);
-		U32 a;
 		for(U32 i=0; i<avatar_ids.size(); i++)
 		{
 			LLColor4 avColor = standard_color;
@@ -415,12 +414,10 @@ void LLNetMap::draw()
 			else 
 			{
 				// MOYMOD Minimap custom av colors.
-				for(a=0;a<mm_netmapnum;a+=1)
+				boost::unordered_map<const LLUUID,LLColor4>::const_iterator it = mm_MarkerColors.find(avatar_ids[i]);
+				if(it != mm_MarkerColors.end())
 				{
-					if(avatar_ids[i]==mm_mapkeys[a])
-					{
-						avColor = mm_mapcols[a];
-					}
+					avColor = it->second;
 				}
 			}
 
@@ -535,7 +532,7 @@ void LLNetMap::reshape(S32 width, S32 height, BOOL called_from_parent)
 
 LLVector3 LLNetMap::globalPosToView(const LLVector3d& global_pos, BOOL rotated)
 {
-	LLVector3d relative_pos_global = global_pos - gAgent.getCameraPositionGlobal();
+	LLVector3d relative_pos_global = global_pos - gAgentCamera.getCameraPositionGlobal();
 	LLVector3 pos_local;
 	pos_local.setVec(relative_pos_global);  // convert to floats from doubles
 
@@ -601,7 +598,7 @@ LLVector3d LLNetMap::viewPosToGlobal( S32 x, S32 y, BOOL rotated )
 	
 	LLVector3d pos_global;
 	pos_global.setVec( pos_local );
-	pos_global += gAgent.getCameraPositionGlobal();
+	pos_global += gAgentCamera.getCameraPositionGlobal();
 
 	return pos_global;
 }
@@ -1087,6 +1084,18 @@ bool LLNetMap::mmsetcustom::handleEvent(LLPointer<LLEvent> event, const LLSD& us
 	//if(self->mClosestAgentAtLastRightClick){
 		mm_setcolor(self->mClosestAgentAtLastRightClick,gSavedSettings.getColor4("MoyMiniMapCustomColor"));
 	//}
+	return true;
+}
+bool LLNetMap::mmsetunmark::handleEvent(LLPointer<LLEvent> event, const LLSD& userdata)
+{
+	mm_MarkerColors.erase(mPtr->mClosestAgentAtLastRightClick);
+	return true;
+}
+bool LLNetMap::mmenableunmark::handleEvent(LLPointer<LLEvent> event, const LLSD& userdata)
+{
+	LLNetMap *self = mPtr;
+	BOOL enabled = mPtr->mClosestAgentAtLastRightClick.notNull() && mm_MarkerColors.find(mPtr->mClosestAgentAtLastRightClick) != mm_MarkerColors.end();
+	self->findControl(userdata["control"].asString())->setValue(enabled);
 	return true;
 }
 bool LLNetMap::LLCenterMap::handleEvent(LLPointer<LLEvent> event, const LLSD& userdata)

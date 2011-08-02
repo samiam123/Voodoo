@@ -44,6 +44,7 @@
 #include "llsdserialize.h"
 
 #include "llagent.h"
+#include "llagentcamera.h"
 #include "llcallbacklist.h"
 #include "llcriticaldamp.h"
 #include "llfloaterperms.h"
@@ -149,7 +150,7 @@ public:
 	void updateSnapshot(BOOL new_snapshot, BOOL new_thumbnail = FALSE, F32 delay = 0.f);
 	LLFloaterPostcard* savePostcard();
 	void saveTexture();
-	BOOL saveLocal();
+	void saveLocal();
 
 	BOOL setThumbnailImageSize() ;
 	void generateThumbnailImage(BOOL force_update = FALSE) ;
@@ -893,7 +894,7 @@ BOOL LLSnapshotLivePreview::onIdle( void* snapshot_preview )
 				previewp->setThumbnailImageSize();
 			}
 
-			previewp->mPosTakenGlobal = gAgent.getCameraPositionGlobal();
+			previewp->mPosTakenGlobal = gAgentCamera.getCameraPositionGlobal();
 			previewp->mShineCountdown = 4; // wait a few frames to avoid animation glitch due to readback this frame
 		}
 	}
@@ -1005,20 +1006,14 @@ void LLSnapshotLivePreview::saveTexture()
 	mDataSize = 0;
 }
 
-BOOL LLSnapshotLivePreview::saveLocal()
+void LLSnapshotLivePreview::saveLocal()
 {
-	BOOL success = gViewerWindow->saveImageNumbered(mFormattedImage);
+	gViewerWindow->saveImageNumbered(mFormattedImage);
 
 	// Relinquish image memory. Save button will be disabled as a side-effect.
 	mFormattedImage = NULL;
 	mDataSize = 0;
 	updateSnapshot(FALSE, FALSE);
-
-	if(success)
-	{
-		gViewerWindow->playSnapshotAnimAndSound();
-	}
-	return success;
 }
 
 ///----------------------------------------------------------------------------
@@ -1410,7 +1405,7 @@ void LLFloaterSnapshot::Impl::onClickDiscard(void* data)
 // static
 void LLFloaterSnapshot::Impl::onCommitSave(LLUICtrl* ctrl, void* data)
 {
-	if (ctrl->getValue().asString() == "save as")
+	if (ctrl->getValue().asString() == "saveas")
 	{
 		gViewerWindow->resetSnapshotLoc();
 	}
@@ -2115,11 +2110,17 @@ void LLFloaterSnapshot::draw()
 	}
 }
 
+void LLFloaterSnapshot::onOpen()
+{
+	gSavedSettings.setBOOL("SnapshotBtnState", TRUE);
+}
+
 void LLFloaterSnapshot::onClose(bool app_quitting)
 {
 	gSnapshotFloaterView->setEnabled(FALSE);
 	// Set invisible so it doesn't eat tooltips. JC
 	gSnapshotFloaterView->setVisible(FALSE);
+	gSavedSettings.setBOOL("SnapshotBtnState", FALSE);
 	destroy();
 }
 
