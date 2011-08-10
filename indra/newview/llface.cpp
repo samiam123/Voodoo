@@ -1463,6 +1463,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 
 	if (rebuild_pos)
 	{
+		llassert(num_vertices > 0);
 		mVertexBuffer->getVertexStrider(vertices, mGeomIndex);
 		LLMatrix4a mat_vert;
 		mat_vert.loadu(mat_vert_in);
@@ -1753,10 +1754,10 @@ BOOL LLFace::verify(const U32* indices_array) const
 	}
 	
 	// First, check whether the face data fits within the pool's range.
-	if ((mGeomIndex + mGeomCount) > mVertexBuffer->getNumVerts())
+	if ((mGeomIndex + mGeomCount) > mVertexBuffer->getRequestedVerts())
 	{
 		ok = FALSE;
-		llinfos << "Face not within pool range!" << llendl;
+		llinfos << "Face references invalid vertices!" << llendl;
 	}
 
 	S32 indices_count = (S32)getIndicesCount();
@@ -1772,6 +1773,12 @@ BOOL LLFace::verify(const U32* indices_array) const
 		llinfos << "Face has bogus indices count" << llendl;
 	}
 	
+	if (mIndicesIndex + mIndicesCount > (U32)mVertexBuffer->getRequestedIndices())
+	{
+		ok = FALSE;
+		llinfos << "Face references invalid indices!" << llendl;
+	}
+
 #if 0
 	S32 geom_start = getGeomStart();
 	S32 geom_count = mGeomCount;
