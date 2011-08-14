@@ -891,7 +891,7 @@ void LLWorld::updateWaterObjects()
 	}
 
 	// Region width in meters.
-	S32 const rwidth = (S32)REGION_WIDTH_U32;
+	S32 const rwidth = (S32)getRegionWidthInMeters();//REGION_WIDTH_U32;
 
 	// The distance we might see into the void
 	// when standing on the edge of a region, in meters.
