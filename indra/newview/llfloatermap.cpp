@@ -43,6 +43,7 @@
 #include "llregionhandle.h"
 #include "llresizebar.h"
 #include "lluictrlfactory.h"
+#include "hippoLimits.h"
 
 // [RLVa:KB]
 #include "rlvhandler.h"
@@ -85,9 +86,12 @@ LLFloaterMap::~LLFloaterMap()
 // virtual 
 void LLFloaterMap::onOpen()
 {
-	gFloaterView->adjustToFitScreen(this, FALSE);
+	if (gHippoLimits->mAllowMinimap) //Check for if minimap is blocked
+	{
+		gFloaterView->adjustToFitScreen(this, FALSE);
 
-	gSavedSettings.setBOOL("ShowMiniMap", TRUE);
+		gSavedSettings.setBOOL("ShowMiniMap", TRUE);
+	}
 }
 
 
@@ -112,7 +116,7 @@ BOOL LLFloaterMap::canClose()
 void LLFloaterMap::draw()
 {
 	// Note: we can't just gAgent.check cameraMouselook() because the transition states are wrong.
-	if( gAgentCamera.cameraMouselook())
+	if( gAgentCamera.cameraMouselook() || !gHippoLimits->mAllowMinimap)
 	{
 		setMouseOpaque(FALSE);
 		getDragHandle()->setMouseOpaque(FALSE);

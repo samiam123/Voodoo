@@ -83,6 +83,7 @@ set(viewer_SOURCE_FILES
     ascentprefschat.cpp
     ascentprefssys.cpp
     ascentprefsvan.cpp
+    astraopenregionsettings.cpp
     dhparam.cpp
     dsaparam.cpp
     emerald.cpp

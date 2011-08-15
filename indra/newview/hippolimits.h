@@ -13,15 +13,23 @@ public:
 	float getMinHoleSize()    const { return mMinHoleSize;    }
 	float getMaxHollow()      const { return mMaxHollow;      }
 	float getMaxPrimScale()   const { return mMaxPrimScale;   }
+    int   getMaxPhysLinkedPrims() const { return mMaxPhysLinkedPrims; }
+    float getMaxInventoryItemsTransfer() const { return mMaxInventoryItemsTransfer; }
 
 	void setLimits();
 
-private:
 	int   mMaxAgentGroups;
 	float mMaxHeight;
 	float mMinHoleSize;
 	float mMaxHollow;
 	float mMaxPrimScale;
+ 	int   mMaxLinkedPrims;
+    int   mMaxPhysLinkedPrims;
+	int   mMaxInventoryItemsTransfer;
+	int   mRenderName;
+	bool  mAllowMinimap;
+	bool  mAllowPhysicalPrims;
+	bool  mRenderWater;
 
 	void setOpenSimLimits();
 	void setSecondLifeLimits();

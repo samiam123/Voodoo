@@ -790,10 +790,10 @@ F32 LLSurface::resolveHeightRegion(const F32 x, const F32 y) const
 		//      i ->
 		// where N = mGridsPerEdge
 
-		const F32 left_bottom  = getZ( left,  bottom );
-		const F32 right_bottom = getZ( right, bottom );
-		const F32 left_top     = getZ( left,  top );
-		const F32 right_top    = getZ( right, top );
+		F32 left_bottom  = getZ( left,  bottom );
+		F32 right_bottom = getZ( right, bottom );
+		F32 left_top     = getZ( left,  top );
+		F32 right_top    = getZ( right, top );
 
 		// dx and dy are incremental steps from (mSurface + k)
 		F32 dx = x - left   * mMetersPerGrid;

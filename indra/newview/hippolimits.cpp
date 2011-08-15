@@ -42,6 +42,12 @@ void HippoLimits::setOpenSimLimits()
 		mMinHoleSize = 0.01f;
 		mMaxHollow = 0.99f;
 	}
+	mMaxPhysLinkedPrims = -1;
+    mAllowMinimap = TRUE;
+    mMaxInventoryItemsTransfer = -1;
+    mRenderName = 2;
+    mAllowPhysicalPrims = TRUE;
+    mRenderWater = TRUE;
 }
 
 void HippoLimits::setSecondLifeLimits()
@@ -60,5 +66,11 @@ void HippoLimits::setSecondLifeLimits()
 	mMaxHeight = 4096.0f;
 	mMinHoleSize = 0.05f;
 	mMaxHollow = 0.95f;
+	mMaxPhysLinkedPrims = 32;
+    mAllowMinimap = TRUE;
+    mMaxInventoryItemsTransfer = 40;
+    mRenderName = 2;
+    mAllowPhysicalPrims = TRUE;
+    mRenderWater = TRUE;
 }
 

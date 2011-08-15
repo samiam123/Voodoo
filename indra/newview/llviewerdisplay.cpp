@@ -83,6 +83,7 @@
 #include "llwlparammanager.h"
 #include "llwaterparammanager.h"
 #include "llpostprocess.h"
+#include "hippoLimits.h"
 
 // [RLVa:KB]
 #include "rlvhandler.h"
@@ -186,6 +187,12 @@ void display_update_camera(bool tiling=false)
 	if (CAMERA_MODE_CUSTOMIZE_AVATAR == gAgentCamera.getCameraMode())
 	{
 		final_far *= 0.5f;
+	}
+	if(gAgentCamera.mLockedDrawDistance)
+	{
+		//Reset the draw distance and do not update with the new val
+	    final_far = LLViewerCamera::getInstance()->getFar();
+	    gAgentCamera.mDrawDistance = final_far;
 	}
 	LLViewerCamera::getInstance()->setFar(final_far);
 	gViewerWindow->setup3DRender();
@@ -342,7 +349,10 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot, boo
 
 	LLImageGL::updateStats(gFrameTimeSeconds);
 	
-	LLVOAvatar::sRenderName = gSavedSettings.getS32("RenderName");
+	S32 RenderName = gSavedSettings.getS32("RenderName");
+	if(RenderName > gHippoLimits->mRenderName)//The most restricted gets set here
+        RenderName = gHippoLimits->mRenderName;
+	LLVOAvatar::sRenderName = RenderName;
 	LLVOAvatar::sRenderGroupTitles = !gSavedSettings.getBOOL("RenderHideGroupTitleAll");
 	
 	gPipeline.mBackfaceCull = TRUE;
@@ -859,6 +869,9 @@ void display(BOOL rebuild, F32 zoom_factor, int subfield, BOOL for_snapshot, boo
 		//}
 
 		LLPipeline::sUnderWaterRender = LLViewerCamera::getInstance()->cameraUnderWater() ? TRUE : FALSE;
+		//Check for RenderWater
+        if (!gSavedSettings.getBOOL("RenderWater") || !gHippoLimits->mRenderWater)
+            LLPipeline::sUnderWaterRender = FALSE;
 		LLPipeline::updateRenderDeferred();
 		
 		stop_glerror();
