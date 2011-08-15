@@ -297,8 +297,6 @@ bool HippoPanelGridsImpl::saveCurGrid()
 	if (mState == NORMAL) {
 		
 		gridInfo = gHippoGridManager->getGrid(mCurGrid);
-	    gridInfo->retrieveGridInfo();
-		refresh();
 	} else if ((mState == ADD_NEW) || (mState == ADD_COPY)) {
 		
 		// check nickname
@@ -328,8 +326,21 @@ bool HippoPanelGridsImpl::saveCurGrid()
 		mState = NORMAL;
 		mCurGrid = gridname;
 		gridInfo = new HippoGridInfo(gridname);
+		if (gridInfo->retrieveGridInfo()) {
+			if (gridInfo->getPlatform() != HippoGridInfo::PLATFORM_OTHER)
+				getChild<LLComboBox>("platform")->setCurrentByIndex(gridInfo->getPlatform());
+			if (gridInfo->getGridName() != "") childSetText("gridname", gridInfo->getGridName());
+			if (gridInfo->getLoginUri() != "") childSetText("loginuri", gridInfo->getLoginUri());
+			if (gridInfo->getLoginPage() != "") childSetText("loginpage", gridInfo->getLoginPage());
+			if (gridInfo->getHelperUri() != "") childSetText("helperuri", gridInfo->getHelperUri());
+			if (gridInfo->getWebSite() != "") childSetText("website", gridInfo->getWebSite());
+			if (gridInfo->getSupportUrl() != "") childSetText("support", gridInfo->getSupportUrl());
+			if (gridInfo->getRegisterUrl() != "") childSetText("register", gridInfo->getRegisterUrl());
+			if (gridInfo->getPasswordUrl() != "") childSetText("password", gridInfo->getPasswordUrl());
+			if (gridInfo->getSearchUrl() != "") childSetText("search", gridInfo->getSearchUrl());
+			if (gridInfo->getGridMessage() != "") childSetText("gridmessage", gridInfo->getGridMessage());
+		}
 		gHippoGridManager->addGrid(gridInfo);
-	    gridInfo->retrieveGridInfo();
 	} else {
 		
 		llwarns << "Illegal state " << mState << '.' << llendl;
