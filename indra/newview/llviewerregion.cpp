@@ -186,7 +186,7 @@ LLViewerRegion::LLViewerRegion(const U64 &handle,
 	if (!gNoRender)
 	{
 		// Create the composition layer for the surface
-		mCompositionp = new LLVLComposition(mLandp, grids_per_region_edge, mWidth/grids_per_region_edge);
+		mCompositionp = new LLVLComposition(mLandp, grids_per_region_edge, 1.f);//((F32)grids_per_region_edge)/256.f);
 		mCompositionp->setSurface(mLandp);
 
 		// Create the surfaces

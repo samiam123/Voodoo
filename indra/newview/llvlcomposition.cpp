@@ -85,8 +85,8 @@ LLVLComposition::LLVLComposition(LLSurface *surfacep, const U32 width, const F32
 		mStartHeight[i] = terrain_color_start_height;
 		mHeightRange[i] = terrain_color_height_range;
 	}
-	mTexScaleX = 16.f;
-	mTexScaleY = 16.f;
+	mTexScaleX = width/16.f;
+	mTexScaleY = width/16.f;
 	mTexturesLoaded = FALSE;
 }
 
@@ -160,10 +160,10 @@ BOOL LLVLComposition::generateHeights(const F32 x, const F32 y,
 	// So we need to compress heights into this range.
 	const S32 NUM_TEXTURES = 4;
 
-	const F32 xyScaleInv = (1.f / xyScale);
+	const F32 xyScaleInv = (1.f / xyScale) * (mWidth / 256.f);
 	const F32 zScaleInv = (1.f / zScale);
 
-	const F32 inv_width = 1.f/256.f;
+	const F32 inv_width = 1.f/mWidth;
 
 	// OK, for now, just have the composition value equal the height at the point.
 	for (S32 j = y_begin; j < y_end; j++)
