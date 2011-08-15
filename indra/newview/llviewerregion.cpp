@@ -176,9 +176,9 @@ LLViewerRegion::LLViewerRegion(const U64 &handle,
 	mCacheEntriesCount(0),
 	mCacheID(),
 	mEventPoll(NULL),
-	mReleaseNotesRequested(FALSE)
+	mReleaseNotesRequested(FALSE),
+	mWidth(region_width_meters)
 {
-	mWidth = region_width_meters;
 	mOriginGlobal = from_region_handle(handle); 
 	updateRenderMatrix();
 
@@ -186,7 +186,7 @@ LLViewerRegion::LLViewerRegion(const U64 &handle,
 	if (!gNoRender)
 	{
 		// Create the composition layer for the surface
-		mCompositionp = new LLVLComposition(mLandp, grids_per_region_edge, region_width_meters/grids_per_region_edge);
+		mCompositionp = new LLVLComposition(mLandp, grids_per_region_edge, mWidth/grids_per_region_edge);
 		mCompositionp->setSurface(mLandp);
 
 		// Create the surfaces
@@ -199,9 +199,9 @@ LLViewerRegion::LLViewerRegion(const U64 &handle,
 
 	if (!gNoRender)
 	{
-		mParcelOverlay = new LLViewerParcelOverlay(this, region_width_meters);
+		mParcelOverlay = new LLViewerParcelOverlay(this, mWidth);
 		//Re-init the parcel mgr for this sim
-	    LLViewerParcelMgr::getInstance()->init(region_width_meters);
+	    LLViewerParcelMgr::getInstance()->init(mWidth);
 	}
 	else
 	{
