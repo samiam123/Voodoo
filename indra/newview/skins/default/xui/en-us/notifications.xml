@@ -1,11 +1,11 @@
 <?xml version="1.0" ?><notifications>
 
   <global name="VIEWER_NAME">
-    Singularity Viewer
+    Astra Viewer
   </global>
 
   <global name="VIEWER_SITE">
-    http://www.singularityviewer.org/
+    http://www.Astraviewer.org/
   </global>
   
   <global name="skipnexttime">

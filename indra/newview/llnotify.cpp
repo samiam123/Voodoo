@@ -588,7 +588,7 @@ void LLNotifyBox::format(std::string& msg, const LLStringUtil::format_map_t& arg
 	targs["[GRID_OWNER]"] = gHippoGridManager->getConnectedGrid()->getGridOwner();	
 	targs["[GRID_SITE]"] = gHippoGridManager->getConnectedGrid()->getWebSite();
 	targs["[CURRENCY]"] = gHippoGridManager->getConnectedGrid()->getCurrencySymbol();
-	targs["[VIEWER_NAME]"] = "Singularity Viewer";
+	targs["[VIEWER_NAME]"] = "Astra Viewer";
 	LLStringUtil::format(msg, targs);
 }
 
