@@ -5,7 +5,7 @@
   </global>
 
   <global name="VIEWER_SITE">
-    http://www.Astraviewer.org/
+    http://www.aurora-sim.org/
   </global>
   
   <global name="skipnexttime">

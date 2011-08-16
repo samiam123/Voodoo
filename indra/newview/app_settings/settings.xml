@@ -127,7 +127,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-      <string>http://app.Astraviewer.org/dict/</string>
+      <string>http://app.singularityviewer.org/dict/</string>
     </map>
 	<key>SpellDisplay</key>
 	<map>
@@ -378,7 +378,7 @@
     <key>Type</key>
     <string>String</string>
     <key>Value</key>
-	<string>http://app.Astraviewer.org/client_definitions.xml</string>
+    <string>http://app.singularityviewer.org/client_definitions.xml</string>
   </map>
 
   <key>LastSelectedGrid</key>
@@ -2016,7 +2016,7 @@
       <key>Type</key>
       <string>String</string>
       <key>Value</key>
-	  <string>http://www.Astraviewer.org</string>
+	  <string>http://www.aurora-sim.org</string>
     </map>
     <key>BrowserCookiesEnabled</key>
     <map>
