@@ -213,6 +213,7 @@
 
 #include "llavatarnamecache.h"
 #include "lgghunspell_wrapper.h"
+#include "lggIrcGroupHandler.h"
 
 // [RLVa:KB]
 #include "rlvhandler.h"
@@ -1021,14 +1022,17 @@ bool idle_startup()
 		{
 			gDirUtilp->setPerAccountChatLogsDir(LLStringUtil::null, 
 				gSavedSettings.getString("FirstName"), gSavedSettings.getString("LastName") );
+			gDirUtilp->setPerAccountIRCSettingsDir(LLStringUtil::null, firstname, lastname);
 		}
 		else
 		{
 			gDirUtilp->setPerAccountChatLogsDir(gHippoGridManager->getCurrentGridNick(), 
 				gSavedSettings.getString("FirstName"), gSavedSettings.getString("LastName") );
+			gDirUtilp->setPerAccountIRCSettingsDir(gHippoGridManager->getCurrentGridNick(), firstname, lastname);
 		}
 		LLFile::mkdir(gDirUtilp->getChatLogsDir());
 		LLFile::mkdir(gDirUtilp->getPerAccountChatLogsDir());
+		LLFile::mkdir(gDirUtilp->getPerAccountIRCSettingsDir());
 
 		//good as place as any to create user windlight directories
 		std::string user_windlight_path_name(gDirUtilp->getExpandedFilename( LL_PATH_USER_SETTINGS , "windlight", ""));
@@ -2898,6 +2902,10 @@ bool idle_startup()
 		// We're not away from keyboard, even though login might have taken
 		// a while. JC
 		gAgent.clearAFK();
+		
+		//lgg starting up auto connect irc things here
+	    //but that crashed.. so i duno
+	    glggIrcGroupHandler.startUpAutoRunIRC();
 
 		// Have the agent start watching the friends list so we can update proxies
 		gAgent.observeFriends();
