@@ -300,3 +300,18 @@ void LLWLDayCycle::loadRegionDayCycle(const LLSD& day_data)
 		addKey((F32)day_data[i][0].asReal(), day_data[i][1].asString());
     }
 }
+
+LLSD LLWLDayCycle::asLLSD()
+{
+    LLSD day_data(LLSD::emptyArray());
+	for(std::map<F32, std::string>::const_iterator mIt = mTimeMap.begin(); mIt != mTimeMap.end(); ++mIt) 
+    {
+        LLSD key(LLSD::emptyArray());
+        key.append(mIt->first);
+        key.append(mIt->second);
+        day_data.append(key);
+    }
+
+    lldebugs << "Dumping day cycle (" << mTimeMap.size() << ") to LLSD: " << day_data << llendl;
+    return day_data;
+}
