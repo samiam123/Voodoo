@@ -75,6 +75,9 @@ public:
 	/// open the advanced sky settings menu
 	static void onOpenAdvancedSky(void* userData);
 
+	// open the day cycle editor
+	static void onOpenDayCycleEditor(void* userData);
+
 	/// open the advanced water settings menu
 	static void onOpenAdvancedWater(void* userData);
 

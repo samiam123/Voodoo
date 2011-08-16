@@ -52,36 +52,52 @@ class SetEnvironment : public LLHTTPNode
 		const LLSD& context,
 		const LLSD& content) const
 	{
+		if( 4 != content.size() ) return;//accept 3 leave out water?
 		LLSD::array_const_iterator it = content.beginArray();
-	    LLSD message = *it++;
+		LLSD message = *it++;
 		LLSD day_cycle = *it++;
 		LLSD skys = *it++;
 		LLSD water = *it;
-
+		LLUUID region_id = message["regionID"];
 		LLViewerRegion* region = gAgent.getRegion();
-		std::string water_name = "RegionWater_";
-	    water_name.append(region->getName());
-		LLWaterParamManager::instance()->loadPresetFromRegion(water_name, water, true);
-
+		if( region_id != region->getRegionID() )
+		{
+			llwarns << "wrong region" << llendl;
+			return;
+		}
+		llwarns << "set water" << llendl;
+		LLWaterParamManager* water_mgr = LLWaterParamManager::instance();
+		std::string water_name = "Region Water (";
+		water_name.append(region->getName());
+		water_name.append(")");
+		water_mgr->loadPresetFromRegion(water_name, water, true);
+		LLWLParamManager* wl_mgr = LLWLParamManager::instance();
 		LLSD::map_const_iterator sky_it = skys.beginMap();
 		LLSD::map_const_iterator sky_end = skys.endMap();
 		for(;sky_it != sky_end; sky_it++)
 		{
-		    LLWLParamManager::instance()->loadPresetFromRegion(sky_it->first, sky_it->second, true);
+			wl_mgr->loadPresetFromRegion(sky_it->first, sky_it->second, true);
 		}
+		std::string dayCycle_name = "Region Settings (";
+		wl_mgr->mDay.loadRegionDayCycle(day_cycle);
+		dayCycle_name.append(region->getName());
+		dayCycle_name.append(")");
+		wl_mgr->mDay.mName = dayCycle_name;
 
-		LLWLParamManager::instance()->mDay.loadRegionDayCycle(day_cycle);
-		LLWLParamManager::instance()->resetAnimator(0.5, true);
-		LLWLParamManager::instance()->mAnimator.mUseLindenTime = true;
-}
-};
+		if( 5 == content.size() )//Server sent the time too, so use it
+			wl_mgr->resetAnimator(*++it, true);
+		else
+			wl_mgr->resetAnimator(0.5, true);//Set as midday then
+		wl_mgr->mAnimator.mUseLindenTime = true;
+	}
+	};
 
-LLHTTPRegistration<SetEnvironment>
-gHTTPRegistrationWindLightSettingsUpdate(
-	"/message/SetEnvironment");
+	LLHTTPRegistration<SetEnvironment>
+	gHTTPRegistrationWindLightSettingsUpdate(
+		"/message/SetEnvironment");
 
-class EnvironmentSettingsResponder : public LLHTTPClient::Responder
-{
+	class EnvironmentSettingsResponder : public LLHTTPClient::Responder
+	{
 public:
 
   virtual void result(const LLSD& content)
@@ -101,8 +117,9 @@ public:
     }
     llwarns << "set water" << llendl;
     LLWaterParamManager* water_mgr = LLWaterParamManager::instance();
-    std::string water_name = "RegionWater_";
+    std::string water_name = "Region Water (";
     water_name.append(region->getName());
+    water_name.append(")");
     water_mgr->loadPresetFromRegion(water_name, water, true);
     LLWLParamManager* wl_mgr = LLWLParamManager::instance();
     LLSD::map_const_iterator sky_it = skys.beginMap();
@@ -111,8 +128,16 @@ public:
     {
         wl_mgr->loadPresetFromRegion(sky_it->first, sky_it->second, true);
     }
+	std::string dayCycle_name = "Region Settings (";
     wl_mgr->mDay.loadRegionDayCycle(day_cycle);
-    wl_mgr->resetAnimator(0.5, true);
+    dayCycle_name.append(region->getName());
+    dayCycle_name.append(")");
+    wl_mgr->mDay.mName = dayCycle_name;
+
+	if( 5 == content.size() )//Server sent the time too, so use it
+		wl_mgr->resetAnimator(*++it, true);
+	else
+		wl_mgr->resetAnimator(0.5, true);//Set as midday then
     wl_mgr->mAnimator.mUseLindenTime = true;
   }
 

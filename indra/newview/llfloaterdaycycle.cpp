@@ -159,12 +159,13 @@ void LLFloaterDayCycle::initCallbacks(void)
 	childSetCommitCallback("WLLengthOfDayHour", onTimeRateChanged, NULL);
 	childSetCommitCallback("WLLengthOfDayMin", onTimeRateChanged, NULL);
 	childSetCommitCallback("WLLengthOfDaySec", onTimeRateChanged, NULL);
-	childSetAction("WLUseLindenTime", onUseLindenTime, NULL);
+	childSetAction("WLSendToServer", onSendToServer, NULL);
 	childSetAction("WLAnimSky", onRunAnimSky, NULL);
 	childSetAction("WLStopAnimSky", onStopAnimSky, NULL);
 
 	childSetAction("WLLoadDayCycle", onLoadDayCycle, NULL);
 	childSetAction("WLSaveDayCycle", onSaveDayCycle, NULL);
+	childSetAction("WLAdvancedSkyButton", onClickEditPreset, NULL);
 
 	LLComboBox* comboBox = getChild<LLComboBox>("DayCyclePresetsCombo");
 
@@ -177,6 +178,12 @@ void LLFloaterDayCycle::initCallbacks(void)
 
 	childSetAction("WLAddKey", onAddKey, NULL);
 	childSetAction("WLDeleteKey", onDeleteKey, NULL);
+}
+
+void LLFloaterDayCycle::onClickEditPreset(void* data)
+{
+	//LLFloater* self = LLFloaterDayCycle::instance();
+	LLFloaterWindLight::instance()->show();
 }
 
 void LLFloaterDayCycle::syncMenu()
@@ -205,16 +212,6 @@ void LLFloaterDayCycle::syncMenu()
 	hourSpin->setValue(hours);
 	minSpin->setValue(min);
 	secSpin->setValue(sec);
-
-	// turn off Use Estate Time button if it's already being used
-	if(	LLWLParamManager::instance()->mAnimator.mUseLindenTime == true)
-	{
-		LLFloaterDayCycle::sDayCycle->childDisable("WLUseLindenTime");
-	} 
-	else 
-	{
-		LLFloaterDayCycle::sDayCycle->childEnable("WLUseLindenTime");
-	}
 }
 
 void LLFloaterDayCycle::syncSliderTrack()
@@ -560,14 +557,9 @@ void LLFloaterDayCycle::onStopAnimSky(void* userData)
 	LLWLParamManager::instance()->mAnimator.mUseLindenTime = false;
 }
 
-void LLFloaterDayCycle::onUseLindenTime(void* userData)
+void LLFloaterDayCycle::onSendToServer(void* userData)
 {
-	LLFloaterDayCycle* dc = LLFloaterDayCycle::instance();
-	LLComboBox* box = dc->getChild<LLComboBox>("DayCyclePresetsCombo");
-	box->selectByValue("");	
-
-	LLWLParamManager::instance()->mAnimator.mIsRunning = true;
-	LLWLParamManager::instance()->mAnimator.mUseLindenTime = true;	
+	LLWLParamManager::instance()->SendSettings();
 }
 
 void LLFloaterDayCycle::onLoadDayCycle(void* userData)
