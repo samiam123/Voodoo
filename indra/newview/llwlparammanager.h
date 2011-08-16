@@ -36,6 +36,7 @@
 #include <vector>
 #include <map>
 #include "llwlparamset.h"
+#include "llwaterparamset.h"
 #include "llwlanimator.h"
 #include "llwldaycycle.h"
 #include "llviewercamera.h"
@@ -195,6 +196,9 @@ public:
 
 	// singleton pattern implementation
 	static LLWLParamManager * instance();
+
+	//Send windlight info to the server
+	void SendSettings(LLWLParamSet mSky, LLWaterParamSet mWater, LLUUID normalMap);
 
 public:
 

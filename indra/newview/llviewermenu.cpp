@@ -9413,6 +9413,12 @@ class LLWorldEnvSettings : public view_listener_t
 			LLWLParamManager::instance()->mAnimator.update(
 				LLWLParamManager::instance()->mCurParams);
 		}
+		else if (tod == "submitwindlight")
+		{
+			LLWLParamManager::instance()->SendSettings(LLWLParamManager::instance()->mCurParams,
+				LLWaterParamManager::instance()->mCurParams,
+				LLWaterParamManager::instance()->getNormalMapID());
+		}
 		else
 		{
 			LLWLParamManager::instance()->mAnimator.mIsRunning = true;

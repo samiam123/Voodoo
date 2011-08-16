@@ -561,3 +561,110 @@ LLWLParamManager * LLWLParamManager::instance()
 
 	return sInstance;
 }
+
+
+void LLWLParamManager::SendSettings(LLWLParamSet mSky, LLWaterParamSet mWater, LLUUID normalMap)
+{
+	LLSD body;
+	std::string url = gAgent.getRegion()->getCapability("DispatchWindLightSettings");
+	if (!url.empty())
+	{
+		bool error;
+
+		body["type"] = 0;
+		LLVector4 v = mSky.getVector("ambient", error);
+		body["ambientX"] = v[0] / 3.0;
+		body["ambientY"] = v[1] / 3.0;
+		body["ambientZ"] = v[2] / 3.0;
+		body["ambientW"] = v[3] / 3.0;
+
+		body["eastAngle"] = mSky.getEastAngle();
+		body["sunMoonPosition"] = mSky.getSunAngle();
+
+		v = mSky.getVector("sunlight_color",error);
+		body["sunMoonColorX"] = v[0] / 3.0;
+		body["sunMoonColorY"] = v[1] / 3.0;
+		body["sunMoonColorZ"] = v[2] / 3.0;
+		body["sunMoonColorW"] = v[3] / 3.0;
+
+		v = mSky.getVector("blue_horizon",error);
+		body["horizonX"] = v[0] / 2.0;
+		body["horizonY"] = v[1] / 2.0;
+		body["horizonZ"] = v[2] / 2.0;
+		body["horizonW"] = v[3] / 2.0;
+
+		v = mSky.getVector("blue_density",error);
+		body["blueDensityX"] = v[0];
+		body["blueDensityY"] = v[1];
+		body["blueDensityZ"] = v[2];
+
+		v = mSky.getVector("haze_horizon",error);
+		body["hazeHorizon"] = v[0];
+
+		body["hazeDensity"] = mSky.getFloat("haze_density",error);
+		body["cloudCoverage"] = mSky.getFloat("cloud_shadow",error);
+		body["densityMultiplier"] = mSky.getFloat("density_multiplier",error) * 1000;
+		body["distanceMultiplier"] = mSky.getFloat("distance_multiplier",error);
+		body["maxAltitude"] = mSky.getFloat("max_y",error);
+
+		v = mSky.getVector("cloud_color",error);
+		body["cloudColorX"] = v[0];
+		body["cloudColorY"] = v[1];
+		body["cloudColorZ"] = v[2];
+		body["cloudColorW"] = v[3];
+
+		v = mSky.getVector("cloud_pos_density1",error);
+		body["cloudXYDensityX"] = v[0];
+		body["cloudXYDensityY"] = v[1];
+		body["cloudXYDensityZ"] = v[2];
+
+		v = mSky.getVector("cloud_pos_density2",error);
+		body["cloudDetailXYDensityX"] = v[0];
+		body["cloudDetailXYDensityY"] = v[1];
+		body["cloudDetailXYDensityZ"] = v[2];
+
+		v = mSky.getVector("glow",error);
+		body["sunGlowSize"] = -((v[0]/ 20) - 2);
+		body["sunGlowFocus"] = -v[2] / 5;
+
+		body["cloudScale"] = mSky.getFloat("cloud_scale",error);
+		body["sceneGamma"] = mSky.getFloat("gamma",error);
+		body["cloudScrollX"] = mSky.getCloudScrollX() - 10;
+		body["cloudScrollY"] = mSky.getCloudScrollY() - 10;
+		body["cloudScrollXLock"] = !mSky.getEnableCloudScrollX();
+		body["cloudScrollYLock"] = !mSky.getEnableCloudScrollY();
+		body["starBrightness"] = mSky.getStarBrightness();
+
+		LLVector3 vvv = mWater.getVector3("normScale",error);
+		body["reflectionWaveletScaleX"] = vvv[0];
+		body["reflectionWaveletScaleY"] = vvv[1];
+		body["reflectionWaveletScaleZ"] = vvv[2];
+
+		v = mWater.getVector4("waterFogColor",error);
+		body["waterColorX"] = v[0] * 256.0;
+		body["waterColorY"] = v[1] * 256.0;
+		body["waterColorZ"] = v[2] * 256.0;
+		body["waterColorW"] = v[3] * 256.0;
+
+		body["waterFogDensityExponent"] = mWater.getFloat("waterFogDensity", error);
+		body["underwaterFogModifier"] = mWater.getFloat("underWaterFogMod", error);
+
+		body["fresnelScale"] = mWater.getFloat("fresnelScale", error);
+		body["fresnelOffset"] = mWater.getFloat("fresnelOffset", error);
+		body["refractScaleAbove"] = mWater.getFloat("scaleAbove", error);
+		body["refractScaleBelow"] = mWater.getFloat("scaleBelow", error);
+		body["blurMultiplier"] = mWater.getFloat("blurMultiplier", error);
+
+		LLVector2 vv = mWater.getVector2("wave1Dir",error);
+		body["littleWaveDirectionX"] = vv[0];
+		body["littleWaveDirectionY"] = vv[1];
+
+		vv = mWater.getVector2("wave2Dir",error);
+		body["bigWaveDirectionX"] = vv[0];
+		body["bigWaveDirectionY"] = vv[1];
+
+		body["normalMapTexture"] = normalMap;
+
+		LLHTTPClient::post(url, body, new LLHTTPClient::Responder());
+	}
+}

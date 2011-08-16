@@ -56,7 +56,7 @@
 	     mouse_opaque="true" name="EnvWaterFogSlider" show_text="true" value="0"
 	     width="210" />
 	<button bottom="-140" follows="left|top" font="SansSerifSmall" height="20"
-	     label="Use Estate Time" left="8" name="EnvUseEstateTimeButton" width="137" />
+	     label="Send To Server" left="8" name="EnvSendToServerButton" width="137" />
 	<button bottom_delta="0" follows="left|top" font="SansSerifSmall" height="20"
 	     label="Advanced Sky" left="154" name="EnvAdvancedSkyButton" width="137" />
 	<button bottom_delta="0" follows="left|top" font="SansSerifSmall" height="20"

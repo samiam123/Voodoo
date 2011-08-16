@@ -24,21 +24,8 @@
 	     min_val="-100" name="terrain_lower_spin" width="180" />
 	<button bottom_delta="0" follows="left|top" font="SansSerifSmall" height="18" label="?"
 	     left="200" name="terrain_lower_help" width="18" />
-	<check_box bottom="-55" follows="left|top" height="20" label="Use Estate Sun" left="250"
-	     name="use_estate_sun_check" width="100" />
-	<button bottom_delta="0" follows="left|top" font="SansSerifSmall" height="18" label="?"
-	     left="420" name="use_estate_sun_help" width="18" />
-	<check_box bottom_delta="-20" follows="left|top" height="20" label="Fixed Sun" left="250"
-	     name="fixed_sun_check" width="100" />
-	<button bottom_delta="0" follows="left|top" font="SansSerifSmall" height="18" label="?"
-	     left="420" name="fixed_sun_help" width="18" />
-	<icon bottom_delta="-25" follows="left|top" height="20"
-	     image_name="icon_day_cycle.tga" left="285" name="daycycle" width="165" />
-	<slider bottom_delta="-25" follows="left|top" height="20" increment="0.001"
-	     label="Phase" left="250" max_val="30" min_val="6" name="sun_hour_slider"
-	     show_text="false" width="200" />
 	<button bottom_delta="-30" enabled="false" follows="left|top" height="20" label="Apply"
-	     left="350" name="apply_btn" width="90" />
+	     left="127" name="apply_btn" width="90" />
 	<view_border bevel_style="none" border_thickness="1" bottom_delta="-5" follows="top|left"
 	     height="130" left="8" width="460" />
 	<button bottom_delta="-80" follows="left|top" height="20"
