@@ -587,8 +587,15 @@ void LLWLParamManager::SendSettings()
 	std::string url = gAgent.getRegion()->getCapability("EnvironmentSettings");
 	if (!url.empty())
 	{
+		LLSD skies;
+		for (std::map<F32, std::string>::const_iterator iter = LLWLParamManager::instance()->mDay.mTimeMap.begin(); iter != LLWLParamManager::instance()->mDay.mTimeMap.end(); ++iter)
+		{
+			LLWLParamSet set;
+			LLWLParamManager::instance()->getParamSet(iter->second, set);
+			skies[set.mName] = set.getAll();
+		}
 		LLEnvironmentSettings settings = LLEnvironmentSettings(LLWLParamManager::instance()->mDay.asLLSD(),
-			LLWLParamManager::instance()->mCurParams.getAll(), LLWaterParamManager::instance()->mCurParams.getAll(),
+			skies, LLWaterParamManager::instance()->mCurParams.getAll(),
 			LLWLParamManager::instance()->mAnimator.mDayTime);
 		LLSD metadata;
 		metadata["regionID"] = gAgent.getRegion()->getRegionID();
