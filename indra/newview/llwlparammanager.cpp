@@ -60,6 +60,7 @@
 #include "llfloaterwindlight.h"
 #include "llfloaterdaycycle.h"
 #include "llfloaterenvsettings.h"
+#include "llwaterparammanager.h"
 
 #include "curl/curl.h"
 
@@ -586,8 +587,8 @@ void LLWLParamManager::SendSettings()
 	std::string url = gAgent.getRegion()->getCapability("EnvironmentSettings");
 	if (!url.empty())
 	{
-		LLEnvironmentSettings settings = new LLEnvironmentSettings(LLWLParamManager::instance()->mDay,
-			LLWLParamManager::instance()->mCurParams, LLWaterParamManager::instance()->mCurParams,
+		LLEnvironmentSettings settings = LLEnvironmentSettings(LLWLParamManager::instance()->mDay.asLLSD(),
+			LLWLParamManager::instance()->mCurParams.getAll(), LLWaterParamManager::instance()->mCurParams.getAll(),
 			LLWLParamManager::instance()->mAnimator.mDayTime);
 		LLSD metadata;
 		metadata["regionID"] = gAgent.getRegion()->getRegionID();

@@ -34,6 +34,7 @@
 #include "llsurface.h"
 #include "llviewerregion.h"
 #include "llviewerobject.h"
+#include "llcallbacklist.h"
 
 #include "linden_common.h"
 #include "llwaterparammanager.h"
@@ -42,15 +43,14 @@
 #include "llwlparamset.h"
 #include "message.h"
 #include "meta7windlight.h"
-#include "lightshare.h"
-#include "wlsettingsmanager.h"
+#include "llwindlightsettingresponder.h"
 
 class SetEnvironment : public LLHTTPNode
 {
 	/*virtual*/ void post(
 		LLHTTPNode::ResponsePtr response,
 		const LLSD& context,
-		const LLSD& input) const
+		const LLSD& content) const
 	{
 		LLSD::array_const_iterator it = content.beginArray();
 	    LLSD message = *it++;
@@ -61,7 +61,7 @@ class SetEnvironment : public LLHTTPNode
 		LLViewerRegion* region = gAgent.getRegion();
 		std::string water_name = "RegionWater_";
 	    water_name.append(region->getName());
-	    LLWaterParamManager->loadPresetFromRegion(water_name, water, true);
+		LLWaterParamManager::instance()->loadPresetFromRegion(water_name, water, true);
 
 		LLSD::map_const_iterator sky_it = skys.beginMap();
 		LLSD::map_const_iterator sky_end = skys.endMap();
@@ -70,13 +70,13 @@ class SetEnvironment : public LLHTTPNode
 		    LLWLParamManager::instance()->loadPresetFromRegion(sky_it->first, sky_it->second, true);
 		}
 
-		LLWLParamManager::instance()->mDay.loadRegionDayCycle(new_settings.getWLDayCycle());
+		LLWLParamManager::instance()->mDay.loadRegionDayCycle(day_cycle);
 		LLWLParamManager::instance()->resetAnimator(0.5, true);
 		LLWLParamManager::instance()->mAnimator.mUseLindenTime = true;
 }
 };
 
-LLHTTPRegistration<WindLightSettingsUpdate>
+LLHTTPRegistration<SetEnvironment>
 gHTTPRegistrationWindLightSettingsUpdate(
 	"/message/SetEnvironment");
 
@@ -109,7 +109,6 @@ public:
     LLSD::map_const_iterator sky_end = skys.endMap();
     for(;sky_it != sky_end; sky_it++)
     {
-        LL_DEBUGS("EnvironmentSettings") << "preset:" <<(sky_it->first) <<"\n" << ll_pretty_print_sd(sky_it->second) << llendl;
         wl_mgr->loadPresetFromRegion(sky_it->first, sky_it->second, true);
     }
     wl_mgr->mDay.loadRegionDayCycle(day_cycle);
