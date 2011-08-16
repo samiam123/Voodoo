@@ -231,6 +231,7 @@ public:
 	/// load an individual preset into the sky
 
 	void loadPreset(const std::string & name,bool propagate=true);
+	BOOL loadPresetFromRegion(const std::string& name, const LLSD& preset, bool propagate );
 
 	/// save the parameter presets to file
 	void savePreset(const std::string & name);

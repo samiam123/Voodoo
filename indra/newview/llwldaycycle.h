@@ -66,6 +66,7 @@ public:
 
 	/// load a day cycle
 	void loadDayCycle(const std::string & fileName);
+	void loadRegionDayCycle(const LLSD& day_data);
 
 	/// load a day cycle
 	void saveDayCycle(const std::string & fileName);

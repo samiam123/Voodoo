@@ -500,6 +500,7 @@ set(viewer_SOURCE_FILES
     llweb.cpp
     llmediactrl.cpp
     llwind.cpp
+    llwindlightsettingresponder.cpp
     llwlanimator.cpp
     llwldaycycle.cpp
     llwlparammanager.cpp
@@ -980,6 +981,7 @@ set(viewer_HEADER_FILES
     llweb.h
     llmediactrl.h
     llwind.h
+    llwindlightsettingresponder.h
     llwindebug.h
     llwlanimator.h
     llwldaycycle.h

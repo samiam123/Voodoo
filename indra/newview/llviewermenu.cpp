@@ -9415,9 +9415,7 @@ class LLWorldEnvSettings : public view_listener_t
 		}
 		else if (tod == "submitwindlight")
 		{
-			LLWLParamManager::instance()->SendSettings(LLWLParamManager::instance()->mCurParams,
-				LLWaterParamManager::instance()->mCurParams,
-				LLWaterParamManager::instance()->getNormalMapID());
+			LLWLParamManager::instance()->SendSettings();
 		}
 		else
 		{

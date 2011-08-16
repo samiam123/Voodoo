@@ -206,6 +206,7 @@
 //#include "llactivation.h"
 #include "wlfPanel_AdvSettings.h" //Lower right Windlight and Rendering options
 #include "ascentdaycyclemanager.h"
+#include "llwindlightsettingresponder.h"
 #include "llfloaterblacklist.h"
 #include "scriptcounter.h"
 // </edit>
@@ -2119,6 +2120,8 @@ bool idle_startup()
 			//
 			init_stat_view();
 		}
+
+		IMPEnvironmentSettings::getInstance()->init();
 
 		display_startup();
 		//

@@ -288,9 +288,7 @@ void LLFloaterEnvSettings::onOpenAdvancedWater(void* userData)
 
 void LLFloaterEnvSettings::onSubmitWindlight(void* userData)
 {
-	LLWLParamManager::instance()->SendSettings(LLWLParamManager::instance()->mCurParams,
-		LLWaterParamManager::instance()->mCurParams,
-		LLWaterParamManager::instance()->getNormalMapID());
+	LLWLParamManager::instance()->SendSettings();
 }
 
 void LLFloaterEnvSettings::onUseEstateTime(void* userData)

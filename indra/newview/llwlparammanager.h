@@ -144,6 +144,8 @@ public:
 
 	/// Set shader uniforms dirty, so they'll update automatically.
 	void propagateParameters(void);
+
+	bool loadPresetFromRegion(const std::string& name, const LLSD& preset, bool propagate =false);
 	
 	/// Update shader uniforms that have changed.
 	void updateShaderUniforms(LLGLSLShader * shader);
@@ -198,7 +200,7 @@ public:
 	static LLWLParamManager * instance();
 
 	//Send windlight info to the server
-	void SendSettings(LLWLParamSet mSky, LLWaterParamSet mWater, LLUUID normalMap);
+	void SendSettings();
 
 public:
 

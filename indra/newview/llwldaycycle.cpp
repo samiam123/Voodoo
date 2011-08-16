@@ -269,3 +269,34 @@ bool LLWLDayCycle::getKeyedParamName(F32 time, std::string & name)
 	// return error if not found
 	return false;
 }
+void LLWLDayCycle::loadRegionDayCycle(const LLSD& day_data)
+{
+    // clear the first few things
+    mTimeMap.clear();
+
+    // add each key
+    for(S32 i = 0; i < day_data.size(); ++i)
+    {
+		// make sure it's a two array
+		if(day_data[i].size() != 2)
+		{
+		  continue;
+		}
+	    
+		// check each param name exists in param manager
+		bool success;
+		LLWLParamSet pset;
+		success = LLWLParamManager::instance()->getParamSet(day_data[i][1].asString(), pset);
+		if(!success)
+		{
+		  // alert the user
+		  LLSD args;
+		  args["SKY"] = day_data[i][1].asString();
+		  LLNotifications::instance().add("WLMissingSky", args);
+		  continue;
+		}
+
+		// then add the key
+		addKey((F32)day_data[i][0].asReal(), day_data[i][1].asString());
+    }
+}
