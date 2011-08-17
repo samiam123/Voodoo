@@ -94,6 +94,17 @@ public:
 	void updateApparentAngles(LLAgent &agent);
 	void update(LLAgent &agent, LLWorld &world);
 
+	void updatePhysicsFlags(const LLViewerObject* object);
+    void onPhysicsFlagsFetchFailure(const LLUUID& object_id);
+    void updatePhysicsShapeType(const LLUUID& object_id, S32 type);
+    void updatePhysicsProperties(const LLUUID& object_id,
+                                    F32 density,
+                                    F32 friction,
+                                    F32 restitution,
+                                    F32 gravity_multiplier);
+
+	void fetchPhysicsFlags();
+
 	void shiftObjects(const LLVector3 &offset);
 
 	void renderObjectsForMap(LLNetMap &netmap);
@@ -209,6 +220,10 @@ protected:
 	std::map<LLUUID, LLPointer<LLVOAvatar> > mUUIDAvatarMap;
 
 	std::vector<LLDebugBeacon> mDebugBeacons;
+
+	//set of objects that need to update their physics flags
+    std::set<LLUUID> mStalePhysicsFlags;
+    std::set<LLUUID> mPendingPhysicsFlags;
 
 	S32 mCurLazyUpdateIndex;
 

@@ -113,15 +113,6 @@ enum {
 	MI_VOLUME_COUNT
 };
 
-
-
-
-
-
-
-
-
-
 enum {
 	MI_HOLE_SAME,
 	MI_HOLE_CIRCLE,
@@ -129,9 +120,6 @@ enum {
 	MI_HOLE_TRIANGLE,
 	MI_HOLE_COUNT
 };
-
-//*TODO:translate (depricated, so very low priority)
-static const std::string LEGACY_FULLBRIGHT_DESC("Fullbright (Legacy)");
 
 LLVector3 LLPanelObject::mClipboardPos;
 LLVector3 LLPanelObject::mClipboardSize;
@@ -227,33 +215,6 @@ BOOL	LLPanelObject::postBuild()
 	childSetAction("copyparams",onCopyParams, this);
 	mBtnPasteParams = getChild<LLButton>("pasteparams");
 	childSetAction("pasteparams",onPasteParams, this);
-
-	//--------------------------------------------------------
-		
-	// material type popup
-	mLabelMaterial = getChild<LLTextBox>("label material");
-	mComboMaterial = getChild<LLComboBox>("material");
-	childSetCommitCallback("material",onCommitMaterial,this);
-	mComboMaterial->removeall();
-	// <edit>
-	/*
-	// *TODO:translate
-	for (LLMaterialTable::info_list_t::iterator iter = LLMaterialTable::basic.mMaterialInfoList.begin();
-		 iter != LLMaterialTable::basic.mMaterialInfoList.end(); ++iter)
-	{
-		LLMaterialInfo* minfop = *iter;
-		if (minfop->mMCode != LL_MCODE_LIGHT)
-		{
-			mComboMaterial->add(minfop->mName);
-		}
-	}
-	*/
-	for(U8 mcode = 0; mcode < 0x10; mcode++)
-	{
-		mComboMaterial->add(LLMaterialTable::basic.getName(mcode));
-	}
-	// </edit>
-	mComboMaterialItemCount = mComboMaterial->getItemCount();
 
 	// Base Type
 	mLabelBaseType = getChild<LLTextBox>("label basetype");
@@ -675,50 +636,6 @@ void LLPanelObject::getState( )
 	mCheckCastShadows->setEnabled( roots_selected==1 && editable );
 #endif
 	
-	// Update material part
-	// slightly inefficient - materials are unique per object, not per TE
-	U8 material_code = 0;
-	struct f : public LLSelectedTEGetFunctor<U8>
-	{
-		U8 get(LLViewerObject* object, S32 te)
-		{
-			return object->getMaterial();
-		}
-	} func;
-	bool material_same = LLSelectMgr::getInstance()->getSelection()->getSelectedTEValue( &func, material_code );
-	
-	if (editable && single_volume && material_same)
-	{
-		mComboMaterial->setEnabled( TRUE );
-		mLabelMaterial->setEnabled( TRUE );
-		// <edit>
-		/*
-		if (material_code == LL_MCODE_LIGHT)
-		{
-			if (mComboMaterial->getItemCount() == mComboMaterialItemCount)
-			{
-				mComboMaterial->add(LEGACY_FULLBRIGHT_DESC);
-			}
-			mComboMaterial->setSimple(LEGACY_FULLBRIGHT_DESC);
-		}
-		else
-		{
-			if (mComboMaterial->getItemCount() != mComboMaterialItemCount)
-			{
-				mComboMaterial->remove(LEGACY_FULLBRIGHT_DESC);
-			}
-			// *TODO:Translate
-			mComboMaterial->setSimple(std::string(LLMaterialTable::basic.getName(material_code)));
-		}
-		*/
-		mComboMaterial->setSimple(std::string(LLMaterialTable::basic.getName(material_code)));
-		// </edit>
-	}
-	else
-	{
-		mComboMaterial->setEnabled( FALSE );
-		mLabelMaterial->setEnabled( FALSE );	
-	}
 	//----------------------------------------------------------------------------
 
 	S32 selected_item	= MI_BOX;
@@ -1547,24 +1464,6 @@ void LLPanelObject::sendCastShadows()
 }
 
 // static
-void LLPanelObject::onCommitMaterial( LLUICtrl* ctrl, void* userdata )
-{
-	//LLPanelObject* self = (LLPanelObject*) userdata;
-	LLComboBox* box = (LLComboBox*) ctrl;
-
-	if (box)
-	{
-		// apply the currently selected material to the object
-		const std::string& material_name = box->getSimple();
-		if (material_name != LEGACY_FULLBRIGHT_DESC)
-		{
-			U8 material_code = LLMaterialTable::basic.getMCode(material_name);
-			LLSelectMgr::getInstance()->selectionSetMaterial(material_code);
-		}
-	}
-}
-
-// static
 void LLPanelObject::onCommitParametric( LLUICtrl* ctrl, void* userdata )
 {
 	LLPanelObject* self = (LLPanelObject*) userdata;
@@ -2366,8 +2265,6 @@ void LLPanelObject::clearCtrls()
 	mCheckCastShadows->set(FALSE);
 	mCheckCastShadows->setEnabled( FALSE );
 #endif
-	mComboMaterial	->setEnabled( FALSE );
-	mLabelMaterial	->setEnabled( FALSE );
 	// Disable text labels
 	mLabelPosition	->setEnabled( FALSE );
 	mLabelSize		->setEnabled( FALSE );

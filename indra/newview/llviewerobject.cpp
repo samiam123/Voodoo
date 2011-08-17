@@ -178,6 +178,11 @@ LLViewerObject::LLViewerObject(const LLUUID &id, const LLPCode pcode, LLViewerRe
 	mGLName(0),
 	mbCanSelect(TRUE),
 	mFlags(0),
+	mPhysicsShapeType(0),
+	mPhysicsGravity(0),
+	mPhysicsFriction(0),
+	mPhysicsDensity(0),
+	mPhysicsRestitution(0),
 	mDrawable(),
 	mCreateSelected(FALSE),
 	mRenderMedia(FALSE),
@@ -211,6 +216,7 @@ LLViewerObject::LLViewerObject(const LLUUID &id, const LLPCode pcode, LLViewerRe
 	mMedia(NULL),
 	mClickAction(0),
 	mAttachmentItemID(LLUUID::null),
+	mPhysicsShapeUnknown(true),
 	mLastUpdateType(OUT_UNKNOWN),
 	mLastUpdateCached(FALSE)
 {
@@ -5015,7 +5021,7 @@ bool LLViewerObject::specialHoverCursor() const
 			|| (mClickAction != 0);
 }
 
-void LLViewerObject::updateFlags()
+void LLViewerObject::updateFlags(BOOL physics_changed)
 {
 	LLViewerRegion* regionp = getRegion();
 	if(!regionp) return;
@@ -5028,6 +5034,15 @@ void LLViewerObject::updateFlags()
 	gMessageSystem->addBOOL("IsTemporary", flagTemporaryOnRez() );
 	gMessageSystem->addBOOL("IsPhantom", flagPhantom() );
 	gMessageSystem->addBOOL("CastsShadows", flagCastShadows() );
+	if (physics_changed)
+	{
+		gMessageSystem->nextBlock("ExtraPhysics");
+		gMessageSystem->addU8("PhysicsShapeType", getPhysicsShapeType() );
+		gMessageSystem->addF32("Density", getPhysicsDensity() );
+		gMessageSystem->addF32("Friction", getPhysicsFriction() );
+		gMessageSystem->addF32("Restitution", getPhysicsRestitution() );
+		gMessageSystem->addF32("GravityMultiplier", getPhysicsGravity() );
+	}
 	gMessageSystem->sendReliable( regionp->getHost() );
 }
 
@@ -5058,6 +5073,43 @@ BOOL LLViewerObject::setFlags(U32 flags, BOOL state)
 		updateFlags();
 	}
 	return setit;
+}
+
+void LLViewerObject::setPhysicsShapeType(U8 type)
+{
+	mPhysicsShapeUnknown = false;
+	mPhysicsShapeType = type;
+}
+
+void LLViewerObject::setPhysicsGravity(F32 gravity)
+{
+	mPhysicsGravity = gravity;
+}
+
+void LLViewerObject::setPhysicsFriction(F32 friction)
+{
+	mPhysicsFriction = friction;
+}
+
+void LLViewerObject::setPhysicsDensity(F32 density)
+{
+	mPhysicsDensity = density;
+}
+
+void LLViewerObject::setPhysicsRestitution(F32 restitution)
+{
+	mPhysicsRestitution = restitution;
+}
+
+U8 LLViewerObject::getPhysicsShapeType() const
+{ 
+	if (mPhysicsShapeUnknown)
+	{
+		mPhysicsShapeUnknown = false;
+		gObjectList.updatePhysicsFlags(this);
+	}
+
+	return mPhysicsShapeType; 
 }
 
 void LLViewerObject::applyAngularVelocity(F32 dt)
@@ -5323,4 +5375,57 @@ const LLUUID &LLViewerObject::extractAttachmentItemID()
 	setAttachmentItemID(item_id);
 	return getAttachmentItemID();
 }
+
+class ObjectPhysicsProperties : public LLHTTPNode
+{
+public:
+	virtual void post(
+		ResponsePtr responder,
+		const LLSD& context,
+		const LLSD& input) const
+	{
+		LLSD object_data = input["body"]["ObjectData"];
+		S32 num_entries = object_data.size();
+		
+		for ( S32 i = 0; i < num_entries; i++ )
+		{
+			LLSD& curr_object_data = object_data[i];
+			U32 local_id = curr_object_data["LocalID"].asInteger();
+
+			// Iterate through nodes at end, since it can be on both the regular AND hover list
+			struct f : public LLSelectedNodeFunctor
+			{
+				U32 mID;
+				f(const U32& id) : mID(id) {}
+				virtual bool apply(LLSelectNode* node)
+				{
+					return (node->getObject() && node->getObject()->mLocalID == mID );
+				}
+			} func(local_id);
+
+			LLSelectNode* node = LLSelectMgr::getInstance()->getSelection()->getFirstNode(&func);
+
+			if (node)
+			{
+				// The LLSD message builder doesn't know how to handle U8, so we need to send as S8 and cast
+				U8 type = (U8)curr_object_data["PhysicsShapeType"].asInteger();
+				F32 density = (F32)curr_object_data["Density"].asReal();
+				F32 friction = (F32)curr_object_data["Friction"].asReal();
+				F32 restitution = (F32)curr_object_data["Restitution"].asReal();
+				F32 gravity = (F32)curr_object_data["GravityMultiplier"].asReal();
+
+				node->getObject()->setPhysicsShapeType(type);
+				node->getObject()->setPhysicsGravity(gravity);
+				node->getObject()->setPhysicsFriction(friction);
+				node->getObject()->setPhysicsDensity(density);
+				node->getObject()->setPhysicsRestitution(restitution);
+			}	
+		}
+		
+		dialog_refresh_all();
+	};
+};
+
+LLHTTPRegistration<ObjectPhysicsProperties>
+	gHTTPRegistrationObjectPhysicsProperties("/message/ObjectPhysicsProperties");
 

@@ -136,6 +136,56 @@ BOOL	LLPanelVolume::postBuild()
 		childSetCommitCallback("Light Ambiance", onCommitLight, this);
 		childSetValidate("Light Ambiance", precommitValidate);
 	}
+
+	// PHYSICS Parameters
+    {
+        // PhysicsShapeType combobox
+        childSetCommitCallback("Physics Shape Type Combo Ctrl", onCommitPhysicsShapeType, this);
+        getChild<LLUICtrl>("Physics Shape Type Combo Ctrl")->setValidateBeforeCommit( precommitValidate);
+        
+        // PhysicsGravity
+        childSetCommitCallback("Physics Gravity", onCommitPhysicsGravity, this);
+        getChild<LLUICtrl>("Physics Gravity")->setValidateBeforeCommit( precommitValidate);
+        
+        // PhysicsFriction
+        childSetCommitCallback("Physics Friction", onCommitPhysicsFriction, this);
+        getChild<LLUICtrl>("Physics Friction")->setValidateBeforeCommit( precommitValidate);
+        
+        // PhysicsDensity
+        childSetCommitCallback("Physics Density", onCommitPhysicsDensity, this);
+        getChild<LLUICtrl>("Physics Density")->setValidateBeforeCommit( precommitValidate);
+        
+        // PhysicsRestitution
+        childSetCommitCallback("Physics Restitution", onCommitPhysicsRestitution, this);
+        getChild<LLUICtrl>("Physics Restitution")->setValidateBeforeCommit( precommitValidate);
+    }
+
+	//--------------------------------------------------------
+		
+	// material type popup
+	mLabelMaterial = getChild<LLTextBox>("label material");
+	mComboMaterial = getChild<LLComboBox>("material");
+	childSetCommitCallback("material",onCommitMaterial,this);
+	mComboMaterial->removeall();
+	// <edit>
+	/*
+	// *TODO:translate
+	for (LLMaterialTable::info_list_t::iterator iter = LLMaterialTable::basic.mMaterialInfoList.begin();
+		 iter != LLMaterialTable::basic.mMaterialInfoList.end(); ++iter)
+	{
+		LLMaterialInfo* minfop = *iter;
+		if (minfop->mMCode != LL_MCODE_LIGHT)
+		{
+			mComboMaterial->add(minfop->mName);
+		}
+	}
+	*/
+	for(U8 mcode = 0; mcode < 0x10; mcode++)
+	{
+		mComboMaterial->add(LLMaterialTable::basic.getName(mcode));
+	}
+	// </edit>
+	mComboMaterialItemCount = mComboMaterial->getItemCount();
 	
 	// Start with everyone disabled
 	clearCtrls();
@@ -358,6 +408,73 @@ void LLPanelVolume::getState( )
 		childSetEnabled("FlexForceY",false);
 		childSetEnabled("FlexForceZ",false);
 	}
+
+	// Update material part
+	// slightly inefficient - materials are unique per object, not per TE
+	U8 material_code = 0;
+	struct f : public LLSelectedTEGetFunctor<U8>
+	{
+		U8 get(LLViewerObject* object, S32 te)
+		{
+			return object->getMaterial();
+		}
+	} func;
+	bool material_same = LLSelectMgr::getInstance()->getSelection()->getSelectedTEValue( &func, material_code );
+	
+	if (editable && single_volume && material_same)
+	{
+		mComboMaterial->setEnabled( TRUE );
+		mLabelMaterial->setEnabled( TRUE );
+		// <edit>
+		/*
+		if (material_code == LL_MCODE_LIGHT)
+		{
+			if (mComboMaterial->getItemCount() == mComboMaterialItemCount)
+			{
+				mComboMaterial->add(LEGACY_FULLBRIGHT_DESC);
+			}
+			mComboMaterial->setSimple(LEGACY_FULLBRIGHT_DESC);
+		}
+		else
+		{
+			if (mComboMaterial->getItemCount() != mComboMaterialItemCount)
+			{
+				mComboMaterial->remove(LEGACY_FULLBRIGHT_DESC);
+			}
+			// *TODO:Translate
+			mComboMaterial->setSimple(std::string(LLMaterialTable::basic.getName(material_code)));
+		}
+		*/
+		mComboMaterial->setSimple(std::string(LLMaterialTable::basic.getName(material_code)));
+		// </edit>
+	}
+	else
+	{
+		mComboMaterial->setEnabled( FALSE );
+		mLabelMaterial->setEnabled( FALSE );	
+	}
+
+	// Physics properties
+    
+    childSetValue("Physics Gravity", objectp->getPhysicsGravity());
+    childSetEnabled("Physics Gravity", editable);
+
+    childSetValue("Physics Friction", objectp->getPhysicsFriction());
+    childSetEnabled("Physics Friction", editable);
+    
+    childSetValue("Physics Density", objectp->getPhysicsDensity());
+    childSetEnabled("Physics Density", editable);
+    
+    childSetValue("Physics Restitution", objectp->getPhysicsRestitution());
+    childSetEnabled("Physics Restitution", editable);
+
+    // update the physics shape combo to include allowed physics shapes
+    getChild<LLComboBox>("Physics Shape Type Combo Ctrl", TRUE)->removeall();
+	getChild<LLComboBox>("Physics Shape Type Combo Ctrl", TRUE)->add("None", LLSD(1));
+    getChild<LLComboBox>("Physics Shape Type Combo Ctrl", TRUE)->add("Prim", LLSD(0)); 
+    getChild<LLComboBox>("Physics Shape Type Combo Ctrl", TRUE)->add("Convex Hull", LLSD(2)); 
+    getChild<LLComboBox>("Physics Shape Type Combo Ctrl", TRUE)->setValue(LLSD(objectp->getPhysicsShapeType()));
+    getChild<LLComboBox>("Physics Shape Type Combo Ctrl", TRUE)->setEnabled(editable);
 	
 	mObject = objectp;
 	mRootObject = root_objectp;
@@ -437,6 +554,8 @@ void LLPanelVolume::clearCtrls()
 	childSetEnabled("FlexForceX",false);
 	childSetEnabled("FlexForceY",false);
 	childSetEnabled("FlexForceZ",false);
+	mComboMaterial->setEnabled( FALSE );
+	mLabelMaterial->setEnabled( FALSE );
 }
 
 //
@@ -547,6 +666,51 @@ void LLPanelVolume::onLightSelectTexture(LLUICtrl* ctrl, void* userdata)
 		LLUUID id = LightTextureCtrl->getImageAssetID();
 		volobjp->setLightTextureID(id);
 		self->mLightSavedTexture = id;
+	}
+}
+
+void LLPanelVolume::onCommitPhysicsShapeType( LLUICtrl* ctrl, void* userdata )
+{
+    U8 type = ctrl->getValue().asInteger();
+	LLSelectMgr::getInstance()->selectionSetPhysicsType(type);
+}
+
+void LLPanelVolume::onCommitPhysicsGravity( LLUICtrl* ctrl, void* userdata )
+{
+    F32 val = ctrl->getValue().asReal();
+	LLSelectMgr::getInstance()->selectionSetGravity(val);
+}
+
+void LLPanelVolume::onCommitPhysicsFriction( LLUICtrl* ctrl, void* userdata )
+{
+    F32 val = ctrl->getValue().asReal();
+	LLSelectMgr::getInstance()->selectionSetFriction(val);
+}
+
+void LLPanelVolume::onCommitPhysicsRestitution( LLUICtrl* ctrl, void* userdata )
+{
+    F32 val = ctrl->getValue().asReal();
+	LLSelectMgr::getInstance()->selectionSetRestitution(val);
+}
+
+void LLPanelVolume::onCommitPhysicsDensity( LLUICtrl* ctrl, void* userdata )
+{
+    F32 val = ctrl->getValue().asReal();
+	LLSelectMgr::getInstance()->selectionSetDensity(val);
+}
+
+// static
+void LLPanelVolume::onCommitMaterial( LLUICtrl* ctrl, void* userdata )
+{
+	//LLPanelObject* self = (LLPanelObject*) userdata;
+	LLComboBox* box = (LLComboBox*) ctrl;
+
+	if (box)
+	{
+		// apply the currently selected material to the object
+		const std::string& material_name = box->getSimple();
+		U8 material_code = LLMaterialTable::basic.getMCode(material_name);
+		LLSelectMgr::getInstance()->selectionSetMaterial(material_code);
 	}
 }
 

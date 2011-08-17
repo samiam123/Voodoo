@@ -1986,6 +1986,101 @@ BOOL LLSelectMgr::selectionGetGlow(F32 *glow)
 	return identical;
 }
 
+void LLSelectMgr::selectionSetPhysicsType(U8 type)
+{
+	struct f : public LLSelectedObjectFunctor
+	{
+		U8 mType;
+		f(const U8& t) : mType(t) {}
+		virtual bool apply(LLViewerObject* object)
+		{
+			if (object->permModify())
+			{
+				object->setPhysicsShapeType(mType);
+				object->updateFlags(TRUE);
+			}
+			return true;
+		}
+	} sendfunc(type);
+	getSelection()->applyToObjects(&sendfunc);
+}
+
+void LLSelectMgr::selectionSetFriction(F32 friction)
+{
+	struct f : public LLSelectedObjectFunctor
+	{
+		F32 mFriction;
+		f(const F32& friction) : mFriction(friction) {}
+		virtual bool apply(LLViewerObject* object)
+		{
+			if (object->permModify())
+			{
+				object->setPhysicsFriction(mFriction);
+				object->updateFlags(TRUE);
+			}
+			return true;
+		}
+	} sendfunc(friction);
+	getSelection()->applyToObjects(&sendfunc);
+}
+
+void LLSelectMgr::selectionSetGravity(F32 gravity )
+{
+	struct f : public LLSelectedObjectFunctor
+	{
+		F32 mGravity;
+		f(const F32& gravity) : mGravity(gravity) {}
+		virtual bool apply(LLViewerObject* object)
+		{
+			if (object->permModify())
+			{
+				object->setPhysicsGravity(mGravity);
+				object->updateFlags(TRUE);
+			}
+			return true;
+		}
+	} sendfunc(gravity);
+	getSelection()->applyToObjects(&sendfunc);
+}
+
+void LLSelectMgr::selectionSetDensity(F32 density )
+{
+	struct f : public LLSelectedObjectFunctor
+	{
+		F32 mDensity;
+		f(const F32& density ) : mDensity(density) {}
+		virtual bool apply(LLViewerObject* object)
+		{
+			if (object->permModify())
+			{
+				object->setPhysicsDensity(mDensity);
+				object->updateFlags(TRUE);
+			}
+			return true;
+		}
+	} sendfunc(density);
+	getSelection()->applyToObjects(&sendfunc);
+}
+
+void LLSelectMgr::selectionSetRestitution(F32 restitution)
+{
+	struct f : public LLSelectedObjectFunctor
+	{
+		F32 mRestitution;
+		f(const F32& restitution ) : mRestitution(restitution) {}
+		virtual bool apply(LLViewerObject* object)
+		{
+			if (object->permModify())
+			{
+				object->setPhysicsRestitution(mRestitution);
+				object->updateFlags(TRUE);
+			}
+			return true;
+		}
+	} sendfunc(restitution);
+	getSelection()->applyToObjects(&sendfunc);
+}
+
 //-----------------------------------------------------------------------------
 // selectionSetMaterial()
 //-----------------------------------------------------------------------------

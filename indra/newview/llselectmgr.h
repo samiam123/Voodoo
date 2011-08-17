@@ -503,6 +503,11 @@ public:
 	bool selectionGetIncludeInSearch(bool* include_in_search_out); // true if all selected objects have same
 	BOOL selectionGetGlow(F32 *glow);
 
+	void selectionSetPhysicsType(U8 type);
+    void selectionSetGravity(F32 gravity);
+    void selectionSetFriction(F32 friction);
+    void selectionSetDensity(F32 density);
+    void selectionSetRestitution(F32 restitution);
 	void selectionSetMaterial(U8 material);
 	void selectionSetImage(const LLUUID& imageid); // could be item or asset id
 	void selectionSetColor(const LLColor4 &color);

@@ -71,6 +71,14 @@ public:
 	static void 	onCommitIsFlexible(		LLUICtrl* ctrl, void* userdata);
 	static void 	onCommitFlexible(		LLUICtrl* ctrl, void* userdata);
 
+	static void 	onCommitMaterial(		LLUICtrl* ctrl, void* userdata);
+
+	static void 	onCommitPhysicsShapeType   (LLUICtrl* ctrl, void* userdata);
+	static void 	onCommitPhysicsGravity     (LLUICtrl* ctrl, void* userdata);
+	static void 	onCommitPhysicsFriction    (LLUICtrl* ctrl, void* userdata);
+	static void 	onCommitPhysicsDensity     (LLUICtrl* ctrl, void* userdata);
+	static void 	onCommitPhysicsRestitution (LLUICtrl* ctrl, void* userdata);
+
 	static void		onLightCancelColor(LLUICtrl* ctrl, void* userdata);
 	static void		onLightSelectColor(LLUICtrl* ctrl, void* userdata);
 
@@ -100,6 +108,11 @@ protected:
 	LLSpinCtrl*		mSpinForce[3];
 */
 
+	S32				mComboMaterialItemCount;
+
+	LLTextBox*		mLabelMaterial;
+	LLComboBox*		mComboMaterial;
+	
 	LLColor4		mLightSavedColor;
 	LLUUID			mLightSavedTexture;
 	LLPointer<LLViewerObject> mObject;
