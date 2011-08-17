@@ -101,6 +101,13 @@ set(viewer_SOURCE_FILES
     jcfloaterareasearch.cpp
     chatbar_as_cmdline.cpp
     qtoolalign.cpp
+	IRC.cpp
+	lggFloaterIrc.cpp
+	lggFloaterIrcEdit.cpp
+	lggIrcData.cpp
+	lggIrcGroupHandler.cpp
+	lggIrcProfileFloater.cpp
+	lggIrcThread.cpp
     llagent.cpp
     llagentaccess.cpp
     llagentcamera.cpp
@@ -576,6 +583,13 @@ set(viewer_HEADER_FILES
     jcfloaterareasearch.h
     lggdicdownload.h
     lgghunspell_wrapper.h
+	IRC.h
+	lggFloaterIrc.h
+	lggFloaterIrcEdit.h
+	lggIrcData.h
+	lggIrcGroupHandler.h
+	lggIrcProfileFloater.h
+	lggIrcThread.h
     chatbar_as_cmdline.h
     qtoolalign.h
     llagent.h
