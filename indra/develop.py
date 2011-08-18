@@ -512,14 +512,14 @@ class WindowsSetup(PlatformSetup):
                     break
 		if self._generator is None:
 			print >> sys.stderr, 'Cannot find a Visual Studio installation, testing for express editions'
-			for version in 'vc80 vc90 vc100 vc71'.split():
+			for version in 'vc90 vc100 vc71'.split():
 				if self.find_visual_studio_express(version):
 					self._generator = version
 					self.using_express = True
 					print 'Building with ', self.gens[version]['gen'] , "Express edition"
 					break
 		if self._generator is None:
-			for version in 'vc80 vc90 vc100 vc71'.split():
+			for version in 'vc90 vc100 vc71'.split():
 				if self.find_visual_studio_express_single(version):
 					self._generator = version
 					self.using_express = True
