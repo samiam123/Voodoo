@@ -128,10 +128,6 @@ private:
 public:
 	void addImage(LLViewerFetchedTexture *image);
 	void deleteImage(LLViewerFetchedTexture *image);
-private:
-
-	void addImageToList(LLViewerFetchedTexture *image);
-	void removeImageFromList(LLViewerFetchedTexture *image);
 
 	LLViewerFetchedTexture * getImage(const LLUUID &image_id,									 
 									 BOOL usemipmap = TRUE,
@@ -141,6 +137,10 @@ private:
 									 LLGLenum primary_format = 0,
 									 LLHost request_from_host = LLHost()
 									 );
+private:
+
+	void addImageToList(LLViewerFetchedTexture *image);
+	void removeImageFromList(LLViewerFetchedTexture *image);
 	
 	LLViewerFetchedTexture * getImageFromFile(const std::string& filename,									 
 									 BOOL usemipmap = TRUE,
