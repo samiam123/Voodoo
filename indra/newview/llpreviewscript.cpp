@@ -90,6 +90,7 @@
 // [RLVa:KB] - Checked: 2010-09-28 (RLVa-1.2.1f)
 #include "rlvhandler.h"
 // [/RLVa:KB]
+#include "statemachine/aifilepicker.h"
 
 const std::string HELLO_LSL =
 	"default\n"
@@ -495,6 +496,77 @@ void LLScriptEdCore::initMenu()
 	menuItem = getChild<LLMenuItemCallGL>("LSL Wiki Help...");
 	menuItem->setMenuCallback(onBtnDynamicHelp, this);
 	menuItem->setEnabledCallback(NULL);
+
+	menuItem = getChild<LLMenuItemCallGL>("Launch Autoscript...");
+	menuItem->setMenuCallback(onBtnAutoscript, this);
+	menuItem->setEnabledCallback(NULL);
+
+	menuItem = getChild<LLMenuItemCallGL>("Import Script...");
+	menuItem->setMenuCallback(onBtnLoadFromDisc, this);
+	menuItem->setEnabledCallback(NULL);
+
+	menuItem = getChild<LLMenuItemCallGL>("Export Script...");
+	menuItem->setMenuCallback(onBtnSaveToDisc, this);
+	menuItem->setEnabledCallback(NULL);
+}
+
+void LLScriptEdCore::onBtnSaveToDisc( void* userdata )
+{
+	LLViewerStats::getInstance()->incStat( LLViewerStats::ST_LSL_SAVE_COUNT );
+
+	LLScriptEdCore* self = (LLScriptEdCore*) userdata;
+
+	if (self->mSaveCallback)
+	{
+		AIFilePicker* file_picker = AIFilePicker::create();
+		const LLViewerInventoryItem *item = ((LLPreviewLSL*)self->getParent())->getItem();
+		file_picker->open(item ? LLDir::getScrubbedFileName(item->getName()) : LLStringUtil::null, FFSAVE_LSL);
+		file_picker->run(boost::bind(&LLScriptEdCore::onBtnSaveToDisc_continued, self, file_picker));
+	}
+}
+
+void LLScriptEdCore::onBtnSaveToDisc_continued(AIFilePicker* file_picker)
+{
+	if (!file_picker->hasFilename())
+	{
+		return;
+	}
+	std::string filename = file_picker->getFilename();
+	std::string scriptText=mEditor->getText();
+	std::ofstream fout(filename.c_str());
+	fout << scriptText;
+	fout.close();
+	mSaveCallback(mUserdata, FALSE);
+}
+
+void LLScriptEdCore::onBtnLoadFromDisc( void* data )
+{
+	LLScriptEdCore* self = (LLScriptEdCore*) data;
+	
+	AIFilePicker* file_picker = AIFilePicker::create();
+	file_picker->open(FFLOAD_LSL);
+	file_picker->run(boost::bind(&LLScriptEdCore::onBtnLoadFromDisc_continued, self, file_picker));
+}
+
+void LLScriptEdCore::onBtnLoadFromDisc_continued(AIFilePicker* file_picker)
+{
+	if (!file_picker->hasFilename())
+	{
+		return;
+	}
+	std::string filename = file_picker->getFilename();
+
+	std::ifstream fin(filename.c_str());
+	
+	std::string line;
+	mEditor->clear();
+	while (!fin.eof())
+	{ 
+		getline(fin,line);
+		line = line + "\n";
+		mEditor->insertText(line);
+	}
+	fin.close();
 }
 
 void LLScriptEdCore::setScriptText(const std::string& text, BOOL is_valid)
@@ -504,6 +576,13 @@ void LLScriptEdCore::setScriptText(const std::string& text, BOOL is_valid)
 		mEditor->setText(text);
 		mHasScriptData = is_valid;
 	}
+}
+
+// static 
+void LLScriptEdCore::onBtnAutoscript(void* userdata)
+{
+	LLScriptEdCore* corep = (LLScriptEdCore*)userdata;
+	LLWeb::loadURL(corep->getString("autoscript_url"));
 }
 
 BOOL LLScriptEdCore::hasChanged(void* userdata)

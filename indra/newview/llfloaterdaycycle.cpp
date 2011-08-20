@@ -182,8 +182,12 @@ void LLFloaterDayCycle::initCallbacks(void)
 
 void LLFloaterDayCycle::onClickEditPreset(void* data)
 {
-	//LLFloater* self = LLFloaterDayCycle::instance();
 	LLFloaterWindLight::instance()->show();
+	LLComboBox* key_combo = LLFloaterDayCycle::instance()->getChild<LLComboBox>( 
+				"WLKeyPresets");//We're assuming that this setting will always be in the other floater... is this safe?
+	LLComboBox* comboBox = LLFloaterWindLight::instance()->getChild<LLComboBox>("WLPresetsCombo");
+	LLSD value = key_combo->getSelectedValue();
+	comboBox->setSelectedByValue(value, true);
 }
 
 void LLFloaterDayCycle::syncMenu()

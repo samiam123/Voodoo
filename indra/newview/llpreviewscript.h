@@ -117,6 +117,11 @@ public:
 	static BOOL		enablePasteMenu(void* userdata);
 	static BOOL		enableSelectAllMenu(void* userdata);
 	static BOOL		enableDeselectMenu(void* userdata);
+	static void		onBtnSaveToDisc(void*);
+	static void		onBtnLoadFromDisc(void*);
+	static void		onBtnAutoscript(void* userdata);
+	void            onBtnSaveToDisc_continued(AIFilePicker* filepicker);
+	void            onBtnLoadFromDisc_continued(AIFilePicker* filepicker);
 
 	static BOOL		hasChanged(void* userdata);
 
