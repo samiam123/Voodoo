@@ -154,7 +154,9 @@ public:
 		// | 4. ADD TO LLAssetType::mAssetTypeHumanNames |
 		// +*********************************************+
 
-		AT_COUNT = 49,
+		AT_MESH = 49,
+
+		AT_COUNT = 50,
 
 		AT_NONE = -1
 	};

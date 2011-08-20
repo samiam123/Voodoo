@@ -105,6 +105,7 @@ LLAssetDictionary::LLAssetDictionary()
 	addEntry(LLAssetType::AT_CURRENT_OUTFIT,	new AssetEntry("FOLDER_LINK",		"current",	"current outfit",	false,		false,		false));
 	addEntry(LLAssetType::AT_OUTFIT,			new AssetEntry("OUTFIT",			"outfit", 	"outfit",			false,		false,		false));
 	addEntry(LLAssetType::AT_MY_OUTFITS,		new AssetEntry("MY_OUTFITS",		"my_otfts",	"my outfits",		false,		false,		false));
+	addEntry(LLAssetType::AT_MESH,		        new AssetEntry("MESH",		        "mesh",	    "mesh",		        false,		true,		true));
 	addEntry(LLAssetType::AT_NONE, 				new AssetEntry("NONE",				"-1",		NULL,		  		false,		false,		false));
 };		
 
@@ -230,6 +231,7 @@ EDragAndDropType LLAssetType::lookupDragAndDropType( EType asset )
 	case AT_CURRENT_OUTFIT:	return DAD_LINK;
 	case AT_OUTFIT:			return DAD_LINK;
 	case AT_MY_OUTFITS:		return DAD_CATEGORY;
+	case AT_MESH:		    return DAD_OBJECT;
 	default: 				return DAD_NONE;
 	};
 }
