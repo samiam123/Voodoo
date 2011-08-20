@@ -160,8 +160,8 @@ void LLFloaterRegionDebugConsole::PopUp(void*)
 		sInstance = new LLFloaterRegionDebugConsole();
 		((LLUICtrlFactory*)LLUICtrlFactory::getInstance())->buildFloater(sInstance, "floater_region_debug_console.xml");
 		sInstance->setVisible(TRUE);
+		sInstance->open();
 	}
-	sInstance->open();
 }
 
 BOOL LLFloaterRegionDebugConsole::postBuild()
@@ -177,15 +177,10 @@ BOOL LLFloaterRegionDebugConsole::postBuild()
     std::string url = gAgent.getRegion()->getCapability("SimConsoleAsync");
     if (url.empty())
     {
-        // Fall back to see if the old API is supported.
-        url = gAgent.getRegion()->getCapability("SimConsole");
-        if (url.empty())
-        {
-            mOutput->appendText(
+        mOutput->appendText(
                 CONSOLE_NOT_SUPPORTED + PROMPT,
                 false, false);
-            return TRUE;
-        }
+        return TRUE;
     }
 
     mOutput->appendText("> ", false, false);
