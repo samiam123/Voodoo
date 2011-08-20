@@ -809,7 +809,7 @@ void init_menus()
 	menu->append(new LLMenuItemCallGL(  "Phantom Avatar", &handle_phantom_avatar, NULL));
 	menu->appendSeparator();
 	menu->append(new LLMenuItemCallGL( "Animation Override...",
-									&handle_edit_ao, NULL));
+									&handle_edit_ao, NULL, NULL, 'O', MASK_CONTROL|MASK_SHIFT));
 	menu->append(new LLMenuItemCheckGL( "Nimble",
 										&menu_toggle_control,
 										NULL,
@@ -1527,7 +1527,7 @@ void init_debug_rendering_menu(LLMenuGL* menu)
 			'R', MASK_CONTROL|MASK_SHIFT));
 
 	LLMenuItemCheckGL* item;
-	item = new LLMenuItemCheckGL("Object-Object Occlusion", menu_toggle_control, NULL, menu_check_control, (void*)"UseOcclusion", 'O', MASK_CONTROL|MASK_SHIFT);
+	item = new LLMenuItemCheckGL("Object-Object Occlusion", menu_toggle_control, NULL, menu_check_control, (void*)"UseOcclusion");
 	item->setEnabled(gGLManager.mHasOcclusionQuery && LLFeatureManager::getInstance()->isFeatureAvailable("UseOcclusion"));
 	menu->append(item);
 
