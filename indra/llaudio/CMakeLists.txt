@@ -33,6 +33,9 @@ set(llaudio_SOURCE_FILES
     llaudiodecodemgr.cpp
     llvorbisdecode.cpp
     llvorbisencode.cpp
+    llaudioengine_fmod.cpp
+    llstreamingaudio_fmod.cpp
+    lllistener_fmod.cpp
     )
 
 set(llaudio_HEADER_FILES
@@ -40,6 +43,8 @@ set(llaudio_HEADER_FILES
 
     llaudioengine.h
     lllistener.h
+    lllistener_fmod.h
+    llstreamingaudio_fmod.h
     llaudiodecodemgr.h
     llvorbisdecode.h
     llvorbisencode.h
