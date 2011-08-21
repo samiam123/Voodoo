@@ -155,13 +155,10 @@ LLFloaterRegionDebugConsole::~LLFloaterRegionDebugConsole()
 
 void LLFloaterRegionDebugConsole::PopUp(void*)
 {
-	if (!sInstance)
-	{
-		sInstance = new LLFloaterRegionDebugConsole();
-		((LLUICtrlFactory*)LLUICtrlFactory::getInstance())->buildFloater(sInstance, "floater_region_debug_console.xml");
-		sInstance->setVisible(TRUE);
-		sInstance->open();
-	}
+	sInstance = new LLFloaterRegionDebugConsole();
+	((LLUICtrlFactory*)LLUICtrlFactory::getInstance())->buildFloater(sInstance, "floater_region_debug_console.xml");
+	sInstance->setVisible(TRUE);
+	sInstance->open();
 }
 
 BOOL LLFloaterRegionDebugConsole::postBuild()

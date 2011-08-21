@@ -156,7 +156,7 @@ class OpenRegionInfoUpdate : public LLHTTPNode
 		}
 		if ( body.has("SayDistance") )
 		{
-			gSavedSettings.setU32("ChatDistance", body["SayDistance"].asReal());
+			//gSavedSettings.setU32("ChatDistance", body["SayDistance"].asReal());
 		}
 		if ( body.has("ShoutDistance") )
 		{
