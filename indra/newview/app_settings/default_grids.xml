@@ -17,7 +17,30 @@
       <key>render_compat</key>
       <boolean>1</boolean>
     </map>
-
+     <map>
+        <key>gridname</key>
+            <string>AnSky Grid</string>
+        <key>gridnick</key>
+            <string>ansky</string>
+        <key>helperuri</key>
+            <string>http://grid.ansky.ca</string>
+        <key>loginpage</key>
+            <string>https://grid.ansky.ca/webui/loginscreen.php</string>
+        <key>loginuri</key>
+            <string>http://grid.ansky.ca</string>
+        <key>platform</key>
+            <string>OpenSim</string>
+        <key>register</key>
+            <string>http://grid.ansky.ca/webui/index.php?page=register</string>
+        <key>render_compat</key>
+            <boolean>0</boolean>
+        <key>search</key>
+            <string />
+        <key>support</key>
+            <string />
+        <key>website</key>
+            <string>http://www.ansky.ca/</string>
+        </map>
     <!-- Local Host -->
     <map>
       <key>gridname</key>
