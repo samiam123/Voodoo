@@ -54,6 +54,7 @@
 #include "llworld.h"
 
 #include "llsdutil.h"
+#include "hippolimits.h"
 
 //<edit>
 #include "llviewermenu.h"
@@ -287,13 +288,24 @@ void LLFloaterAvatarList::showInstance()
 
 void LLFloaterAvatarList::draw()
 {
-	LLFloater::draw();
+	if (gHippoLimits->mAllowMinimap) //Check for if minimap is blocked
+	{
+		LLFloater::draw();
+	}
+	else
+	{
+		sInstance->setVisible(FALSE);
+		gSavedSettings.setBOOL("ShowRadar", FALSE);
+	}
 }
 
 void LLFloaterAvatarList::onOpen()
 {
-	gSavedSettings.setBOOL("ShowRadar", TRUE);
-	sInstance->setVisible(TRUE);
+	if (gHippoLimits->mAllowMinimap) //Check for if minimap is blocked
+	{
+		gSavedSettings.setBOOL("ShowRadar", TRUE);
+		sInstance->setVisible(TRUE);
+	}
 }
 
 void LLFloaterAvatarList::onClose(bool app_quitting)

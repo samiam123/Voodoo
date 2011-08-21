@@ -698,7 +698,8 @@ void LLAgentWearables::onInitialWearableAssetArrived( LLWearable* wearable, void
 		{
 			if( !gAgentWearables.mWearableEntry[i].mItemID.isNull() && !gAgentWearables.mWearableEntry[i].mWearable )
 			{
-				gAgentWearables.mWearablesLoaded = FALSE;
+				if(!gSavedSettings.getBOOL("RenderUnloadedAvatar"))
+					gAgentWearables.mWearablesLoaded = FALSE;
 				break;
 			}
 		}
@@ -754,7 +755,8 @@ void LLAgentWearables::recoverMissingWearableDone()
 	{
 		if( !mWearableEntry[i].mItemID.isNull() && !mWearableEntry[i].mWearable )
 		{
-			mWearablesLoaded = FALSE;
+			if(!gSavedSettings.getBOOL("RenderUnloadedAvatar"))
+				mWearablesLoaded = FALSE;
 			break;
 		}
 	}

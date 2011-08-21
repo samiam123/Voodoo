@@ -36,6 +36,7 @@
 #include <vector>
 #include <map>
 #include "llwlparamset.h"
+#include "llwaterparamset.h"
 #include "llwlanimator.h"
 #include "llwldaycycle.h"
 #include "llviewercamera.h"
@@ -143,6 +144,8 @@ public:
 
 	/// Set shader uniforms dirty, so they'll update automatically.
 	void propagateParameters(void);
+
+	bool loadPresetFromRegion(const std::string& name, const LLSD& preset, bool propagate =false);
 	
 	/// Update shader uniforms that have changed.
 	void updateShaderUniforms(LLGLSLShader * shader);
@@ -195,6 +198,9 @@ public:
 
 	// singleton pattern implementation
 	static LLWLParamManager * instance();
+
+	//Send windlight info to the server
+	void SendSettings();
 
 public:
 
@@ -283,5 +289,84 @@ inline LLVector4 LLWLParamManager::getRotatedLightDir(void) const
 {
 	return mRotatedLightDir;
 }
+
+class LLEnvironmentSettings
+{
+public:
+    LLEnvironmentSettings() :
+        mWLDayCycle(LLSD::emptyMap()),
+        mSkyMap(LLSD::emptyMap()),
+        mWaterParams(LLSD::emptyMap()),
+        mDayTime(0.f)
+    {}
+    LLEnvironmentSettings(const LLSD& dayCycle, const LLSD& skyMap, const LLSD& waterParams, F64 dayTime) :
+        mWLDayCycle(dayCycle),
+        mSkyMap(skyMap),
+        mWaterParams(waterParams),
+        mDayTime(dayTime)
+    {}
+    ~LLEnvironmentSettings() {}
+
+    void saveParams(const LLSD& dayCycle, const LLSD& skyMap, const LLSD& waterParams, F64 dayTime)
+    {
+        mWLDayCycle = dayCycle;
+        mSkyMap = skyMap;
+        mWaterParams = waterParams;
+        mDayTime = dayTime;
+    }
+
+    const LLSD& getWLDayCycle() const
+    {
+        return mWLDayCycle;
+    }
+
+    const LLSD& getWaterParams() const
+    {
+        return mWaterParams;
+    }
+
+    const LLSD& getSkyMap() const
+    {
+        return mSkyMap;
+    }
+
+    F64 getDayTime() const
+    {
+        return mDayTime;
+    }
+
+    bool isEmpty() const
+    {
+        return mWLDayCycle.size() == 0;
+    }
+
+    void clear()
+    {
+        *this = LLEnvironmentSettings();
+    }
+
+    LLSD makePacket(const LLSD& metadata) const
+    {
+        LLSD full_packet = LLSD::emptyArray();
+
+        // 0: metadata
+        full_packet.append(metadata);
+
+        // 1: day cycle
+        full_packet.append(mWLDayCycle);
+
+        // 2: map of sky setting names to sky settings (as LLSD)
+        full_packet.append(mSkyMap);
+
+        // 3: water params
+        full_packet.append(mWaterParams);
+
+        return full_packet;
+    }
+
+private:
+    LLSD mWLDayCycle, mWaterParams, mSkyMap;
+    F64 mDayTime;
+};
 
 #endif

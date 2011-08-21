@@ -83,6 +83,7 @@ set(viewer_SOURCE_FILES
     ascentprefschat.cpp
     ascentprefssys.cpp
     ascentprefsvan.cpp
+    astraopenregionsettings.cpp
     dhparam.cpp
     dsaparam.cpp
     emerald.cpp
@@ -100,6 +101,13 @@ set(viewer_SOURCE_FILES
     jcfloaterareasearch.cpp
     chatbar_as_cmdline.cpp
     qtoolalign.cpp
+	IRC.cpp
+	lggFloaterIrc.cpp
+	lggFloaterIrcEdit.cpp
+	lggIrcData.cpp
+	lggIrcGroupHandler.cpp
+	lggIrcProfileFloater.cpp
+	lggIrcThread.cpp
     llaccountingcostmanager.cpp
     llagent.cpp
     llagentaccess.cpp
@@ -232,6 +240,7 @@ set(viewer_SOURCE_FILES
     llfloaterpreference.cpp
     llfloaterproperties.cpp
     llfloaterregioninfo.cpp
+    llfloaterregiondebugconsole.cpp
     llfloaterreporter.cpp
     llfloaterscriptdebug.cpp
     llfloatersellland.cpp
@@ -503,6 +512,7 @@ set(viewer_SOURCE_FILES
     llweb.cpp
     llmediactrl.cpp
     llwind.cpp
+    llwindlightsettingresponder.cpp
     llwlanimator.cpp
     llwldaycycle.cpp
     llwlparammanager.cpp
@@ -578,6 +588,13 @@ set(viewer_HEADER_FILES
     jcfloaterareasearch.h
     lggdicdownload.h
     lgghunspell_wrapper.h
+	IRC.h
+	lggFloaterIrc.h
+	lggFloaterIrcEdit.h
+	lggIrcData.h
+	lggIrcGroupHandler.h
+	lggIrcProfileFloater.h
+	lggIrcThread.h
     chatbar_as_cmdline.h
     qtoolalign.h
     llaccountingcostmanager.h
@@ -714,6 +731,7 @@ set(viewer_HEADER_FILES
     llfloaterperms.h
     llfloaterproperties.h
     llfloaterregioninfo.h
+    llfloaterregiondebugconsole.h
     llfloaterreporter.h
     llfloaterscriptdebug.h
     llfloatersellland.h
@@ -987,6 +1005,7 @@ set(viewer_HEADER_FILES
     llweb.h
     llmediactrl.h
     llwind.h
+    llwindlightsettingresponder.h
     llwindebug.h
     llwlanimator.h
     llwldaycycle.h
@@ -1126,8 +1145,8 @@ if (WINDOWS)
         ${ARTWORK_DIR}/res/lltooltranslate.cur
         ${ARTWORK_DIR}/res/lltoolzoomin.cur
         ${ARTWORK_DIR}/res/lltoolzoomout.cur
-        ${ARTWORK_DIR}/res/snowglobe_icon.BMP
-        ${ARTWORK_DIR}/res/snowglobe_icon.ico
+        ${ARTWORK_DIR}/res/astra_icon.BMP
+        ${ARTWORK_DIR}/res/astra_icon.ico
         ${ARTWORK_DIR}/res/resource.h
         ${ARTWORK_DIR}/res/toolbuy.cur
         ${ARTWORK_DIR}/res/toolopen.cur

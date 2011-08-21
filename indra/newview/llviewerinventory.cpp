@@ -274,6 +274,7 @@ void LLViewerInventoryItem::setTransactionID(const LLTransactionID& transaction_
 // virtual
 void LLViewerInventoryItem::packMessage(LLMessageSystem* msg) const
 {
+	LL_INFOS("Inventory") << " UDP Rez/UpdateObject of UUID " << mUUID << " parent = " << mParentUUID << " type= " << mType << " transaction= "<< mTransactionID << LL_ENDL; // OGPX
 	msg->addUUIDFast(_PREHASH_ItemID, mUUID);
 	msg->addUUIDFast(_PREHASH_FolderID, mParentUUID);
 	mPermissions.packMessage(msg);
@@ -503,21 +504,8 @@ bool LLViewerInventoryCategory::fetchDescendents()
 		// This comes from LLInventoryFilter from llfolderview.h
 		U32 sort_order = gSavedSettings.getU32("InventorySortOrder") & 0x1;
 
-		// *NOTE: For bug EXT-2879, originally commented out
-		// gAgent.getRegion()->getCapability in order to use the old
-		// message-based system.  This has been uncommented now that
-		// AIS folks are aware of the issue and have a fix in process.
-		// see ticket for details.
+		std::string url = gAgent.getRegion()->getCapability("WebFetchInventoryDescendents");
 
-		std::string url;
-		if (gAgent.getRegion())
-		{
-			url = gAgent.getRegion()->getCapability("FetchInventoryDescendents");
-		}
-		else
-		{
-			llwarns << "agent region is null" << llendl;
-		}
 		if (!url.empty()) //Capability found.  Build up LLSD and use it.
 		{
 			LLInventoryModel::startBackgroundFetch(mUUID);			

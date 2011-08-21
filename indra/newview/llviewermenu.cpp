@@ -255,6 +255,7 @@
 #include "llagentui.h"
 
 #include "hippogridmanager.h"
+#include "llfloaterregiondebugconsole.h"
 
 using namespace LLVOAvatarDefines;
 void init_client_menu(LLMenuGL* menu);
@@ -800,7 +801,7 @@ void init_menus()
 	// TomY TODO convert these two
 	LLMenuGL*menu;
 
-	menu = new LLMenuGL("Singularity");
+	menu = new LLMenuGL("Astra");
 	menu->append(new LLMenuItemCallGL(	"Close All Dialogs", 
 										&handle_close_all_notifications, NULL, NULL, 'D', MASK_CONTROL | MASK_ALT | MASK_SHIFT));
 	menu->appendSeparator();
@@ -809,7 +810,7 @@ void init_menus()
 	menu->append(new LLMenuItemCallGL(  "Phantom Avatar", &handle_phantom_avatar, NULL));
 	menu->appendSeparator();
 	menu->append(new LLMenuItemCallGL( "Animation Override...",
-									&handle_edit_ao, NULL));
+									&handle_edit_ao, NULL, NULL, 'O', MASK_CONTROL|MASK_SHIFT));
 	menu->append(new LLMenuItemCheckGL( "Nimble",
 										&menu_toggle_control,
 										NULL,
@@ -1172,6 +1173,8 @@ void init_client_menu(LLMenuGL* menu)
 										&menu_check_control,
 										(void*)"ShowConsoleWindow"));
 
+	menu->append(new LLMenuItemCallGL( "Region Console Window", LLFloaterRegionDebugConsole::PopUp));
+
 // [RLVa:KB] - Checked: 2009-07-08 (RLVa-1.0.0e) | Modified: RLVa-1.0.0e | OK
 	#ifdef RLV_ADVANCED_TOGGLE_RLVA
 		if (gSavedSettings.controlExists(RLV_SETTING_MAIN))
@@ -1525,7 +1528,7 @@ void init_debug_rendering_menu(LLMenuGL* menu)
 			'R', MASK_CONTROL|MASK_SHIFT));
 
 	LLMenuItemCheckGL* item;
-	item = new LLMenuItemCheckGL("Object-Object Occlusion", menu_toggle_control, NULL, menu_check_control, (void*)"UseOcclusion", 'O', MASK_CONTROL|MASK_SHIFT);
+	item = new LLMenuItemCheckGL("Object-Object Occlusion", menu_toggle_control, NULL, menu_check_control, (void*)"UseOcclusion");
 	item->setEnabled(gGLManager.mHasOcclusionQuery && LLFeatureManager::getInstance()->isFeatureAvailable("UseOcclusion"));
 	menu->append(item);
 
@@ -1634,14 +1637,10 @@ void init_debug_avatar_menu(LLMenuGL* menu)
 	menu->append(new LLMenuItemToggleGL( "Debug Rotation", &LLVOAvatar::sDebugAvatarRotation));
 	menu->append(new LLMenuItemCallGL("Dump Attachments", handle_dump_attachments));
 	menu->append(new LLMenuItemCallGL("Rebake Textures", handle_rebake_textures, NULL, NULL, 'R', MASK_ALT | MASK_CONTROL ));
-// <edit>
-//#ifndef LL_RELEASE_FOR_DOWNLOAD
-// </edit>
+
 	menu->append(new LLMenuItemCallGL("Debug Avatar Textures", handle_debug_avatar_textures, NULL, NULL, 'A', MASK_SHIFT|MASK_CONTROL|MASK_ALT));
 	menu->append(new LLMenuItemCallGL("Dump Local Textures", handle_dump_avatar_local_textures, NULL, NULL, 'M', MASK_SHIFT|MASK_ALT ));	
-// <edit>
-//#endif
-// </edit>
+
 
 	LLMenuItemCallGL* mesh_item = new LLMenuItemCallGL("Meshes And Morphs...", handle_meshes_and_morphs);
 	mesh_item->setUserData((void*)mesh_item);  // So we can remove it later
@@ -7710,7 +7709,6 @@ void menu_toggle_control( void* user_data )
         gSavedSettings.setBOOL(setting, !checked);
 }
 
-
 // these are used in the gl menus to set control values.
 class LLToggleControl : public view_listener_t
 {
@@ -9406,6 +9404,10 @@ class LLWorldEnvSettings : public view_listener_t
 			// then call update once
 			LLWLParamManager::instance()->mAnimator.update(
 				LLWLParamManager::instance()->mCurParams);
+		}
+		else if (tod == "submitwindlight")
+		{
+			LLWLParamManager::instance()->SendSettings();
 		}
 		else
 		{

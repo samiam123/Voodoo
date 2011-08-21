@@ -169,6 +169,30 @@ BOOL	LLPanelVolume::postBuild()
 		mSpinPhysicsRestitution->setCommitCallback(boost::bind(&LLPanelVolume::sendPhysicsRestitution, this, _1, mSpinPhysicsRestitution));
 	}
 #endif //MESH_ENABLED
+
+	mLabelMaterial = getChild<LLTextBox>("label material");
+	mComboMaterial = getChild<LLComboBox>("material");
+	childSetCommitCallback("material",onCommitMaterial,this);
+	mComboMaterial->removeall();
+    // <edit>
+	/*
+	// *TODO:translate
+	for (LLMaterialTable::info_list_t::iterator iter = LLMaterialTable::basic.mMaterialInfoList.begin();
+		 iter != LLMaterialTable::basic.mMaterialInfoList.end(); ++iter)
+	{
+		LLMaterialInfo* minfop = *iter;
+		if (minfop->mMCode != LL_MCODE_LIGHT)
+		{
+			mComboMaterial->add(minfop->mName);
+		}
+	}
+	*/
+	for(U8 mcode = 0; mcode < 0x10; mcode++)
+	{
+		mComboMaterial->add(LLMaterialTable::basic.getName(mcode));
+	}
+	// </edit>
+	mComboMaterialItemCount = mComboMaterial->getItemCount();
 	// Start with everyone disabled
 	clearCtrls();
 
@@ -396,6 +420,18 @@ void LLPanelVolume::getState( )
 		getChildView("FlexForceY")->setEnabled(false);
 		getChildView("FlexForceZ")->setEnabled(false);
 	}
+
+	// Update material part
+	// slightly inefficient - materials are unique per object, not per TE
+	U8 material_code = 0;
+	struct f : public LLSelectedTEGetFunctor<U8>
+	{
+		U8 get(LLViewerObject* object, S32 te)
+		{
+			return object->getMaterial();
+		}
+	} func;
+	bool material_same = LLSelectMgr::getInstance()->getSelection()->getSelectedTEValue( &func, material_code );
 	
 #if MESH_ENABLED
 	// Physics properties
@@ -448,6 +484,38 @@ void LLPanelVolume::getState( )
 	mComboPhysicsShapeType->setEnabled(editable);
 #endif //MESH_ENABLED
 
+    if (editable && single_volume && material_same)
+	{
+		mComboMaterial->setEnabled( TRUE );
+		mLabelMaterial->setEnabled( TRUE );
+		// <edit>
+		/*
+		if (material_code == LL_MCODE_LIGHT)
+		{
+			if (mComboMaterial->getItemCount() == mComboMaterialItemCount)
+			{
+				mComboMaterial->add(LEGACY_FULLBRIGHT_DESC);
+			}
+			mComboMaterial->setSimple(LEGACY_FULLBRIGHT_DESC);
+		}
+		else
+		{
+			if (mComboMaterial->getItemCount() != mComboMaterialItemCount)
+			{
+				mComboMaterial->remove(LEGACY_FULLBRIGHT_DESC);
+			}
+			// *TODO:Translate
+			mComboMaterial->setSimple(std::string(LLMaterialTable::basic.getName(material_code)));
+		}
+		*/
+		mComboMaterial->setSimple(std::string(LLMaterialTable::basic.getName(material_code)));
+		// </edit>
+	}
+	else
+	{
+		mComboMaterial->setEnabled( FALSE );
+		mLabelMaterial->setEnabled( FALSE );	
+	}
 	mObject = objectp;
 	mRootObject = root_objectp;
 }
@@ -554,6 +622,8 @@ void LLPanelVolume::clearCtrls()
 	mSpinPhysicsDensity->setEnabled(FALSE);
 	mSpinPhysicsRestitution->setEnabled(FALSE);
 #endif //MESH_ENABLED
+	mComboMaterial->setEnabled( FALSE );
+	mLabelMaterial->setEnabled( FALSE );
 }
 
 //
@@ -712,6 +782,21 @@ void LLPanelVolume::onLightSelectTexture(LLUICtrl* ctrl, void* userdata)
 	}
 }
 
+
+// static
+void LLPanelVolume::onCommitMaterial( LLUICtrl* ctrl, void* userdata )
+{
+	//LLPanelObject* self = (LLPanelObject*) userdata;
+	LLComboBox* box = (LLComboBox*) ctrl;
+
+	if (box)
+	{
+		// apply the currently selected material to the object
+		const std::string& material_name = box->getSimple();
+		U8 material_code = LLMaterialTable::basic.getMCode(material_name);
+		LLSelectMgr::getInstance()->selectionSetMaterial(material_code);
+	}
+}
 
 // static
 void LLPanelVolume::onCommitLight( LLUICtrl* ctrl, void* userdata )

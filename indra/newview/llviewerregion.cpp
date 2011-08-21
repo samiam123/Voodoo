@@ -1495,9 +1495,10 @@ void LLViewerRegionImpl::buildCapabilityNames(LLSD& capabilityNames)
 	capabilityNames.append("DispatchRegionInfo");
 	capabilityNames.append("EstateChangeInfo");
 	capabilityNames.append("EventQueueGet");
-	/*capabilityNames.append("EnvironmentSettings");
+	capabilityNames.append("EnvironmentSettings");
 	capabilityNames.append("ObjectMedia");
-	capabilityNames.append("ObjectMediaNavigate");*/
+	capabilityNames.append("ObjectMediaNavigate");
+	capabilityNames.append("WebFetchInventoryDescendents");
 	
 	if (false)//gSavedSettings.getBOOL("UseHTTPInventory")) //Caps suffixed with 2 by LL. Don't update until rest of fetch system is updated first.
 	{
@@ -1542,7 +1543,7 @@ void LLViewerRegionImpl::buildCapabilityNames(LLSD& capabilityNames)
 	//capabilityNames.append("SimConsole");
 	capabilityNames.append("SimulatorFeatures");
 	capabilityNames.append("SetDisplayName");
-	//capabilityNames.append("SimConsoleAsync");
+	capabilityNames.append("SimConsoleAsync");
 	capabilityNames.append("StartGroupProposal");
 	capabilityNames.append("TextureStats");
 	capabilityNames.append("UntrustedSimulatorMessage");

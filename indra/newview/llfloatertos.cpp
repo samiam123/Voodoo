@@ -52,6 +52,7 @@
 #include "lluictrlfactory.h"
 #include "llvfile.h"
 #include "message.h"
+#include "hippogridmanager.h"
 
 
 // static 
@@ -162,7 +163,24 @@ BOOL LLFloaterTOS::postBuild()
 	editor->setVisible( FALSE );
 
 	LLMediaCtrl* web_browser = getChild<LLMediaCtrl>("tos_html");
-	if ( web_browser )
+	bool use_web_browser = false;
+
+	//Check to see if the message is a link to display
+	std::string token = "http://";
+	std::string::size_type iIndex = mMessage.rfind(token);
+	//IF it has http:// in it, we use the web browser
+	if(iIndex != std::string::npos && mMessage.length() >= 2)
+	{
+		// it exists
+		use_web_browser = true;
+	}
+	else if (gHippoGridManager->getConnectedGrid()->isSecondLife())
+	{
+		//Its SL, use the browser for it as thats what it should do
+		use_web_browser = true;
+	}
+
+	if ( web_browser && use_web_browser)
 	{
 		web_browser->addObserver(this);
 		gResponsePtr = LLIamHere::build( this );

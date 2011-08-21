@@ -262,6 +262,7 @@ public:
 	void			unlockView();
 public:
 	F32				mDrawDistance;
+	BOOL            mLockedDrawDistance;
 
 	//--------------------------------------------------------------------
 	// Mouselook

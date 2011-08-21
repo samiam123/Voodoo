@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <floater bottom="-150" can_close="true" can_drag_on_left="false" can_minimize="true"
-     can_resize="false" height="275" left="50" min_height="180"
+     can_resize="false" height="295" left="50" min_height="180"
      min_width="400" mouse_opaque="true" name="Day Cycle Floater"
-     rect_control="FloaterDayCycleRect" title="Day Cycle Editor" width="646">
+     rect_control="FloaterDayCycleRect" title="Day Cycle Editor" width="666">
 	<tab_container bottom="-275" follows="left|top" height="255" left="0"
 	     mouse_opaque="false" name="Day Cycle Tabs" tab_position="top" width="644">
 		<panel border="true" bottom="-255" follows="left|top|right|bottom" height="255"
 		     label="Day Cycle" left="1" mouse_opaque="false"
-		     name="Day Cycle" width="642">
+		     name="Day Cycle" width="662">
 			<button bottom_delta="-18" follows="left|top" font="SansSerifSmall" height="15"
-			     label="?" left="612" name="WLDayCycleHelp" width="18" />
+			     label="?" left="632" name="WLDayCycleHelp" width="18" />
 			<multi_slider allow_overlap="false" bottom="-35" can_edit_text="true"
 			     control_name="WLTimeSlider" decimal_digits="0" draw_track="false"
 			     follows="bottom" height="10" increment="0.08333333333" initial_val="0"
@@ -148,10 +148,10 @@
 				|
 			</text>
 			<button bottom="-40" enabled="true" font="SansSerif" halign="center" height="20"
-			     label="Add Key" label_selected="Add Key" left="550"
+			     label="Add Key" label_selected="Add Key" left="570"
 			     mouse_opaque="true" name="WLAddKey" scale_image="true" width="80" />
 			<button bottom="-65" enabled="true" font="SansSerif" halign="center" height="20"
-			     label="Delete Key" label_selected="Delete Key" left="550"
+			     label="Delete Key" label_selected="Delete Key" left="570"
 			     mouse_opaque="true" name="WLDeleteKey" scale_image="true" width="80" />
 			<text type="string" length="1" bg_visible="true" border_drop_shadow_visible="false" border_visible="true"
 			     bottom="-120" control_name="DayCycleText" drop_shadow_visible="true"
@@ -186,24 +186,17 @@
 			<combo_box allow_text_entry="false" bottom_delta="-25" enabled="true" follows="left|top"
 			     height="18" label="Preset" left_delta="0" max_chars="20"
 			     mouse_opaque="true" name="WLKeyPresets" width="155" />
-			<view_border bevel_style="none" border_thickness="1" bottom_delta="-6" follows="top|left"
-			     height="115" left="12" width="190" />
+      <button bottom_delta="-25" follows="left|top" font="SansSerifSmall" height="20"
+           label="Edit Sky Preset" name="WLAdvancedSkyButton" width="137" />
+      
+			<view_border bevel_style="none" border_thickness="1" bottom="-250" follows="top|left"
+			     height="130" left="12" width="190" />
 			<text type="string" length="1" bg_visible="true" border_drop_shadow_visible="false" border_visible="true"
-			     bottom="-130" control_name="DayCycleText" drop_shadow_visible="true"
+			     bottom="-140" control_name="DayCycleText" drop_shadow_visible="true"
 			     follows="left|top|right" font="SansSerif" h_pad="0" halign="left"
 			     height="16" left="220" mouse_opaque="true"
-			     name="DayCycleText" v_pad="0" width="120">
-				Snap:
-			</text>
-			<combo_box allow_text_entry="false" bottom_delta="-25" enabled="false" follows="left|top"
-			     height="18" label="5 min" left_delta="0" max_chars="20" mouse_opaque="true"
-			     name="WLSnapOptions" width="70" />
-			<text type="string" length="1" bg_visible="true" border_drop_shadow_visible="false" border_visible="true"
-			     bottom="-180" control_name="DayCycleText" drop_shadow_visible="true"
-			     follows="left|top|right" font="SansSerif" h_pad="0" halign="left"
-			     height="16" left="220" mouse_opaque="true"
-			     name="DayCycleText2" v_pad="0" width="120">
-				Length of Cycle:
+			     name="DayCycleText2" v_pad="0" width="160">
+				Length of Preview Cycle:
 			</text>
 			<spinner bottom_delta="-20" can_edit_text="true" control_name="WLLengthOfDayHour"
 			     decimal_digits="0" enabled="true" follows="left|top" height="16"
@@ -221,49 +214,52 @@
 			     max_val="59" min_val="0" mouse_opaque="true" name="WLLengthOfDaySec"
 			     width="60" />
 			<text type="string" length="1" bg_visible="true" border_drop_shadow_visible="false" border_visible="true"
-			     bottom="-130" control_name="DayCycleText" drop_shadow_visible="true"
+			     bottom="-120" control_name="DayCycleText" drop_shadow_visible="true"
 			     follows="left|top|right" font="SansSerif" h_pad="0" halign="left"
-			     height="16" left="310" mouse_opaque="true"
+			     height="16" left="220" mouse_opaque="true"
 			     name="DayCycleText3" v_pad="0" width="120">
-				Preview:
+				Preview the Cycle:
 			</text>
-			<button bottom="-155" enabled="true" font="SansSerif" halign="center" height="20"
-			     label="Play" label_selected="Play" left="310"
+			<button bottom="-190" enabled="true" font="SansSerif" halign="center" height="20"
+			     label="Play" label_selected="Play" left="220"
 			     mouse_opaque="true" name="WLAnimSky" scale_image="true" width="50" />
-			<button bottom="-155" enabled="true" font="SansSerif" halign="center" height="20"
+			<button bottom="-190" enabled="true" font="SansSerif" halign="center" height="20"
 			     label="Stop!" label_selected="Stop" left_delta="55"
 			     mouse_opaque="true" name="WLStopAnimSky" scale_image="true" width="50" />
-			<button bottom="-155" enabled="true" font="SansSerif" halign="center" height="20"
-			     label="Use Estate Time" label_selected="Go to Estate Time"
-			     left_delta="55" mouse_opaque="true" name="WLUseLindenTime"
-			     scale_image="true" width="140" />
-			<text type="string" length="1" bg_visible="false" border_drop_shadow_visible="false" border_visible="false"
-				bottom="-180" drop_shadow_visible="true"
+      <view_border bevel_style="none" border_thickness="1" bottom="-250" follows="top|left"
+			     height="130" left="215" width="210" />
+      <text type="string" length="1" bg_visible="true" border_drop_shadow_visible="false" border_visible="true"
+			     bottom="-120" control_name="DayCycleText" drop_shadow_visible="true"
+			     follows="left|top|right" font="SansSerif" h_pad="0" halign="left"
+			     height="16" left="440" mouse_opaque="true"
+			     name="DayCycleText3" v_pad="0" width="120">
+        Day Cycle Presets:
+      </text>
+      <text type="string" length="1" bg_visible="false" border_drop_shadow_visible="false" border_visible="false"
+				bottom="-140" drop_shadow_visible="true"
 				font="SansSerif" h_pad="0" halign="left" height="16"
-				left="430" mouse_opaque="true" name="KeyFramePresetsText" v_pad="0"
-				width="110">
+				left="440" mouse_opaque="true" name="KeyFramePresetsText" v_pad="0"
+				width="130">
 				Presets:
 			</text>
-			<combo_box allow_text_entry="false" bottom_delta="-1" follows="left|top" height="18"
-				left_delta="80" max_chars="20" mouse_opaque="true" name="DayCyclePresetsCombo"
+			<combo_box allow_text_entry="false" bottom_delta="0" follows="left|top" height="18"
+				left_delta="50" max_chars="20" mouse_opaque="true" name="DayCyclePresetsCombo"
 				width="120" />
-			<button bottom_delta="-40" enabled="true" font="SansSerif" halign="center" height="20"
-				label="New" label_selected="New" left_delta="-80"
-				mouse_opaque="true" name="DayCycleNewPreset" scale_image="true" width="60" />
-			<button bottom_delta="0" enabled="true" font="SansSerif" halign="center" height="20"
-				label="Save" label_selected="Save" left_delta="70"
-				mouse_opaque="true" name="DayCycleSavePreset" scale_image="true" width="60" />
-			<button bottom_delta="0" enabled="true" font="SansSerif" halign="center" height="20"
-				label="Delete" label_selected="Delete" left_delta="70"
-				mouse_opaque="true" name="DayCycleDeletePreset" scale_image="true" width="60" />
-			<!--<button bottom="-295" enabled="true" font="SansSerif" halign="center" height="20"
-			     label="Save Test Day" label_selected="Save Test Day"
-			     left="480" mouse_opaque="true" name="WLSaveDayCycle" scale_image="true"
-			     width="150" />
-			<button bottom="-320" enabled="true" font="SansSerif" halign="center" height="20"
-			     label="Load Test Day" label_selected="Load Test Day"
-			     left="480" mouse_opaque="true" name="WLLoadDayCycle" scale_image="true"
-			     width="150" />-->
+			<button bottom_delta="-40" enabled="true" font="SansSerifSmall" halign="center" height="20"
+				label="Create new" label_selected="New" left_delta="-50"
+				mouse_opaque="true" name="DayCycleNewPreset" scale_image="true" width="65" />
+			<button bottom_delta="0" enabled="true" font="SansSerifSmall" halign="center" height="20"
+				label="Save" label_selected="Save" left_delta="75"
+				mouse_opaque="true" name="DayCycleSavePreset" scale_image="true" width="65" />
+			<button bottom_delta="0" enabled="true" font="SansSerifSmall" halign="center" height="20"
+				label="Delete" label_selected="Delete" left_delta="75"
+				mouse_opaque="true" name="DayCycleDeletePreset" scale_image="true" width="65" />
+      <button bottom="-190" enabled="true" font="SansSerif" halign="center" height="20"
+			     label="Send Day Cycle to the Server" label_selected="Go to Estate Time"
+			     left="440" mouse_opaque="true" name="WLSendToServer"
+			     scale_image="true" width="180" />
+      <view_border bevel_style="none" border_thickness="1" bottom="-250" follows="top|left"
+			     height="130" left="430" width="230" />
 		</panel>
 	</tab_container>
 	<string name="DaycycleDefaultNames">

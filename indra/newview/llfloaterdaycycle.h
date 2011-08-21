@@ -61,6 +61,7 @@ public:
 
 	/// help button stuff
 	static void onClickHelp(void* data);
+	static void onClickEditPreset(void* data);
 	void initHelpBtn(const std::string& name, const std::string& xml_alert);
 
 	/// initialize all
@@ -125,8 +126,8 @@ public:
 	/// button to save day OLD -HgB
 	static void onSaveDayCycle(void* userData);
 
-	/// toggle for Linden time
-	static void onUseLindenTime(void* userData);
+	/// send to the server
+	static void onSendToServer(void* userData);
 
 
 	//// menu management

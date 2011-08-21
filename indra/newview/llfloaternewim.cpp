@@ -41,10 +41,12 @@
 S32 COL_1_WIDTH = 200;
 
 static std::string sOnlineDescriptor = "*";
+LLFloaterNewIM* LLFloaterNewIM::sInstance = NULL;
 
-LLFloaterNewIM::LLFloaterNewIM()
+LLFloaterNewIM::LLFloaterNewIM(const LLSD& seed)
 {
 	LLUICtrlFactory::getInstance()->buildFloater(this, "floater_new_im.xml");
+	sInstance = this;
 }
 
 BOOL LLFloaterNewIM::postBuild()

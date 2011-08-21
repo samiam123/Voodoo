@@ -61,8 +61,8 @@ END
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDI_LL_ICON             ICON                    "singularity_icon.ico"
-IDI_LCD_LL_ICON         ICON                    "singularity_icon.ico"
+IDI_LL_ICON             ICON                    "Astra_icon.ico"
+IDI_LCD_LL_ICON         ICON                    "Astra_icon.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -154,13 +154,13 @@ BEGIN
     BEGIN
         BLOCK "040904b0"
         BEGIN
-            VALUE "CompanyName", "Siana Gearz"
-            VALUE "FileDescription", "Singularity Viewer"
+            VALUE "CompanyName", "Astra Dev Team"
+            VALUE "FileDescription", "Astra Viewer"
             VALUE "FileVersion", "1.5.0.0"
             VALUE "InternalName", "Second Life"
-            VALUE "LegalCopyright", "Copyright © 2001-2010, Linden Research, Inc., Copyright 2010 Siana Gearz"
-            VALUE "OriginalFilename", "singularity.exe"
-            VALUE "ProductName", "Singularity Viewer"
+            VALUE "LegalCopyright", "Copyright © 2001-2010, Linden Research, Inc., Copyright 2011 Astra Dev Team"
+            VALUE "OriginalFilename", "Astra.exe"
+            VALUE "ProductName", "Astra Viewer"
             VALUE "ProductVersion", "1.5.0.0"
         END
     END

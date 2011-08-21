@@ -66,6 +66,7 @@ public:
 
 	/// load a day cycle
 	void loadDayCycle(const std::string & fileName);
+	void loadRegionDayCycle(const LLSD& day_data);
 
 	/// load a day cycle
 	void saveDayCycle(const std::string & fileName);
@@ -102,6 +103,8 @@ public:
 	/// get the name
 	/// returns true if it found one
 	bool getKeyedParamName(F32 time, std::string & name);
+
+	LLSD asLLSD();
 
 };
 

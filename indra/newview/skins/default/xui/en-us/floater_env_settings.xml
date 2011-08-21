@@ -55,12 +55,12 @@
 	     initial_val="0" label="" left="385" max_val="10" min_val="0"
 	     mouse_opaque="true" name="EnvWaterFogSlider" show_text="true" value="0"
 	     width="210" />
-	<button bottom="-140" follows="left|top" font="SansSerifSmall" height="20"
-	     label="Use Estate Time" left="8" name="EnvUseEstateTimeButton" width="137" />
-	<button bottom_delta="0" follows="left|top" font="SansSerifSmall" height="20"
-	     label="Advanced Sky" left="154" name="EnvAdvancedSkyButton" width="137" />
-	<button bottom_delta="0" follows="left|top" font="SansSerifSmall" height="20"
-	     label="Advanced Water" left="300" name="EnvAdvancedWaterButton" width="137" />
+  <button bottom="-140" follows="left|top" font="SansSerifSmall" height="20"
+	     label="Edit the Day Cycle" left="8" name="EnvDayCycleButton" width="137" />
+  <button bottom_delta="0" follows="left|top" font="SansSerifSmall" height="20"
+	     label="Send Day Cycle to the Server" left="154" name="EnvSubmitWindlight" width="187" />
+  <button bottom_delta="0" follows="left|top" font="SansSerifSmall" height="20"
+	     label="Edit Water Presets" left="350" name="EnvAdvancedWaterButton" width="137" />
 	<button bottom="-40" follows="left|top" font="SansSerif" height="18" label="?"
 	     left="570" name="EnvSettingsHelpButton" width="18" />
 </floater>

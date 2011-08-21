@@ -576,6 +576,10 @@
 			     left="0" mouse_opaque="true" name="Revert to Region Default" width="169">
 				<on_click function="World.EnvSettings" userdata="default" />
 			</menu_item_call>
+			<menu_item_call bottom="-105" enabled="false" height="19" label="Send Current Settings To Region"
+			     left="0" mouse_opaque="true" name="submitwindlight" width="169">
+				<on_click function="World.EnvSettings" userdata="default" />
+			</menu_item_call>
 			<menu_item_separator bottom="-113" enabled="true" height="8" label="-----------" left="0"
 			     mouse_opaque="true" name="separator" width="169" />
       <menu_item_call bottom="-132" enabled="false" height="19" label="Environment Editor" left="0"
@@ -892,7 +896,7 @@
 				     userdata="WebLaunchPublicIssue,http://jira.secondlife.com" />
 			</menu_item_call>
 		</menu>
-		<menu_item_call bottom="-313" enabled="true" height="19" label="About Singularity..." left="0"
+		<menu_item_call bottom="-313" enabled="true" height="19" label="About Astra..." left="0"
 		     mouse_opaque="true" name="About Second Life..." width="166">
 			<on_click function="ShowFloater" userdata="about" />
 		</menu_item_call>

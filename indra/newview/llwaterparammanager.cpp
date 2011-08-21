@@ -458,3 +458,23 @@ LLWaterParamManager * LLWaterParamManager::instance()
 
 	return sInstance;
 }
+
+bool LLWaterParamManager::loadPresetFromRegion(const std::string& name, const LLSD& preset, bool propagate )
+{
+    std::map<std::string, LLWaterParamSet>::iterator mIt = mParamList.find(name);
+    if(mIt == mParamList.end())
+    {
+		addParamSet(name, preset);
+    }
+    else
+    {
+		setParamSet(name, preset);
+    }
+
+    if(propagate)
+    {
+		getParamSet(name, mCurParams);
+		propagateParameters();
+    }
+    return true;
+}

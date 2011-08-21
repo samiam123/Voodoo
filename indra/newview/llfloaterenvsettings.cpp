@@ -48,6 +48,7 @@
 #include "llwaterparammanager.h"
 #include "llmath.h"
 #include "llviewerwindow.h"
+#include "llfloaterdaycycle.h"
 
 #include "pipeline.h"
 
@@ -87,6 +88,7 @@ void LLFloaterEnvSettings::initCallbacks(void)
 
 	// WL Top
 	childSetAction("EnvAdvancedSkyButton", onOpenAdvancedSky, NULL);
+	childSetAction("EnvDayCycleButton", onOpenDayCycleEditor, NULL);
 	childSetAction("EnvAdvancedWaterButton", onOpenAdvancedWater, NULL);
 	childSetAction("EnvSubmitWindlight", onSubmitWindlight, NULL);
 	childSetAction("EnvUseEstateTimeButton", onUseEstateTime, NULL);
@@ -281,6 +283,11 @@ void LLFloaterEnvSettings::onOpenAdvancedSky(void* userData)
 	LLFloaterWindLight::show();
 }
 
+void LLFloaterEnvSettings::onOpenDayCycleEditor(void* userData)
+{
+	LLFloaterDayCycle::show();
+}
+
 void LLFloaterEnvSettings::onOpenAdvancedWater(void* userData)
 {
 	LLFloaterWater::show();
@@ -288,17 +295,7 @@ void LLFloaterEnvSettings::onOpenAdvancedWater(void* userData)
 
 void LLFloaterEnvSettings::onSubmitWindlight(void* userData)
 {
-	Meta7WindlightPacket * wl = new Meta7WindlightPacket();
-
-	LLWaterParamManager * param_mgr = LLWaterParamManager::instance();
-	wl->reflectionWaveletScale.X = param_mgr->mNormalScale.mX;
-	wl->reflectionWaveletScale.Y = param_mgr->mNormalScale.mY;
-	wl->reflectionWaveletScale.Z = param_mgr->mNormalScale.mZ;
-
-	
-	std::vector<std::string> strings;
-	strings.push_back((char*)wl);
-	send_generic_message("Windlight", strings);
+	LLWLParamManager::instance()->SendSettings();
 }
 
 void LLFloaterEnvSettings::onUseEstateTime(void* userData)

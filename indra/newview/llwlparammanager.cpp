@@ -60,6 +60,7 @@
 #include "llfloaterwindlight.h"
 #include "llfloaterdaycycle.h"
 #include "llfloaterenvsettings.h"
+#include "llwaterparammanager.h"
 
 #include "curl/curl.h"
 
@@ -560,4 +561,45 @@ LLWLParamManager * LLWLParamManager::instance()
 	}
 
 	return sInstance;
+}
+bool LLWLParamManager::loadPresetFromRegion(const std::string& name, const LLSD& preset, bool propagate )
+{
+    std::map<std::string, LLWLParamSet>::iterator mIt = mParamList.find(name);
+    if(mIt == mParamList.end())
+    {
+		addParamSet(name, preset);
+    }
+    else 
+    {
+		setParamSet(name, preset);
+    }
+
+    if(propagate)
+    {
+		getParamSet(name, mCurParams);
+		propagateParameters();
+    }
+    return true;
+}
+void LLWLParamManager::SendSettings()
+{
+	LLSD body;
+	std::string url = gAgent.getRegion()->getCapability("EnvironmentSettings");
+	if (!url.empty())
+	{
+		LLSD skies;
+		for (std::map<F32, std::string>::const_iterator iter = LLWLParamManager::instance()->mDay.mTimeMap.begin(); iter != LLWLParamManager::instance()->mDay.mTimeMap.end(); ++iter)
+		{
+			LLWLParamSet set;
+			LLWLParamManager::instance()->getParamSet(iter->second, set);
+			skies[set.mName] = set.getAll();
+		}
+		LLEnvironmentSettings settings = LLEnvironmentSettings(LLWLParamManager::instance()->mDay.asLLSD(),
+			skies, LLWaterParamManager::instance()->mCurParams.getAll(),
+			LLWLParamManager::instance()->mAnimator.mDayTime);
+		LLSD metadata;
+		metadata["regionID"] = gAgent.getRegion()->getRegionID();
+		body = settings.makePacket(metadata);
+		LLHTTPClient::post(url, body, new LLHTTPClient::Responder());
+	}
 }

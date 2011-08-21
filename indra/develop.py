@@ -77,7 +77,7 @@ class PlatformSetup(object):
     standalone = 'OFF'
     unattended = 'OFF'
     universal = 'OFF'
-    project_name = 'Singularity'
+    project_name = 'Astra'
     distcc = True
     cmake_opts = []
     word_size = 32
@@ -505,29 +505,29 @@ class WindowsSetup(PlatformSetup):
 
     def _get_generator(self):
         if self._generator is None:
-            for version in 'vc80 vc90 vc100 vc71'.split():
+            for version in 'vc90 vc100'.split():
                 if self.find_visual_studio(version):
                     self._generator = version
                     print 'Building with ', self.gens[version]['gen']
                     break
-            else:
-                print >> sys.stderr, 'Cannot find a Visual Studio installation, testing for express editions'
-                for version in 'vc80 vc90 vc100 vc71'.split():
-                    if self.find_visual_studio_express(version):
-                        self._generator = version
-                        self.using_express = True
-                        print 'Building with ', self.gens[version]['gen'] , "Express edition"
-                        break
-                else:
-					for version in 'vc80 vc90 vc100 vc71'.split():
-						if self.find_visual_studio_express_single(version):
-							self._generator = version
-							self.using_express = True
-							print 'Building with ', self.gens[version]['gen'] , "Express edition"
-							break
-					else:
-						print >> sys.stderr, 'Cannot find any Visual Studio installation'
-						sys.exit(1)
+		if self._generator is None:
+			print >> sys.stderr, 'Cannot find a Visual Studio installation, testing for express editions'
+			for version in 'vc90 vc100'.split():
+				if self.find_visual_studio_express(version):
+					self._generator = version
+					self.using_express = True
+					print 'Building with ', self.gens[version]['gen'] , "Express edition"
+					break
+		if self._generator is None:
+			for version in 'vc90 vc100'.split():
+				if self.find_visual_studio_express_single(version):
+					self._generator = version
+					self.using_express = True
+					print 'Building with ', self.gens[version]['gen'] , "Express edition"
+					break
+		if self._generator is None:
+			print >> sys.stderr, 'Cannot find any Visual Studio installation'
+			sys.exit(1)
         return self._generator
 
     def _set_generator(self, gen):
@@ -693,7 +693,7 @@ class WindowsSetup(PlatformSetup):
                 continue
             vstool_cmd = (os.path.join('tools','vstool','VSTool.exe') +
                           ' --solution ' +
-                          os.path.join(build_dir,'Singularity.sln') +
+                          os.path.join(build_dir,'Astra.sln') +
                           ' --config ' + self.build_type +
                           ' --startup secondlife-bin')
             print 'Running %r in %r' % (vstool_cmd, getcwd())

@@ -90,8 +90,6 @@ public:
 	
 	static void 	onCommitParametric(		LLUICtrl* ctrl, void* userdata);
 
-	static void 	onCommitMaterial(		LLUICtrl* ctrl, void* userdata);
-
 	static void     onCommitSculpt(        LLUICtrl* ctrl, void* userdata);
 	static void     onCancelSculpt(        LLUICtrl* ctrl, void* userdata);
 	static void     onSelectSculpt(        LLUICtrl* ctrl, void* userdata);
@@ -122,11 +120,6 @@ protected:
 	static LLVector3 mClipboardRot;
 	static LLVolumeParams mClipboardVolumeParams;
 	static BOOL hasParamClipboard;
-	
-	S32				mComboMaterialItemCount;
-
-	LLTextBox*		mLabelMaterial;
-	LLComboBox*		mComboMaterial;
 	
 	// Per-object options
 	LLTextBox*		mLabelBaseType;
