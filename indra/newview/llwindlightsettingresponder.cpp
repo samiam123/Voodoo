@@ -176,9 +176,12 @@ void IMPEnvironmentSettings::idle(void* user_data)
 
 void IMPEnvironmentSettings::getEnvironmentSettings()
 {
-  std::string url = gAgent.getRegion()->getCapability("EnvironmentSettings");
-  if (!url.empty())
+  if(gSavedSettings.getBOOL("UseServersideWindlightSettings"))
   {
-     LLHTTPClient::get(url, new EnvironmentSettingsResponder);
+	  std::string url = gAgent.getRegion()->getCapability("EnvironmentSettings");
+	  if (!url.empty())
+	  {
+		 LLHTTPClient::get(url, new EnvironmentSettingsResponder);
+	  }
   }
 }

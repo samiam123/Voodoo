@@ -151,8 +151,11 @@ void process_generic_message(LLMessageSystem* msg, void**)
 
 				normalMapTexture.set(out);
 
-				param_mgr->setParamSet(	"LightShare-CurrentRegion", param_set);
-				param_mgr->setNormalMapID(normalMapTexture);
+				if(gSavedSettings.getBOOL("UseServersideWindlightSettings"))
+				{
+					param_mgr->setParamSet(	"LightShare-CurrentRegion", param_set);
+					param_mgr->setNormalMapID(normalMapTexture);
+				}
 
 				LLWLParamManager * wl_param_mgr = LLWLParamManager::instance();
 				LLWLParamSet & wl_param_set = wl_param_mgr->mCurParams;
@@ -187,9 +190,12 @@ void process_generic_message(LLMessageSystem* msg, void**)
 				wl_param_mgr->removeParamSet("LightShare-CurrentRegion",true);
 				wl_param_mgr->addParamSet(	"LightShare-CurrentRegion", wl_param_set);
 				wl_param_mgr->savePreset( "LightShare-CurrentRegion");
-				LLWLParamManager::instance()->mAnimator.mIsRunning = false;
-				LLWLParamManager::instance()->mAnimator.mUseLindenTime = false;
-				wl_param_mgr->loadPreset( "LightShare-CurrentRegion",true);	
+				if(gSavedSettings.getBOOL("UseServersideWindlightSettings"))
+				{
+					LLWLParamManager::instance()->mAnimator.mIsRunning = false;
+					LLWLParamManager::instance()->mAnimator.mUseLindenTime = false;
+					wl_param_mgr->loadPreset( "LightShare-CurrentRegion",true);	
+				}
 			}
 		}
 	}
