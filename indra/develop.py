@@ -691,7 +691,7 @@ class WindowsSetup(PlatformSetup):
             if prev_build == self.build_type:
                 # Only run vstool if the build type has changed.
                 continue
-            vstool_cmd = (os.path.join('.\tools','vstool','VSTool.exe') +
+            vstool_cmd = (os.path.join('tools','vstool','VSTool.exe') +
                           ' --solution ' +
                           os.path.join(build_dir,'Astra.sln') +
                           ' --config ' + self.build_type +
