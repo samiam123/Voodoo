@@ -1009,6 +1009,9 @@
 				<combo_item name="Cylinder" value="Cylinder">
 					Cylinder
 				</combo_item>
+				<combo_item name="Mesh" value="Mesh">
+					Mesh
+				</combo_item>
       		</combo_box>
 		</panel>
 

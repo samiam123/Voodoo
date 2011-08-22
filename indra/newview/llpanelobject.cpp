@@ -1329,7 +1329,9 @@ void LLPanelObject::getState( )
 			BOOL sculpt_invert = sculpt_type & LL_SCULPT_FLAG_INVERT;
 			BOOL sculpt_mirror = sculpt_type & LL_SCULPT_FLAG_MIRROR;		
 #if MESH_ENABLED
+#if NO_MESH_SWITCHING
 			isMesh = (sculpt_stitching == LL_SCULPT_TYPE_MESH);
+#endif //NO_MESH_SWITCHING
 #endif //MESH_ENABLED
 
 			LLTextureCtrl*  mTextureCtrl = getChild<LLTextureCtrl>("sculpt texture control");
@@ -2148,7 +2150,9 @@ void LLPanelObject::sendSculpt()
 
 	bool enabled = true;
 #if MESH_ENABLED
+#if NO_MESH_SWITCHING
 	enabled = sculpt_type != LL_SCULPT_TYPE_MESH;
+#endif //NO_MESH_SWITCHING
 #endif //MESH_ENABLED
 
 	if (mCtrlSculptMirror)
