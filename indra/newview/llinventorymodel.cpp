@@ -1676,7 +1676,7 @@ void LLInventoryModel::bulkFetch(std::string url)
 			if (body_lib["folders"].size())
 			{
 				std::string url_lib;
-				url_lib = gAgent.getRegion()->getCapability("FetchLibDescendents");
+				url_lib = gAgent.getRegion()->getCapability("WebFetchLibDescendents");
 				LLHTTPClient::post(url_lib, body_lib, new fetchDescendentsResponder(body_lib),300.0);
 			}
 			sFetchTimer.reset();
@@ -1778,14 +1778,13 @@ void LLInventoryModel::backgroundFetch(void*)
 	if (sBackgroundFetchActive && gAgent.getRegion())
 	{
 		// If we'll be using the capability, we'll be sending batches and the background thing isn't as important.
-		std::string url = gAgent.getRegion()->getCapability("FetchInventoryDescendents");   
-		if (false /*gSavedSettings.getBOOL("UseHTTPInventory")*/ && !url.empty()) 
+		std::string url = gAgent.getRegion()->getCapability("WebFetchInventoryDescendents");   
+		if (!url.empty()) 
 		{
 			bulkFetch(url);
 			return;
 		}
 		
-#if 1
 		//DEPRECATED OLD CODE FOLLOWS.
 		// no more categories to fetch, stop fetch process
 		if (sFetchQueue.empty())
@@ -1901,11 +1900,6 @@ void LLInventoryModel::backgroundFetch(void*)
 			// not enough time has elapsed to do a new fetch
 			break;
 		}
-		
-		//
-		// DEPRECATED OLD CODE
-		//--------------------------------------------------------------------------------
-#endif
 	}
 }
 
