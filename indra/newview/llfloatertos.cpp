@@ -164,6 +164,7 @@ BOOL LLFloaterTOS::postBuild()
 
 	LLMediaCtrl* web_browser = getChild<LLMediaCtrl>("tos_html");
 	bool use_web_browser = false;
+	bool is_SL = false;
 
 	//Check to see if the message is a link to display
 	std::string token = "http://";
@@ -178,13 +179,17 @@ BOOL LLFloaterTOS::postBuild()
 	{
 		//Its SL, use the browser for it as thats what it should do
 		use_web_browser = true;
+		is_SL = true;
 	}
 
 	if ( web_browser && use_web_browser)
 	{
 		web_browser->addObserver(this);
 		gResponsePtr = LLIamHere::build( this );
-		LLHTTPClient::get( getString( "real_url" ), gResponsePtr );
+		if(is_SL)
+			LLHTTPClient::get( getString( "real_url" ), gResponsePtr );
+		else
+			LLHTTPClient::get( mMessage, gResponsePtr );
 	}
 
 	return TRUE;
