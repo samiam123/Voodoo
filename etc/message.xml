@@ -706,7 +706,7 @@
 			<boolean>false</boolean>
 
 			<key>WebFetchInventoryDescendents</key>
-			<boolean>true</boolean>
+			<boolean>false</boolean>
 
 			<key>FetchInventory</key>
 			<boolean>true</boolean>
