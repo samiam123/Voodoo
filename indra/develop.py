@@ -473,14 +473,6 @@ class DarwinSetup(UnixSetup):
 
 class WindowsSetup(PlatformSetup):
     gens = {
-        'vc71' : {
-            'gen' : r'Visual Studio 7 .NET 2003',
-            'ver' : r'7.1'
-            },
-        'vc80' : {
-            'gen' : r'Visual Studio 8 2005',
-            'ver' : r'8.0'
-            },
         'vc90' : {
             'gen' : r'Visual Studio 9 2008',
             'ver' : r'9.0'
@@ -490,8 +482,6 @@ class WindowsSetup(PlatformSetup):
             'ver' : r'10.0'
             }
         }
-    gens['vs2003'] = gens['vc71']
-    gens['vs2005'] = gens['vc80']
     gens['vs2008'] = gens['vc90']
     gens['vs2010'] = gens['vc100']
 
