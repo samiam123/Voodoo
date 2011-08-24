@@ -423,6 +423,7 @@ set(viewer_SOURCE_FILES
     lltoolselectland.cpp
     lltoolselectrect.cpp
     lltoolview.cpp
+    lltpresponder.cpp
     lltracker.cpp
     lltrans.cpp
     lltranslate.cpp
@@ -916,6 +917,7 @@ set(viewer_HEADER_FILES
     lltoolselectland.h
     lltoolselectrect.h
     lltoolview.h
+    lltpresponder.h
     lltracker.h
     lltrans.h
     lltranslate.h
