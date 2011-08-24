@@ -1999,7 +1999,15 @@ U32 LLVOVolume::getVolumeInterfaceID() const
 {
 	if (mVolumeImpl && mVolumeImpl != NULL)
 	{
-		return mVolumeImpl->getID();
+		try
+		{
+			return mVolumeImpl->getID();
+		}
+		catch(...)
+		{
+			llinfos << "Failed to show prim UUID: " <<" - " << getID() << ", position: " <<
+				getPositionRegion() << llendl;
+		}
 	}
 
 	return 0;
