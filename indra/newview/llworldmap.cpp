@@ -674,8 +674,8 @@ void LLWorldMap::processMapBlockReply(LLMessageSystem* msg, void**)
 	{
 		U16 x_regions;
 		U16 y_regions;
-		U16 x_size;
-		U16 y_size;
+		U16 x_size = 256;
+		U16 y_size = 256;
 		std::string name;
 		U8 accesscode;
 		U32 region_flags;
