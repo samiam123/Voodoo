@@ -8653,6 +8653,8 @@ version 2.0
 		{	WaterHeight	U8				}	// meters
 		{	Agents		U8				}
 		{	MapImageID	LLUUID			}
+		{	SizeX		U16				}
+		{	SizeY		U16				}
 	}
 }
 
