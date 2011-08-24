@@ -377,15 +377,7 @@
 				<key>trusted-sender</key>
 				<boolean>true</boolean>
 			</map>
-
-			<key>WebFetchInventoryDescendents</key>
-			<map>
-				<key>flavor</key>
-				<string>llsd</string>
-				<key>trusted-sender</key>
-				<boolean>true</boolean>
-			</map>
-
+			
 			<key>SimConsoleResponse</key>
 			<map>
 				<key>flavor</key>
@@ -588,6 +580,14 @@
 				<boolean>false</boolean>
 			</map>
 
+			<key>WebFetchInventoryDescendents</key>
+			<map>
+				<key>flavor</key>
+				<string>template</string>
+				<key>trusted-sender</key>
+				<boolean>true</boolean>
+			</map>
+
 			<key>GroupProposalBallot</key>
 			<map>
 				<key>flavor</key>
@@ -703,9 +703,6 @@
 			<boolean>true</boolean>
 
 			<key>FetchInventoryDescendents</key>
-			<boolean>false</boolean>
-
-			<key>WebFetchInventoryDescendents</key>
 			<boolean>false</boolean>
 
 			<key>FetchInventory</key>
