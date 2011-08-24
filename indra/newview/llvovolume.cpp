@@ -814,7 +814,7 @@ BOOL LLVOVolume::setVolume(const LLVolumeParams &params_in, const S32 detail, bo
 	{
 		mFaceMappingChanged = TRUE;
 		
-		if (mVolumeImpl)
+		if (mVolumeImpl && mVolumeImpl != NULL)
 		{
 			mVolumeImpl->onSetVolume(volume_params, mLOD); //detail ?
 		}
@@ -1247,7 +1247,7 @@ void LLVOVolume::preRebuild()
 
 void LLVOVolume::updateRelativeXform()
 {
-	if (mVolumeImpl)
+	if (mVolumeImpl && mVolumeImpl != NULL)
 	{
 		mVolumeImpl->updateRelativeXform();
 		return;
@@ -1997,7 +1997,7 @@ F32 LLVOVolume::getLightCutoff() const
 
 U32 LLVOVolume::getVolumeInterfaceID() const
 {
-	if (mVolumeImpl)
+	if (mVolumeImpl && mVolumeImpl != NULL)
 	{
 		return mVolumeImpl->getID();
 	}
@@ -2065,7 +2065,7 @@ BOOL LLVOVolume::hasLightTexture() const
 
 BOOL LLVOVolume::isVolumeGlobal() const
 {
-	if (mVolumeImpl)
+	if (mVolumeImpl && mVolumeImpl != NULL)
 	{
 		return mVolumeImpl->isVolumeGlobal() ? TRUE : FALSE;
 	}
@@ -2298,7 +2298,7 @@ void LLVOVolume::parameterChanged(U16 param_type, bool local_origin)
 void LLVOVolume::parameterChanged(U16 param_type, LLNetworkData* data, BOOL in_use, bool local_origin)
 {
 	LLViewerObject::parameterChanged(param_type, data, in_use, local_origin);
-	if (mVolumeImpl)
+	if (mVolumeImpl && mVolumeImpl != NULL)
 	{
 		mVolumeImpl->onParameterChanged(param_type, data, in_use, local_origin);
 	}
@@ -2400,7 +2400,7 @@ F32 LLVOVolume::getBinRadius()
 
 const LLVector3 LLVOVolume::getPivotPositionAgent() const
 {
-	if (mVolumeImpl)
+	if (mVolumeImpl && mVolumeImpl != NULL)
 	{
 		return mVolumeImpl->getPivotPosition();
 	}
@@ -2409,7 +2409,7 @@ const LLVector3 LLVOVolume::getPivotPositionAgent() const
 
 void LLVOVolume::onShift(const LLVector4a &shift_vector)
 {
-	if (mVolumeImpl)
+	if (mVolumeImpl && mVolumeImpl != NULL)
 	{
 		mVolumeImpl->onShift(shift_vector);
 	}
@@ -2419,7 +2419,7 @@ void LLVOVolume::onShift(const LLVector4a &shift_vector)
 
 const LLMatrix4& LLVOVolume::getWorldMatrix(LLXformMatrix* xform) const
 {
-	if (mVolumeImpl)
+	if (mVolumeImpl && mVolumeImpl != NULL)
 	{
 		return mVolumeImpl->getWorldMatrix(xform);
 	}
