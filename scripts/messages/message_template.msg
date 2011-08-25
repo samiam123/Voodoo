@@ -8655,7 +8655,7 @@ version 2.0
 		{	MapImageID	LLUUID			}
 	}
 	{	
-		Size			Single
+		Size			Variable
 		{	SizeX		U16				}
 		{	SizeY		U16				}
 	}
