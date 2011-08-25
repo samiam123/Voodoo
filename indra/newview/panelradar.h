@@ -45,7 +45,7 @@ public:
 	BOOL postBuild();
 
 	// Returns true if agent_id belongs to an Imprudence developer
-	bool isImpDev(const LLUUID& agent_id);
+	bool isSpecial(const LLUUID& agent_id);
 	// Change the camera focus to an avatar
 	void lookAtAvatar(const LLUUID& agent_id);
 	

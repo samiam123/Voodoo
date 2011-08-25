@@ -110,7 +110,7 @@ PanelRadar::~PanelRadar()
 {
 }
 
-bool PanelRadar::isImpDev(const LLUUID& agent_id)
+bool PanelRadar::isSpecial(const LLUUID& agent_id)
 {
 	// We use strings here as avatar keys change across grids. 
 	// Feel free to add/remove yourself.
@@ -119,7 +119,20 @@ bool PanelRadar::isImpDev(const LLUUID& agent_id)
 	        agent_name == "Jacek Antonelli" ||
 	        agent_name == "Armin Weatherwax" ||
 			agent_name == "Elektra Hesse" || 
-			agent_name == "CodeBastard Redgrave");
+			agent_name == "CodeBastard Redgrave" || 
+			agent_name == "Revolution Smythe" || 
+			agent_name == "Matrix Smythe" || 
+			agent_name == "Siana Gearz" || 
+			agent_name == "WhiteStar Magic" ||
+			agent_name == "Maggie Dashwood" ||
+			agent_name == "Enrico Nirvana" ||
+			agent_name == "Matto Destiny" ||
+			agent_name == "Skidz Tweak" ||
+			agent_name == "Simpy Merryman" ||
+			agent_name == "Mahakala Dharmapala" ||
+			agent_name == "Ubit Umarov" ||
+			agent_name == "Greybeard Thinker" ||
+			agent_name == "Eryn Galen");
 }
 
 void PanelRadar::updateRadarInfo()

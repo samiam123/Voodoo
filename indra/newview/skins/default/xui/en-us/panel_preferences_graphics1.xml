@@ -222,29 +222,7 @@
 		</combo_item>
 	</combo_box>
 
-	<!--radio_group bottom_delta="-73" control_name="RenderReflectionDetail" draw_border="false"
-	     enabled="true" follows="left|top" height="70"
-	     left_delta="-2" mouse_opaque="true" name="ReflectionDetailRadio"
-	     width="321">
-		<radio_item type="string" length="1" bottom="-19" enabled="true" follows="left|top" height="16"
-		     left="3" mouse_opaque="true" name="0" width="315">
-			Terrain and Trees
-		</radio_item>
-		<radio_item type="string" length="1" bottom="-35" enabled="true" follows="left|top" height="16"
-		     left="3" mouse_opaque="true" name="1" width="315">
-			All Static Objects
-		</radio_item>
-		<radio_item type="string" length="1" bottom="-51" enabled="true" follows="left|top" height="16"
-		     left="3" mouse_opaque="true" name="2" width="315">
-			All Avatars and Objects
-		</radio_item>
-		<radio_item type="string" length="1" bottom="-67" enabled="true" follows="left|top" height="16"
-		     left="3" mouse_opaque="true" name="3" width="315">
-			Everything
-		</radio_item>
-	</radio_group-->
-
-  <text type="string" length="1" bg_visible="false" border_drop_shadow_visible="false" border_visible="false"
+	<text type="string" length="1" bg_visible="false" border_drop_shadow_visible="false" border_visible="false"
 	     bottom_delta="-17" drop_shadow_visible="true" enabled="true" follows="left|top"
 	     font="SansSerifSmall" h_pad="0" halign="left" height="12"
 	     left="15" mouse_opaque="true" name="ShadowDetailText" v_pad="0"

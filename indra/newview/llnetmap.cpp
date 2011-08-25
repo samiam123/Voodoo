@@ -401,6 +401,10 @@ void LLNetMap::draw()
 			{
 				avColor = linden_color;
 			}
+			else if(LLFloaterMap::getInstance()->getRadar()->isSpecial(avatar_ids[i]))
+			{
+				avColor = linden_color;
+			}
 			//check if they are an estate owner at their current position
 			else if(estate_owner.notNull() && avatar_ids[i] == estate_owner)
 			{
