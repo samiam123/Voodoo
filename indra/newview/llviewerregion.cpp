@@ -1545,6 +1545,7 @@ void LLViewerRegionImpl::buildCapabilityNames(LLSD& capabilityNames)
 	capabilityNames.append("SetDisplayName");
 	capabilityNames.append("SimConsoleAsync");
 	capabilityNames.append("StartGroupProposal");
+	capabilityNames.append("TeleportLocation");
 	capabilityNames.append("TextureStats");
 	capabilityNames.append("UntrustedSimulatorMessage");
 	capabilityNames.append("UpdateAgentInformation");
