@@ -47,6 +47,7 @@ public:
 
 	static void onClickExpandBtn(void* user_data);
 	static void onChangePresetName(LLUICtrl* ctrl, void* userData);
+	static void onChangeQuality(LLUICtrl *ctrl, void *data);
 
 protected:
 	void build();

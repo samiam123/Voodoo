@@ -43,7 +43,9 @@
 #include "llwlparammanager.h"
 #include "llwaterparammanager.h"
 #include "llstartup.h"
-
+#include "llsliderctrl.h"
+#include "llfeaturemanager.h"
+#include "llfloaterpreference.h"
 
 BOOL firstBuildDone;
 void* fixPointer;
@@ -123,6 +125,10 @@ BOOL wlfPanel_AdvSettings::postBuild()
 	fixPointer = this;
 	/*onClickExpandBtn(fixPointer);
 	onClickExpandBtn(fixPointer);*/
+
+	LLSliderCtrl* mCtrlSliderQuality = getChild<LLSliderCtrl>("QualityPerformanceSelection");
+	mCtrlSliderQuality->setSliderMouseUpCallback(onChangeQuality);
+	mCtrlSliderQuality->setCallbackUserData(this);
 	return TRUE;
 }
 void wlfPanel_AdvSettings::draw()
@@ -152,6 +158,16 @@ void wlfPanel_AdvSettings::onClickExpandBtn(void* user_data)
 	wlfPanel_AdvSettings* remotep = (wlfPanel_AdvSettings*)user_data;
 	remotep->build();
 	gOverlayBar->layoutButtons();
+}
+void wlfPanel_AdvSettings::onChangeQuality(LLUICtrl *ctrl, void *data)
+{
+	LLSliderCtrl* sldr = static_cast<LLSliderCtrl*>(ctrl);
+
+	if(sldr == NULL)
+		return;
+
+	U32 set = (U32)sldr->getValueF32();
+	LLFeatureManager::getInstance()->setGraphicsLevel(set, true);
 }
 void wlfPanel_AdvSettings::onChangePresetName(LLUICtrl* ctrl, void * userData)
 {
