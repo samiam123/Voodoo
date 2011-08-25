@@ -690,7 +690,7 @@ void LLWorldMap::processMapBlockReply(LLMessageSystem* msg, void**)
 		msg->getU8Fast(_PREHASH_Data, _PREHASH_WaterHeight, water_height, block);
 		msg->getU8Fast(_PREHASH_Data, _PREHASH_Agents, agents, block);
 		msg->getUUIDFast(_PREHASH_Data, _PREHASH_MapImageID, image_id, block);
-        if(msg->has(_PREHASH_Size))
+		if(msg->getNumberOfBlocksFast(_PREHASH_Size) > 0)
 		{
 			msg->getU16Fast(_PREHASH_Size, _PREHASH_SizeX, x_size, block);
 			msg->getU16Fast(_PREHASH_Size, _PREHASH_SizeY, y_size, block);
