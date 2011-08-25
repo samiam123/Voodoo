@@ -14676,5 +14676,49 @@
       <key>Value</key>
       <string>Random</string>
     </map>
+    <key>ShowMiniMapRadar</key>
+    <map>
+      <key>Comment</key>
+      <string>Reveal the minimap radar</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>ChatDistance</key>
+    <map>
+      <key>Comment</key>
+      <string>Default chat distance in meters</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>U32</string>
+      <key>Value</key>
+      <real>20</real>
+    </map>
+	<key>MiniMapNotifyChatRange</key>
+    <map>
+      <key>Comment</key>
+      <string>Notify when avatars enter chat range</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
+    <key>MiniMapNotifySimRange</key>
+    <map>
+      <key>Comment</key>
+      <string>Notify when avatars enters the current sim</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>0</integer>
+    </map>
   </map>
 </llsd>

@@ -73,6 +73,8 @@
 
 //<edit>
 #include "llmutelist.h"
+#include "panelradar.h"
+#include "llfloatermap.h"
 //</edit>
 
 // [RLVa:KB]
@@ -519,6 +521,8 @@ void LLNetMap::draw()
 	setDirectionPos( getChild<LLTextBox>("se_label"), rotation + F_PI + F_PI_BY_TWO + F_PI_BY_TWO / 2);
 
 	LLView::draw();
+	
+	LLFloaterMap::getInstance()->getRadar()->updateRadarInfo();
 }
 
 void LLNetMap::reshape(S32 width, S32 height, BOOL called_from_parent)

@@ -34,6 +34,7 @@
 #define LL_LLFLOATERMAP_H
 
 #include "llfloater.h"
+#include "panelradar.h"
 
 class LLNetMap;
 
@@ -46,6 +47,7 @@ public:
 	virtual ~LLFloaterMap();
 
 	static void* createPanelMiniMap(void* data);
+	static void* createPanelRadar(void* data);
 
 	BOOL postBuild();
 
@@ -57,9 +59,17 @@ public:
     /*virtual*/ void    open();
 // [/RLVa:KB]
 
+    PanelRadar* getRadar();
+
 private:
 	LLFloaterMap(const LLSD& key = LLSD());
 	LLNetMap*		mPanelMap;
+    PanelRadar* mPanelRadar;
+    static void onToggleRadar(void *user_data);
+    void toggleRadarVisible();
+    void setRadarVisible( bool show_radar );
+    void setRadarButtonState(bool showing_radar);
+    void adjustLayout( bool expand );
 };
 
 #endif  // LL_LLFLOATERMAP_H

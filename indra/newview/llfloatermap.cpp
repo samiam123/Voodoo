@@ -44,6 +44,7 @@
 #include "llresizebar.h"
 #include "lluictrlfactory.h"
 #include "hippoLimits.h"
+#include "panelradar.h"
 
 // [RLVa:KB]
 #include "rlvhandler.h"
@@ -52,10 +53,12 @@
 LLFloaterMap::LLFloaterMap(const LLSD& key)
 	:
 	LLFloater(std::string("minimap")),
-	mPanelMap(NULL)
+	mPanelMap(NULL),
+	mPanelRadar(NULL)
 {
 	LLCallbackMap::map_t factory_map;
 	factory_map["mini_mapview"] = LLCallbackMap(createPanelMiniMap, this);
+	factory_map["RadarPanel"] = LLCallbackMap(createPanelRadar, this);
 	LLUICtrlFactory::getInstance()->buildFloater(this, "floater_mini_map.xml", &factory_map, FALSE);
 }
 
@@ -68,12 +71,28 @@ void* LLFloaterMap::createPanelMiniMap(void* data)
 	return self->mPanelMap;
 }
 
+// static
+void* LLFloaterMap::createPanelRadar(void* data)
+{
+	LLFloaterMap* self = (LLFloaterMap*)data;
+	self->mPanelRadar = new PanelRadar();
+	return self->mPanelRadar;
+}
+
 BOOL LLFloaterMap::postBuild()
 {
 	// Send the drag handle to the back, but make sure close stays on top
 	sendChildToBack(getDragHandle());
 	sendChildToFront(getChild<LLButton>("llfloater_close_btn"));
 	setIsChrome(TRUE);
+
+	childSetAction("toggle_radar", onToggleRadar, this);
+
+	if (!gSavedSettings.getBOOL("ShowMiniMapRadar"))
+	{
+		// Collapse radar if it's not showing.
+		adjustLayout( false );
+	}
 	return TRUE;
 }
 
@@ -91,6 +110,9 @@ void LLFloaterMap::onOpen()
 		gFloaterView->adjustToFitScreen(this, FALSE);
 
 		gSavedSettings.setBOOL("ShowMiniMap", TRUE);
+
+		bool showing_radar = gSavedSettings.getBOOL("ShowMiniMapRadar");
+		setRadarVisible( showing_radar );
 	}
 }
 
@@ -122,6 +144,7 @@ void LLFloaterMap::draw()
 		getDragHandle()->setMouseOpaque(FALSE);
 
 		drawChild(mPanelMap);
+		drawChild(mPanelRadar);
 	}
 	else
 	{
@@ -129,6 +152,102 @@ void LLFloaterMap::draw()
 		getDragHandle()->setMouseOpaque(TRUE);
 
 		LLFloater::draw();
+	}
+}
+
+PanelRadar* LLFloaterMap::getRadar()
+{
+	return mPanelRadar;
+}
+
+// static
+void LLFloaterMap::onToggleRadar(void *user_data)
+{
+	LLFloaterMap* self = (LLFloaterMap*) user_data;
+	self->toggleRadarVisible();
+}
+
+
+void LLFloaterMap::toggleRadarVisible()
+{
+	bool show_radar = gSavedSettings.getBOOL("ShowMiniMapRadar");
+	show_radar = !show_radar;
+	setRadarVisible( show_radar );
+}
+
+
+void LLFloaterMap::setRadarVisible( bool show_radar )
+{
+	bool old_show_radar = gSavedSettings.getBOOL("ShowMiniMapRadar");
+
+	gSavedSettings.setBOOL("ShowMiniMapRadar", show_radar);
+	setRadarButtonState( show_radar );
+	mPanelRadar->setVisible( show_radar );
+
+	// Adjust the minimap window's size if visibility is changing
+	if (show_radar != old_show_radar)
+	{
+		adjustLayout( show_radar );
+	}
+}
+
+
+void LLFloaterMap::setRadarButtonState( bool showing_radar )
+{
+	LLButton* toggle = getChild<LLButton>("toggle_radar");
+	if (toggle)
+	{
+		toggle->setToggleState(showing_radar);
+		if (showing_radar)
+		{
+			// Expanded, so show image to offer to collapse upwards.
+			toggle->setImageOverlay("arrow_up.tga");
+		}
+		else
+		{
+			// Collapsed, so show image to offer to expand downwards.
+			toggle->setImageOverlay("arrow_down.tga");
+		}
+	}
+}
+
+void LLFloaterMap::adjustLayout( bool expand )
+{
+	S32 radar_height = mPanelRadar->getRect().getHeight();
+	S32 height = getRect().getHeight();
+	LLRect map_rect = mPanelMap->getRect();
+	S32 map_bottom = map_rect.mBottom;
+
+	S32 min_width, min_height;
+	getResizeLimits( &min_width, &min_height );
+
+	S32 adjust = radar_height;
+	if (!expand)
+	{
+		adjust = -adjust;
+	}
+	
+	height += adjust;
+	min_height += adjust;
+	map_bottom += adjust;
+
+	map_rect.set( map_rect.mLeft,  map_rect.mTop,
+	              map_rect.mRight, map_bottom );
+	mPanelMap->setRect(map_rect);
+
+	setResizeLimits( min_width, min_height );
+	reshape( getRect().getWidth(), height, false );
+
+	LLRect temp_rect = getRect();
+	temp_rect.translate( 0, -adjust );
+	setRect( temp_rect );
+
+	LLButton* toggle = getChild<LLButton>("toggle_radar");
+	if (toggle)
+	{
+		temp_rect = toggle->getRect();
+		temp_rect.translate( 0, adjust );
+		toggle->setRect( temp_rect );
 	}
 }
 
