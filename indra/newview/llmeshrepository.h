@@ -32,6 +32,8 @@
 #include "lluuid.h"
 #include "llviewertexture.h"
 #include "llvolume.h"
+#include "llui.h"
+#include "lluploadfloaterobservers.h"
 
 #if MESH_IMPORT
 #define LLCONVEXDECOMPINTER_STATIC 1

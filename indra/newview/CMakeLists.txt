@@ -226,6 +226,9 @@ set(viewer_SOURCE_FILES
     llfloatermap.cpp
     llfloatermemleak.cpp
     llfloatermessagelog.cpp
+    llfloatermodelpreview.cpp
+    llfloatermodeluploadbase.cpp
+    llfloatermodelwizard.cpp
     llfloatermute.cpp
     llfloaternamedesc.cpp
     llfloaternewim.cpp
@@ -428,6 +431,7 @@ set(viewer_SOURCE_FILES
     lltrans.cpp
     lltranslate.cpp
     lluploaddialog.cpp
+    lluploadfloaterobservers.cpp
     llurl.cpp
     llurldispatcher.cpp
     llurlhistory.cpp
@@ -525,6 +529,8 @@ set(viewer_SOURCE_FILES
     llworldmapview.cpp
     llxmlrpctransaction.cpp
     noise.cpp
+    panelradar.cpp
+    panelradarentry.cpp
     pipeline.cpp
     scriptcounter.cpp
     wlfPanel_AdvSettings.cpp
@@ -718,6 +724,9 @@ set(viewer_HEADER_FILES
     llfloatermap.h
     llfloatermemleak.h
     llfloatermessagelog.h
+    llfloatermodelpreview.h
+    llfloatermodeluploadbase.h
+    llfloatermodelwizard.h
     llfloatermute.h
     llfloaternamedesc.h
     llfloaternewim.h
@@ -923,6 +932,7 @@ set(viewer_HEADER_FILES
     lltranslate.h
     lluiconstants.h
     lluploaddialog.h
+    lluploadfloaterobservers.h
     llurl.h
     llurldispatcher.h
     llurlhistory.h
@@ -1021,6 +1031,8 @@ set(viewer_HEADER_FILES
     llxmlrpctransaction.h
     macmain.h
     noise.h
+    panelradar.h
+    panelradarentry.h
     pipeline.h
     randgauss.h
     scriptcounter.h

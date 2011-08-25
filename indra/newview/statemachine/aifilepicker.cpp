@@ -170,6 +170,9 @@ void AIFilePicker::open(ELoadFilter filter, std::string const& default_path, std
 	  case FFLOAD_LSL:
 		  mFilter = "lsl";
 		  break;
+	  case FFLOAD_MESH:
+		  mFilter = "dae";
+		  break;
 	  case FFLOAD_BLACKLIST:
 		  mFilter = "blacklist";
 		  break;
