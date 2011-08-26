@@ -1,4 +1,3 @@
-#if MESH_IMPORT
 /**
  * @file llfloatermodelpreview.h
  * @brief LLFloaterModelPreview class definition
@@ -25,6 +24,7 @@
  * $/LicenseInfo$
  */
 
+#if MESH_IMPORT_UI
 #ifndef LL_LLFLOATERMODELPREVIEW_H
 #define LL_LLFLOATERMODELPREVIEW_H
 

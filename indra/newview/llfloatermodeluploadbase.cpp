@@ -1,4 +1,3 @@
-#if MESH_IMPORT
 /**
  * @file llfloatermodeluploadbase.cpp
  * @brief LLFloaterUploadModelBase class definition
@@ -27,6 +26,7 @@
 
 #include "llviewerprecompiledheaders.h"
 
+#if MESH_IMPORT_UI
 #include "llfloatermodeluploadbase.h"
 #include "llagent.h"
 #include "llviewerregion.h"

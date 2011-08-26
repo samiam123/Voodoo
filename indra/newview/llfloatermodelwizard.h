@@ -23,7 +23,7 @@
  * $/LicenseInfo$
  */
 
-#if MESH_IMPORT
+#if MESH_IMPORT_UI
 #ifndef LLFLOATERMODELWIZARD_H
 #define LLFLOATERMODELWIZARD_H
 

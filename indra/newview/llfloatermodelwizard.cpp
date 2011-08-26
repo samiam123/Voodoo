@@ -24,9 +24,10 @@
  * Linden Research, Inc., 945 Battery Street, San Francisco, CA  94111  USA
  * $/LicenseInfo$
  */
-#if MESH_IMPORT
 
 #include "llviewerprecompiledheaders.h"
+
+#if MESH_IMPORT_UI
 
 #include "llbutton.h"
 #include "lldrawable.h"

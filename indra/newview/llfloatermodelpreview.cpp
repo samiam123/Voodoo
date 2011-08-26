@@ -1,4 +1,3 @@
-#if MESH_IMPORT
 /**
  * @file llfloatermodelpreview.cpp
  * @brief LLFloaterModelPreview class implementation
@@ -26,6 +25,8 @@
  */
 
 #include "llviewerprecompiledheaders.h"
+
+#if MESH_IMPORT_UI
 
 #if MESH_IMPORT
 #include "dae.h"
@@ -102,9 +103,7 @@
 #include "llviewerobjectlist.h"
 #include "llanimationstates.h"
 #include "llviewernetwork.h"
-#if MESH_IMPORT
 #include "glod/glod.h"
-#endif
 #include <boost/algorithm/string.hpp>
 
 
