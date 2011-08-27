@@ -507,10 +507,11 @@ public:
 
 	LLSD& getMeshHeader(const LLUUID& mesh_id);
 
+#if MESH_IMPORT_UI
 	void uploadModel(std::vector<LLModelInstance>& data, LLVector3& scale, bool upload_textures,
 			bool upload_skin, bool upload_joints, std::string upload_url, bool do_upload = true,
 					 LLHandle<LLWholeModelFeeObserver> fee_observer= (LLHandle<LLWholeModelFeeObserver>()), LLHandle<LLWholeModelUploadObserver> upload_observer = (LLHandle<LLWholeModelUploadObserver>()));
-
+#endif
 	S32 getMeshSize(const LLUUID& mesh_id, S32 lod);
 
 	typedef std::map<LLVolumeParams, std::set<LLUUID> > mesh_load_map;

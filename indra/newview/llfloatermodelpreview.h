@@ -141,6 +141,7 @@ public:
 private:
 	static std::list<LLModelLoader*> sActiveLoaderList;
 	static bool isAlive(LLModelLoader* loader) ;
+	static void assert_main_thread();
 };
 
 class LLFloaterModelPreview : public LLFloaterModelUploadBase
@@ -284,6 +285,7 @@ protected:
 private:
 	void onClickCalculateBtn();
 	void toggleCalculateButton();
+	void assert_main_thread();
 
 	// Toggles between "Calculate weights & fee" and "Upload" buttons.
 	void toggleCalculateButton(bool visible);
@@ -372,6 +374,7 @@ private:
 	bool verifyCount( int expected, int result );
 	//Creates the dummy avatar for the preview window
 	void		createPreviewAvatar( void );
+	static void assert_main_thread();
 	//Accessor for the dummy avatar
 	LLVOAvatar* getPreviewAvatar( void ) { return mPreviewAvatar; }
 

@@ -442,7 +442,7 @@ BOOL LLFloaterModelPreview::postBuild()
 		LLTextBox* text = getChild<LLTextBox>(lod_label_name[i]);
 		if (text)
 		{
-			text->setMouseDownCallback(boost::bind(&LLModelPreview::setPreviewLOD, mModelPreview, i));
+			text->setCursorDownCallback(boost::bind(&LLModelPreview::setPreviewLOD, mModelPreview, i));
 		}
 
 		text = getChild<LLTextBox>(lod_triangles_name[i]);
@@ -5611,5 +5611,18 @@ void LLFloaterModelPreview::setPermissonsErrorStatus(U32 status, const std::stri
 	llwarns << "LLFloaterModelPreview::setPermissonsErrorStatus(" << status << " : " << reason << ")" << llendl;
 
 	LLNotificationsUtil::add("MeshUploadPermError");
+}
+
+void LLModelPreview::assert_main_thread()
+{
+	//Todo: ?
+}
+void LLFloaterModelPreview::assert_main_thread()
+{
+	//Todo: ?
+}
+void LLModelLoader::assert_main_thread()
+{
+	//Todo: ?
 }
 #endif
