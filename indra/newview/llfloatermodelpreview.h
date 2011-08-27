@@ -48,14 +48,12 @@ class LLVertexBuffer;
 class LLModelPreview;
 class LLFloaterModelPreview;
 
-#if MESH_IMPORT
 class daeElement;
 class domProfile_COMMON;
 class domInstance_geometry;
 class domNode;
 class domTranslate;
 class domController;
-#endif //MESH_IMPORT
 class LLMenuButton;
 class LLToggleableMenu;
 

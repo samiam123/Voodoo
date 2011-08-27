@@ -28,9 +28,8 @@
 
 #if MESH_IMPORT_UI
 
-#if MESH_IMPORT
 #include "dae.h"
-//#include "dom.h"
+#include "dom.h"
 #include "dom/domAsset.h"
 #include "dom/domBind_material.h"
 #include "dom/domCOLLADA.h"
@@ -50,8 +49,6 @@
 #include "dom/domScale.h"
 #include "dom/domTranslate.h"
 #include "dom/domVisual_scene.h"
-
-#endif
 
 #include "llfloatermodelpreview.h"
 
@@ -952,6 +949,7 @@ void LLFloaterModelPreview::onPhysicsParamCommit(LLUICtrl* ctrl, void* data)
 //static
 void LLFloaterModelPreview::onPhysicsStageExecute(LLUICtrl* ctrl, void* data)
 {
+#if MESH_UPLOAD
 	LLCDStageData* stage_data = (LLCDStageData*) data;
 	std::string stage = stage_data->mName;
 
@@ -989,6 +987,7 @@ void LLFloaterModelPreview::onPhysicsStageExecute(LLUICtrl* ctrl, void* data)
 			sInstance->childDisable("Decompose");
 		}
 	}
+#endif
 }
 
 //static
@@ -1015,7 +1014,7 @@ void LLFloaterModelPreview::onCancel(LLUICtrl* ctrl, void* data)
 {
 	if (sInstance)
 	{
-		sInstance->closeFloater(false);
+		sInstance->close(false);
 	}
 }
 
@@ -3312,7 +3311,7 @@ void LLModelPreview::loadModel(std::string filename, S32 lod, bool force_disable
 		{
 			// this is the initial file picking. Close the whole floater
 			// if we don't have a base model to show for high LOD.
-			mFMP->closeFloater(false);
+			mFMP->close(false);
 			mLoading = false;
 		}
 		return;
@@ -3358,7 +3357,7 @@ void LLModelPreview::loadModel(std::string filename, S32 lod, bool force_disable
 		mFMP->childSetText("physics_file", mLODFile[lod]);
 	}
 
-	mFMP->openFloater();
+	mFMP->open();
 }
 
 void LLModelPreview::setPhysicsFromLOD(S32 lod)
@@ -5543,7 +5542,7 @@ void LLFloaterModelPreview::setModelPhysicsFeeErrorStatus(U32 status, const std:
 /*virtual*/ 
 void LLFloaterModelPreview::onModelUploadSuccess()
 {
-	closeFloater(false);
+	close(false);
 }
 
 /*virtual*/ 
