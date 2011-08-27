@@ -771,15 +771,7 @@ CreateShortCut	"$SMPROGRAMS\$INSTSHORTCUT\$INSTSHORTCUT.lnk" \
 				"$INSTDIR\$INSTEXE" "$INSTFLAGS $SHORTCUT_LANG_PARAM"
 
 
-WriteINIStr		"$SMPROGRAMS\$INSTSHORTCUT\SL Create Account.url" \
-				"InternetShortcut" "URL" \
-				"http://www.secondlife.com/registration/"
-WriteINIStr		"$SMPROGRAMS\$INSTSHORTCUT\SL Your Account.url" \
-				"InternetShortcut" "URL" \
-				"http://www.secondlife.com/account/"
-WriteINIStr		"$SMPROGRAMS\$INSTSHORTCUT\SL Scripting Language Help.url" \
-				"InternetShortcut" "URL" \
-                "http://wiki.secondlife.com/wiki/LSL_Portal"
+
 CreateShortCut	"$SMPROGRAMS\$INSTSHORTCUT\Uninstall $INSTSHORTCUT.lnk" \
 				'"$INSTDIR\uninst.exe"' ''
 
