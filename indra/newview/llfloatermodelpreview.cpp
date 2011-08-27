@@ -103,6 +103,7 @@
 #include "llviewerobjectlist.h"
 #include "llanimationstates.h"
 #include "llviewernetwork.h"
+#include "hippogridmanager.h"
 #include "glod/glod.h"
 #include <boost/algorithm/string.hpp>
 
@@ -465,17 +466,8 @@ BOOL LLFloaterModelPreview::postBuild()
 			text->setMouseDownCallback(boost::bind(&LLModelPreview::setPreviewLOD, mModelPreview, i));
 		}
 	}
-	std::string current_grid = LLGridManager::getInstance()->getGridLabel();
-	std::transform(current_grid.begin(),current_grid.end(),current_grid.begin(),::tolower);
-	std::string validate_url;
-	if (current_grid == "agni")
-	{
-		validate_url = "http://secondlife.com/my/account/mesh.php";
-	}
-	else
-	{
-		validate_url = llformat("http://secondlife.%s.lindenlab.com/my/account/mesh.php",current_grid.c_str());
-	}
+	
+	std::string validate_url = gHippoGridManager->getConnectedGrid()->getMeshUploadHelper();
 	getChild<LLTextBox>("warning_message")->setTextArg("[VURL]", validate_url);
 
 	mUploadBtn = getChild<LLButton>("ok_btn");
@@ -927,6 +919,7 @@ void LLFloaterModelPreview::onOpen()
 //static
 void LLFloaterModelPreview::onPhysicsParamCommit(LLUICtrl* ctrl, void* data)
 {
+#if MESH_IMPORT
 	if (LLConvexDecomposition::getInstance() == NULL)
 	{
 		llinfos << "convex decomposition tool is a stub on this platform. cannot get decomp." << llendl;
@@ -953,6 +946,7 @@ void LLFloaterModelPreview::onPhysicsParamCommit(LLUICtrl* ctrl, void* data)
 			}
 		}
 	}
+#endif
 }
 
 //static

@@ -53,6 +53,7 @@ HippoGridInfo::HippoGridInfo(const std::string& gridName) :
 	mFirstName(LLStringUtil::null),
 	mLastName(LLStringUtil::null),
 	mAvatarPassword(LLStringUtil::null),
+	mMeshUploadHelper("http://secondlife.com/my/account/mesh.php"),
 	mGridMessage(""),
 	mXmlState(XML_VOID),
 	mVoiceConnector("SLVoice"),
@@ -424,6 +425,8 @@ void HippoGridInfo::onXmlElementStart(void* userData, const XML_Char* name, cons
 		self->mXmlState = XML_SEARCH;
 	else if (strcasecmp(name, "message") == 0)
 		self->mXmlState = XML_MESSAGE;
+	else if (strcasecmp(name, "meshurlhelper") == 0)
+		self->mXmlState = XML_MESHURLHELPER;
 }
 
 //static
@@ -474,6 +477,7 @@ void HippoGridInfo::onXmlCharacterData(void* userData, const XML_Char* s, int le
 		case XML_REGISTER: self->mRegisterUrl.assign(s, len); break;
 		case XML_PASSWORD: self->mPasswordUrl.assign(s, len); break;
 		case XML_MESSAGE: self->mGridMessage.assign(s, len); break;
+		case XML_MESHURLHELPER: self->mMeshUploadHelper.assign(s, len); break;
 
 		case XML_VOID: break;
 	}
@@ -556,7 +560,7 @@ const char* HippoGridInfo::getPlatformString(Platform platform)
 {
 	static const char* platformStrings[PLATFORM_LAST] = 
 	{
-		"Other", "Aurora", "OpenSim", "SecondLife"
+		"Aurora", "OpenSim", "SecondLife", "Other"
 	};
 
 	if ((platform < PLATFORM_OTHER) || (platform >= PLATFORM_LAST))
@@ -583,7 +587,7 @@ std::string HippoGridInfo::sanitizeUri(std::string &uri)
 
 void HippoGridInfo::initFallback()
 {
-	FALLBACK_GRIDINFO.setPlatform(PLATFORM_OPENSIM);
+	FALLBACK_GRIDINFO.setPlatform(PLATFORM_AURORA);
 	FALLBACK_GRIDINFO.setGridName("Local Host");
 	FALLBACK_GRIDINFO.setLoginUri("http://127.0.0.1:9000/");
 	FALLBACK_GRIDINFO.setHelperUri("http://127.0.0.1:9000/");
