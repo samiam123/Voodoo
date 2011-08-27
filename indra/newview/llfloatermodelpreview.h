@@ -285,7 +285,7 @@ protected:
 private:
 	void onClickCalculateBtn();
 	void toggleCalculateButton();
-	void assert_main_thread();
+	static void assert_main_thread();
 
 	// Toggles between "Calculate weights & fee" and "Upload" buttons.
 	void toggleCalculateButton(bool visible);
