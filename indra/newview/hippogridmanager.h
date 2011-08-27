@@ -22,10 +22,10 @@ class HippoGridInfo
 {
 public:
 	enum Platform {
-		PLATFORM_OTHER = 0,
-		PLATFORM_AURORA,
+		PLATFORM_AURORA = 0,
 		PLATFORM_OPENSIM,
 		PLATFORM_SECONDLIFE,
+		PLATFORM_OTHER,
 		PLATFORM_LAST
 	};
 	enum SearchType {
@@ -55,6 +55,7 @@ public:
 	const std::string& getLastName()        const;
 	const std::string& getAvatarPassword()  const;
 	const std::string& getVoiceConnector()  const { return mVoiceConnector; }
+	const std::string& getMeshUploadHelper()  const { return mMeshUploadHelper; }
 	std::string getSearchUrl(SearchType ty, bool is_web) const;
 	bool isRenderCompat()                   const;
 	int getMaxAgentGroups() const { return mMaxAgentGroups; }
@@ -80,6 +81,7 @@ public:
 	void setGridMessage(const std::string& message);
 	void setRenderCompat(bool compat);
 	void setMaxAgentGroups(int max)                   { mMaxAgentGroups = max;   }
+	void setMeshUploadHelper(std::string& url)        { mMeshUploadHelper = url;   }
 	void setFirstName(const std::string& firstName);
 	void setLastName(const std::string& lastName);
 	void setAvatarPassword(const std::string& avatarPassword);
@@ -113,6 +115,7 @@ private:
 	std::string mFirstName;
 	std::string mLastName;
 	std::string mAvatarPassword;
+	std::string mMeshUploadHelper;
 	bool mRenderCompat;
 	bool mInvLinks;
 	int mMaxAgentGroups;
@@ -127,7 +130,7 @@ private:
 	{
 		XML_VOID, XML_PLATFORM, XML_GRIDNAME,
 		XML_LOGINURI, XML_LOGINPAGE, XML_HELPERURI,
-		XML_WEBSITE, XML_SUPPORT, XML_REGISTER, XML_PASSWORD, XML_SEARCH, XML_MESSAGE
+		XML_WEBSITE, XML_SUPPORT, XML_REGISTER, XML_PASSWORD, XML_SEARCH, XML_MESSAGE, XML_MESHURLHELPER
 	};
 	XmlState mXmlState;
 

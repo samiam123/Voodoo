@@ -383,7 +383,6 @@ public:
 
 };
 
-#if MESH_IMPORT
 class LLMeshUploadThread : public LLThread 
 {
 private:
@@ -462,7 +461,6 @@ private:
 
 	bool mDoUpload; // if FALSE only model data will be requested, otherwise the model will be uploaded
 };
-#endif //MESH_IMPORT
 
 class LLMeshRepository
 {
@@ -509,11 +507,9 @@ public:
 
 	LLSD& getMeshHeader(const LLUUID& mesh_id);
 
-#if MESH_IMPORT
 	void uploadModel(std::vector<LLModelInstance>& data, LLVector3& scale, bool upload_textures,
 			bool upload_skin, bool upload_joints, std::string upload_url, bool do_upload = true,
 					 LLHandle<LLWholeModelFeeObserver> fee_observer= (LLHandle<LLWholeModelFeeObserver>()), LLHandle<LLWholeModelUploadObserver> upload_observer = (LLHandle<LLWholeModelUploadObserver>()));
-#endif //MESH_IMPORT
 
 	S32 getMeshSize(const LLUUID& mesh_id, S32 lod);
 
@@ -551,15 +547,11 @@ public:
 	
 	U32 mMeshThreadCount;
 
-#if MESH_IMPORT
 	void cacheOutgoingMesh(LLMeshUploadData& data, LLSD& header);
-#endif //MESH_IMPORT
 
 	LLMeshRepoThread* mThread;
-#if MESH_IMPORT
 	std::vector<LLMeshUploadThread*> mUploads;
 	std::vector<LLMeshUploadThread*> mUploadWaitList;
-#endif //MESH_IMPORT
 
 	LLPhysicsDecomp* mDecompThread;
 	

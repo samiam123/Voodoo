@@ -28,9 +28,8 @@
 
 #if MESH_IMPORT_UI
 
-#if MESH_IMPORT
 #include "dae.h"
-//#include "dom.h"
+#include "dom.h"
 #include "dom/domAsset.h"
 #include "dom/domBind_material.h"
 #include "dom/domCOLLADA.h"
@@ -50,8 +49,6 @@
 #include "dom/domScale.h"
 #include "dom/domTranslate.h"
 #include "dom/domVisual_scene.h"
-
-#endif
 
 #include "llfloatermodelpreview.h"
 
@@ -103,6 +100,7 @@
 #include "llviewerobjectlist.h"
 #include "llanimationstates.h"
 #include "llviewernetwork.h"
+#include "hippogridmanager.h"
 #include "glod/glod.h"
 #include <boost/algorithm/string.hpp>
 
@@ -465,17 +463,8 @@ BOOL LLFloaterModelPreview::postBuild()
 			text->setMouseDownCallback(boost::bind(&LLModelPreview::setPreviewLOD, mModelPreview, i));
 		}
 	}
-	std::string current_grid = LLGridManager::getInstance()->getGridLabel();
-	std::transform(current_grid.begin(),current_grid.end(),current_grid.begin(),::tolower);
-	std::string validate_url;
-	if (current_grid == "agni")
-	{
-		validate_url = "http://secondlife.com/my/account/mesh.php";
-	}
-	else
-	{
-		validate_url = llformat("http://secondlife.%s.lindenlab.com/my/account/mesh.php",current_grid.c_str());
-	}
+	
+	std::string validate_url = gHippoGridManager->getConnectedGrid()->getMeshUploadHelper();
 	getChild<LLTextBox>("warning_message")->setTextArg("[VURL]", validate_url);
 
 	mUploadBtn = getChild<LLButton>("ok_btn");
@@ -927,6 +916,7 @@ void LLFloaterModelPreview::onOpen()
 //static
 void LLFloaterModelPreview::onPhysicsParamCommit(LLUICtrl* ctrl, void* data)
 {
+#if MESH_IMPORT
 	if (LLConvexDecomposition::getInstance() == NULL)
 	{
 		llinfos << "convex decomposition tool is a stub on this platform. cannot get decomp." << llendl;
@@ -953,11 +943,13 @@ void LLFloaterModelPreview::onPhysicsParamCommit(LLUICtrl* ctrl, void* data)
 			}
 		}
 	}
+#endif
 }
 
 //static
 void LLFloaterModelPreview::onPhysicsStageExecute(LLUICtrl* ctrl, void* data)
 {
+#if MESH_UPLOAD
 	LLCDStageData* stage_data = (LLCDStageData*) data;
 	std::string stage = stage_data->mName;
 
@@ -995,6 +987,7 @@ void LLFloaterModelPreview::onPhysicsStageExecute(LLUICtrl* ctrl, void* data)
 			sInstance->childDisable("Decompose");
 		}
 	}
+#endif
 }
 
 //static
@@ -1021,7 +1014,7 @@ void LLFloaterModelPreview::onCancel(LLUICtrl* ctrl, void* data)
 {
 	if (sInstance)
 	{
-		sInstance->closeFloater(false);
+		sInstance->close(false);
 	}
 }
 
@@ -3318,7 +3311,7 @@ void LLModelPreview::loadModel(std::string filename, S32 lod, bool force_disable
 		{
 			// this is the initial file picking. Close the whole floater
 			// if we don't have a base model to show for high LOD.
-			mFMP->closeFloater(false);
+			mFMP->close(false);
 			mLoading = false;
 		}
 		return;
@@ -3364,7 +3357,7 @@ void LLModelPreview::loadModel(std::string filename, S32 lod, bool force_disable
 		mFMP->childSetText("physics_file", mLODFile[lod]);
 	}
 
-	mFMP->openFloater();
+	mFMP->open();
 }
 
 void LLModelPreview::setPhysicsFromLOD(S32 lod)
@@ -5549,7 +5542,7 @@ void LLFloaterModelPreview::setModelPhysicsFeeErrorStatus(U32 status, const std:
 /*virtual*/ 
 void LLFloaterModelPreview::onModelUploadSuccess()
 {
-	closeFloater(false);
+	close(false);
 }
 
 /*virtual*/ 

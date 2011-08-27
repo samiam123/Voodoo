@@ -2693,7 +2693,6 @@ LLSD& LLMeshRepoThread::getMeshHeader(const LLUUID& mesh_id)
 	return dummy_ret;
 }
 
-#if MESH_IMPORT
 void LLMeshRepository::uploadModel(std::vector<LLModelInstance>& data, LLVector3& scale, bool upload_textures,
 									bool upload_skin, bool upload_joints, std::string upload_url, bool do_upload,
 								   LLHandle<LLWholeModelFeeObserver> fee_observer, LLHandle<LLWholeModelUploadObserver> upload_observer)
@@ -2702,7 +2701,6 @@ void LLMeshRepository::uploadModel(std::vector<LLModelInstance>& data, LLVector3
 														do_upload, fee_observer, upload_observer);
 	mUploadWaitList.push_back(thread);
 }
-#endif //MESH_IMPORT
 
 S32 LLMeshRepository::getMeshSize(const LLUUID& mesh_id, S32 lod)
 {
