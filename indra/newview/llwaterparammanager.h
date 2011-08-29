@@ -225,6 +225,8 @@ public:
 	LLWaterParamManager();
 	~LLWaterParamManager();
 
+	void updateShaderLinks();
+
 	/// load a preset file
 	void loadAllPresets(const std::string & fileName);
 
@@ -320,6 +322,7 @@ public:
 private:
 	LLVector4 mWaterPlane;
 	F32 mWaterFogKS;
+	std::vector<LLGLSLShader *> mShaderList;
 
 	// our parameter manager singleton instance
 	static LLWaterParamManager * sInstance;

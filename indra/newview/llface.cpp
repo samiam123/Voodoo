@@ -457,83 +457,6 @@ void LLFace::updateCenterAgent()
 	}
 }
 
-void LLFace::renderForSelect(U32 data_mask)
-{
-	if(mDrawablep.isNull() || mVertexBuffer.isNull())
-	{
-		return;
-	}
-
-	LLSpatialGroup* group = mDrawablep->getSpatialGroup();
-	if (!group || group->isState(LLSpatialGroup::GEOM_DIRTY))
-	{
-		return;
-	}
-
-	if (mVObjp->mGLName)
-	{
-		S32 name = mVObjp->mGLName;
-
-		LLColor4U color((U8)(name >> 16), (U8)(name >> 8), (U8)name);
-#if 0 // *FIX: Postponing this fix until we have texcoord pick info...
-		if (mTEOffset != -1)
-		{
-			color.mV[VALPHA] = (U8)(getTextureEntry()->getColor().mV[VALPHA] * 255.f);
-		}
-#endif
-		glColor4ubv(color.mV);
-
-		if (!getPool())
-		{
-			switch (getPoolType())
-			{
-			case LLDrawPool::POOL_ALPHA:
-				gGL.getTexUnit(0)->bind(getTexture());
-				break;
-			default:
-				gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
-				break;
-			}
-		}
-
-		mVertexBuffer->setBuffer(data_mask);
-#if !LL_RELEASE_FOR_DOWNLOAD
-		LLGLState::checkClientArrays("", data_mask);
-#endif
-		if (mTEOffset != -1)
-		{
-			// mask off high 4 bits (16 total possible faces)
-			color.mV[0] &= 0x0f;
-			color.mV[0] |= (mTEOffset & 0x0f) << 4;
-			glColor4ubv(color.mV);
-		}
-
-		if (mIndicesCount)
-		{
-			if (isState(GLOBAL))
-			{
-				if (mDrawablep->getVOVolume())
-				{
-					glPushMatrix();
-					glMultMatrixf((float*) mDrawablep->getRegion()->mRenderMatrix.mMatrix);
-					mVertexBuffer->draw(LLRender::TRIANGLES, mIndicesCount, mIndicesIndex);
-					glPopMatrix();
-				}
-				else
-				{
-					mVertexBuffer->draw(LLRender::TRIANGLES, mIndicesCount, mIndicesIndex);
-				}
-			}
-			else
-			{
-				glPushMatrix();
-				glMultMatrixf((float*)getRenderMatrix().mMatrix);
-				mVertexBuffer->draw(LLRender::TRIANGLES, mIndicesCount, mIndicesIndex);
-				glPopMatrix();
-			}
-		}
-	}
-}
 void LLFace::renderSelected(LLViewerTexture *imagep, const LLColor4& color)
 {
 	if (mDrawablep->getSpatialGroup() == NULL)
@@ -1540,6 +1463,7 @@ BOOL LLFace::getGeometryVolume(const LLVolume& volume,
 
 	if (rebuild_pos)
 	{
+		llassert(num_vertices > 0);
 		mVertexBuffer->getVertexStrider(vertices, mGeomIndex);
 		LLMatrix4a mat_vert;
 		mat_vert.loadu(mat_vert_in);
@@ -1830,10 +1754,10 @@ BOOL LLFace::verify(const U32* indices_array) const
 	}
 	
 	// First, check whether the face data fits within the pool's range.
-	if ((mGeomIndex + mGeomCount) > mVertexBuffer->getNumVerts())
+	if ((mGeomIndex + mGeomCount) > mVertexBuffer->getRequestedVerts())
 	{
 		ok = FALSE;
-		llinfos << "Face not within pool range!" << llendl;
+		llinfos << "Face references invalid vertices!" << llendl;
 	}
 
 	S32 indices_count = (S32)getIndicesCount();
@@ -1849,6 +1773,12 @@ BOOL LLFace::verify(const U32* indices_array) const
 		llinfos << "Face has bogus indices count" << llendl;
 	}
 	
+	if (mIndicesIndex + mIndicesCount > (U32)mVertexBuffer->getRequestedIndices())
+	{
+		ok = FALSE;
+		llinfos << "Face references invalid indices!" << llendl;
+	}
+
 #if 0
 	S32 geom_start = getGeomStart();
 	S32 geom_count = mGeomCount;
