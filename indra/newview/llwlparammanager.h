@@ -130,6 +130,8 @@ public:
 	LLWLParamManager();
 	~LLWLParamManager();
 
+	void updateShaderLinks();
+
 	/// load a preset file
 	void loadPresets(const std::string & fileName);
 
@@ -260,6 +262,7 @@ public:
 	
 	
 private:
+	std::vector<LLGLSLShader *> mShaderList;
 	// our parameter manager singleton instance
 	static LLWLParamManager * sInstance;
 
