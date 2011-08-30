@@ -2284,7 +2284,7 @@ osShutDown()
 Shut's down current Simulator.  Authorized Admin Only by config.  
 (Aurora-Sim Only function)
   </string>
-  <string name="LSLTipText_osaddAgentToGroup">
+  <string name="LSLTipText_osAddAgentToGroup">
 osAddAgentToGroup(key avatarID, string group_name, string role_name)
 Adds an avatar to a group.  Where group_name = name of the target group, role_name = role to assign within the group.   
 (Aurora-Sim Only function)

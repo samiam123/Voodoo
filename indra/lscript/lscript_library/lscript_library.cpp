@@ -660,7 +660,7 @@ void LLScriptLibrary::init()
     addFunction(10.f, 0.f, dummy_func, "botSitObject", NULL, "ssv");
     addFunction(10.f, 0.f, dummy_func, "botStandUp", NULL, "s");
     addFunction(10.f, 0.f, dummy_func, "botTouchObject", NULL, "ss");
-    addFunction(10.f, 0.f, dummy_func, "botaddTag", NULL, "ss");
+    addFunction(10.f, 0.f, dummy_func, "botAddTag", NULL, "ss");
     addFunction(10.f, 0.f, dummy_func, "botGetBotsWithTag", "l", "s");
     addFunction(10.f, 0.f, dummy_func, "botRemoveBotsWithTag", NULL, "s");
 }
