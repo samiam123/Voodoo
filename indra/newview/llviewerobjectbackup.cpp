@@ -403,7 +403,7 @@ bool LLObjectBackup::validatePerms(const LLPermissions *item_permissions)
 	}
 	else
 	{
-		*/ Out of Second Life, simply check that the asset is full perms.
+		 Out of Second Life, simply check that the asset is full perms.*/
 		return (gAgent.getID() == item_permissions->getOwner() && gAgent.getID() == item_permissions->getCreator() &&
 				(item_permissions->getMaskOwner() & PERM_ITEM_UNRESTRICTED) == PERM_ITEM_UNRESTRICTED);
 	//}
