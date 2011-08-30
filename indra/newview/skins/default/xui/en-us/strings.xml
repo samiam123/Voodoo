@@ -1739,503 +1739,588 @@ llSetObjectPermMask( integer mask, integer value )
 Sets the given permission mask to the new value on the root object the task is attached to.
 (Requires god mode)
   </string>
+  <string name="LSLTipText_llGetMemoryLimit">
+LlGetMemoryLimit( )
+Get the maximum memory a script can use. Returns the integer amount of memory the script can use in bytes.  
+  </string>
+  <string name="LSLTipText_llSetAngularVelocity">
+llSetAngularVelocity(vector force, integer local )
+Applies rotational velocity to object. Vector force,  Integer local Bool , if TRUE uses local axis, if FALSE uses region axis.
+  </string>
 
-<!-- Addition of OSSL commands for use in OpenSimulator based regions, including Aurora -->
-  <string name="LSLTipText_osSetRegionWaterHeight">
-osSetRegionWaterHeight(float height)
-Adjusts water height on region.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osSetRegionSunSettings">
-osSetRegionSunSettings(integer useEstateSun, integer sunFixed, float sunHour)
-Changes the estate sun settings, then triggers a sun update
-'sunFixed' TRUE to keep the sun stationary, FALSE to use global time
-'sunHour' The sun hour that is desired, 0...24, 0 is sunrise.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osSetEstateSunSettings">
-osSetEstateSunSettings(integer sunFixed, float sunHour)
-sunFixed = TRUE or FALSE, sunHour = 00.00 to 24.00.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osGetCurrentSunHour">
-float osGetCurrentSunHour()
-Returns float value of current sun hour 0...24 0 is sunrise.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osSunGetParam">
-*DEPRECATED* Use osGetSunParam instead.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osSunSetParam">
-*DEPRECATED* Use osSetSunParam instead.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osWindActiveModelPluginName">
-string osWindActiveModelPluginName()
-Returns the current working wind module installed
-These are SimpleRandomWind or ConfigurableWind.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osParcelJoin">
-osParcelJoin(vector pos1, vector pos2))
-Joins parcels @ X,Y coordinates.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osParcelSubdivide">
-osParcelSubdivide(vector pos1, vector pos2))
-Subdivides parcels @ X,Y coordinates.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osParcelSetDetails">
-*DEPRECATED* Use osSetParcelDetails instead.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osWindParamSet">
-*DEPRECATED* Use osSetWindParam instead.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osWindParamGet">
-*DEPRECATED* Use osGetWindParam instead.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osList2Double">
-double osList2Double(list src, integer index)
-Returns double-precision value from src at index.
-(OpenSim only.)
-  </string>
+<!-- == OSSL - aaFunctions - botFunctions for Aurora-Sim & OpenSimulator             == -->
+<!-- == Please maintain same order as is used in lscript_library.cpp for consistency == -->
+<!-- == Updated August.30.2011 by WhiteStar Magic, Team Aurora                       == -->
+  
   <string name="LSLTipText_osSetDynamicTextureURL">
 osSetDynamicTextureURL(key dynamicID, string contentType, string url, string extraParams, integer timer )
 Renders a web texture on the prim containing the script, and returns the UUID of the newly created texture.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osSetDynamicTextureData">
-osSetDynamicTextureData(key dynamicID, string contentType, string data, string extraParams, integer timer)
-Writes text and vector graphics onto a prim face.
-(OpenSim only.)
+(Aurora-Sim / OpenSim function)  
   </string>
   <string name="LSLTipText_osSetDynamicTextureURLBlend">
 osSetDynamicTextureURLBlend(key dynamicID, string contentType, string url, string extraParams, integer timer, integer alpha)
 Allows for two dynamic textures to blend on the prim containing this script.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osSetDynamicTextureDataBlend">
-osSetDynamicTextureDataBlend(key dynamicID, string contentType, string data, string extraParams, integer timer, integer alpha)
-Allows for two dynamic textures to blend on the prim containing this script.
-(OpenSim only.)
+(Aurora-Sim / OpenSim function)
   </string>
   <string name="LSLTipText_osSetDynamicTextureURLBlendFace">
 osSetDynamicTextureURLBlendFace(key dynamicID, string contentType, string url, string extraParams, integer blend, integer disp, integer timer, integer alpha, integer face)
 Loads a web texture on a prim.
-(OpenSim only.)
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osSetDynamicTextureData">
+osSetDynamicTextureData(key dynamicID, string contentType, string data, string extraParams, integer timer)
+Writes text and vector graphics onto a prim face. 
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osSetDynamicTextureDataBlend">
+osSetDynamicTextureDataBlend(key dynamicID, string contentType, string data, string extraParams, integer timer, integer alpha)
+Allows for two dynamic textures to blend on the prim containing this script. 
+(Aurora-Sim / OpenSim function)  
   </string>
   <string name="LSLTipText_osSetDynamicTextureDataBlendFace">
 osSetDynamicTextureDataBlendFace(key dynamicID, string contentType, string data, string extraParams, integer blend, integer disp, integer timer, integer alpha, integer face)
-(OpenSim only.)
+(Aurora-Sim / OpenSim function)
   </string>
-  <string name="LSLTipText_osTerrainGetHeight">
-*DEPRECATED* Use osGetTerrainHeight instead.
-(OpenSim only.)
+  <string name="LSLTipText_osGetTerrainHeight">
+osGetTerrainHeight(integer x, integer y)
+Returns current terrain height as float at the given coordinates. 
+(Aurora-Sim / OpenSim function)
   </string>
-  <string name="LSLTipText_osTerrainSetHeight">
-*DEPRECATED* Use osSetTerrainHeight instead.
-(OpenSim only.)
+  <string name="LSLTipText_osSetTerrainHeight">
+osSetTerrainHeight(integer x, integer y, float val)
+Sets terrain height at the given coordinates. Use osTerrainFlush() afterwards. 
+(Aurora-Sim / OpenSim function)
   </string>
   <string name="LSLTipText_osTerrainFlush">
 osTerrainFlush()
-Updates terrain data. Call this after you are done using osTerrainSetHeight.
-(OpenSim only.)
+Updates terrain data. Call this after you are done using osTerrainSetHeight. 
+(Aurora-Sim / OpenSim function)
   </string>
   <string name="LSLTipText_osRegionRestart">
-integer osRegionRestart(float seconds)
-Restart the current region in the specified number of seconds from now.
-(OpenSim only.)
+osRegionRestart(float seconds)
+Restart the current region in the specified number of seconds from now. 
+(Aurora-Sim / OpenSim function)
   </string>
   <string name="LSLTipText_osRegionNotice">
 osRegionNotice(string msg)
 Broadcasts a notification message to all agents on the current region.
-(OpenSim only.)
+(Aurora-Sim / OpenSim function)
   </string>
   <string name="LSLTipText_osConsoleCommand">
 osConsoleCommand(string command)
-Issues commands directly to the OpenSim server console.
-(OpenSim only.)
+Issues commands directly to the OpenSim server console. 
+(Aurora-Sim / OpenSim function)
   </string>
   <string name="LSLTipText_osSetParcelMediaURL">
 osSetParcelMediaURL(string url)
-Sets parcel media URL.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osSetParcelSIPAddress">
-osSetParcelSIPAddress(string SIPAddress)
-Sets parcel SIP Address for Voice.
-(OpenSim only.)
+Sets parcel media URL. 
+(Aurora-Sim / OpenSim function)
   </string>
   <string name="LSLTipText_osSetPrimFloatOnWater">
 osSetPrimFloatOnWater(integer floatYN)
-Make physical prims float at the water level, TRUE or FALSE.
-(OpenSim only.)
+Make physical prims float at the water level, TRUE or FALSE. 
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osSetParcelSIPaddress">
+osSetParcelSIPAddress(string SIPAddress)
+Sets parcel SIP Address for Voice. 
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osGetAgentIP">
+osGetAgentIP(key agent)
+Returns the Avatars IP Address as a string.  Allows in-world tools be used to coordinate out of world network services that need access to client IP addresses.  
+Should *ONLY* be used by Region Server Owner.  
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osGetAgents">
+osGetAgents()
+Returns a list of all avatars in the region in which the script is running.  
+(Aurora-Sim / OpenSim function)
   </string>
   <string name="LSLTipText_osTeleportAgent">
+POLYMORPHIC COMMAND
 osTeleportAgent(key agent, integer regionX, integer regionY, vector position, vector lookat)
   or
 osTeleportAgent(key agent, string regionName, vector position, vector lookat)
   or
 osTeleportAgent(key agent, vector position, vector lookat)
-Teleports the specified agent to a specified location in the region, the grid, or the hypergrid. See documentation for details.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osGetAgentIP">
-string osGetAgentIP(key agent)
-Returns the Avatars IP Address
-Allows in-world tools be used to coordinate out of world network services that need access to client IP addresses.
-Should *ONLY* be used by Region Server Owner.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osGetAgents">
-list osGetAgents()
-Returns a list of all avatars in the region in which the script is running.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osAvatarPlayAnimation">
-osAvatarPlayAnimation(key UUID, string animation)
-Triggers animations contained within the same prim as the script. Does not need the target avatar's permission.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osAvatarStopAnimation">
-osAvatarStopAnimation(key UUID, string animation)
-Stops specified animation on the specified avatar.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osMovePen">
-osMovePen(string drawList, integer x, integer y)
-Moves the pen's location to the coordinates specified by the x and y parameters, without drawing anything.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osDrawLine">
-osDrawLine(string drawList, integer startX, integer startY, integer endX, integer endY)
-osDrawLine(string drawList, integer endX, integer endY)
-Draws a line on a dynamic texture.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osDrawText">
-osDrawText(string drawList, string text)
-Renders text on a dynamic texture.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osDrawEllipse">
-osDrawEllipse(string drawList, integer width, integer height)
-Draws an ellipse on a dynamic texture.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osDrawRectangle">
-osDrawRectangle(string drawList, integer width, integer height)
-Draws a rectangle on a dynamic texture.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osDrawFilledRectangle">
-osDrawFilledRectangle(string drawList, integer width, integer height)
-Draws a rectangle on a dynamic texture, and fills it with the current pen color.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osDrawPolygon">
-string osDrawPolygon (string drawList, list x, list y)
-Draws a polygon on a dynamic texture.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osDrawFilledPolygon">
-string osDrawFilledPolygon (string drawList, list x, list y)
-Draws a polygon on a dynamic texture, and fills it with the current pen color.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osSetFontSize">
-osSetFontSize(string drawList, integer fontSize)
-Sets the font size to be used in osDrawText.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osSetFontName">
-osSetFontName(string drawList, string fontName)
-Sets current font to be used by osDrawText.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osSetPenSize">
-osSetPenSize(string drawList, integer penSize)
-Sets the pen size (line thickness) that is to be used when drawing dynamic textures.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osSetPenCap">
-osSetPenCap(string drawList, string direction, string type)
-Apply a shape on the end of a line. This allows using arrow, diamond, round and flat caps.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osSetPenColour">
-*DEPRECATED* Use osSetPenColor instead
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osDrawImage">
-osDrawImage(string drawList, integer width, integer height, string imageUrl)
-Retrieves an image specified by the imageUrl parameter and draws it at the specified height and width.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osGetDrawStringSize">
-vector osGetDrawStringSize(string contentType, string text, string fontName, integer fontSize)
-Returns a vector containing the horizontal and vertical dimensions in pixels of the specified text
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osSetStateEvents">
-osSetStateEvents(integer events)
-Used in the past as a workaround for a bug with Opensim, which has long since been fixed.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osGetScriptEngineName">
-string osGetScriptEngineName()
-Returns the name of the script engine which is currently enabled on the server.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osGetSimulatorVersion">
-string osGetSimulatorVersion()
-Returns OpenSim server version information as a string.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osParseJSON">
-string osParseJSON(string JSON)
-Returns a hashtable containing the structured JSON contents.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osMessageObject">
-osMessageObject(key UUID, string message)
-Sends a string to the object identified by UUID.
-The receiving object requires a dataserver(key queryid, string data) in a contained script(s).
-The queryid passed will be the id of the calling object.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osMakeNotecard">
-osMakeNotecard(string notecardName, list contents)
-Write a Notecard contained in Prim with contents of list.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osGetNotecardLine">
-string osGetNotecardLine(string name, integer line)
-Reads the requested notecard line and return its data as a string.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osGetNotecard">
-string osGetNotecard(string name)
-Reads the entire notecard and return its data as a string.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osGetNumberOfNotecardLines">
-integer osGetNumberOfNotecardLines(string name)
-Returns total number of lines in a notecard.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osAvatarName2Key">
-key osAvatarName2Key(string firstname, string lastname)
-Returns the avatar's UUID from their firstname, lastname.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osKey2Name">
-string osKey2Name(key UUID)
-Returns avatar name from their UUID key.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osGetGridNick">
-string osGetGridNick()
-Returns the grid's nickname.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osGetGridName">
-string osGetGridName()
-Returns the grid's name.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osGetGridLoginURI">
-string osGetGridLoginURI()
-Returns the grid's LoginURI.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osFormatString">
-string osFormatString(string str, list strings)
-Return the string with parameters substituted into it (format comes from .NET String.Format class)
-Parameters are specified positionally.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osMatchString">
-list osMatchString(string src, string pattern, integer start)
-Return a list of matches for the pattern and its components inside the source string.
-The pattern is a regular expression. Each match in the result is the string that matched and its position in the source.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osLoadedCreationDate">
-string osLoadedCreationDate()
-Returns Creation Date from meta data of OAR.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osLoadedCreationTime">
-string osLoadedCreationTime()
-Returns Creation Time from meta data of OAR.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osLoadedCreationID">
-string osLoadedCreationID()
-Returns creation ID from meta data of OAR. Can not be used to identify a machine.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osGetLinkPrimitiveParams">
-list osGetLinkPrimitiveParams(integer linknumber, list rules)
-Returns the primitive parameters for the linkset prims specified by linknumber. If using linkset constants (e.g. LINK_SET, LINK_ALL_CHILDREN, etc), the requested parameters of each relevant prim are concatenated to the end of the list. Otherwise, usage is identical to llGetPrimitiveParams().
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osNpcCreate">
-key osNpcCreate(string firstname, string lastname, vector position, key UUID)
-Creates an NPC (Non Player Character) clone named firstname lastname at position from an already existing avatar specified by UUID.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osNpcMoveTo">
-osNpcMoveTo(key npc, vector position)
-Moves an NPC to a location within the region.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osNpcSay">
-osNpcSay(key npc, string message)
-Makes an NPC say something.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osNpcRemove">
-osNpcRemove(key npc)
-Removes an NPC.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osGetMapTexture">
-key osGetMapTexture()
-Returns the map texture UUID.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osGetRegionMapTexture">
-key osGetRegionMapTexture(string regionName)
-Returns the map texture UUID for the regionName requested.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osGetRegionStats">
-list osGetRegionStats()
-Returns a list of float values representing a number of region statistics (21 of the values shown in the statistics bar of LL-based clients).
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osGetSimulatorMemory">
-integer osGetSimulatorMemory()
-Returns the current amount of RAM used by the current OpenSim instance.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osKickAvatar">
-osKickAvatar(string FirstName, string LastName, string alert)
-Kicks avatar from region with an alert message.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osSetSpeed">
-osSetSpeed(key UUID, float SpeedModifier)
-Multiplies the normal running, walking, and flying speed of the specified avatar.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osCauseDamage">
-osCauseDamage(key UUID, float damage)
-Causes damage to specified avatar.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osCauseHealing">
-osCauseHealing(key UUID, float healing)
-Causes healing to specified avatar.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osGetPrimitiveParams">
-list osGetPrimitiveParams(key prim, list rules)
-Gets the parameters of the primitive, specified by key.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osSetPrimitiveParams">
-osSetPrimitiveParams(key prim, list rules)
-Sets primitive Params.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osSetProjectionParams">
-osSetProjectionParams(key prim. integer projection, key texture, float fov, float focus, float amb)
-Set projection paramaters for light sources.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osUnixTimeToTimestamp">
-string osUnixTimeToTimestamp(integer unixtime)
-Converts unixtime to an llGetTimeStamp() formated string.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osSetPenColor">
-osSetPenColor(string drawList, string color)
-Sets the pen color that is to be used when drawing dynamic textures.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osGetSunParam">
-float osGetSunParam(string param)
-Returns current float values for param, where param = day_length, year_length, day_night_offset, update_interval.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osSetSunParam">
-osSetSunParam(string param, float value)
-Sets region's sun parameters, where param = day_length, year_length, day_night_offset, update_interval.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osSetParcelDetails">
-osSetParcelDetails(vector pos, list rules)
-Set parcel details.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osGetTerrainHeight">
-float osGetTerrainHeight(integer x, integer y)
-Returns current terrain height at the given coordinates.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osSetTerrainHeight">
-osSetTerrainHeight(integer x, integer y, float val)
-Sets terrain height at the given coordinates. Use osTerrainFlush() afterwards.
-(OpenSim only.)
-  </string>
-  <string name="LSLTipText_osGetAvatarList">
-list osGetAvatarList()
-Returns a strided list of the UUID, position, and name of each avatar in the region, except the owner.
-(OpenSim only.)
+Teleports the specified agent to a specified location in the region, the grid, or the hypergrid. 
+(Aurora-Sim / OpenSim function)
   </string>
   <string name="LSLTipText_osTeleportOwner">
+POLYMORPHIC COMMAND  
 osTeleportOwner(integer regionX, integer regionY, vector position, vector lookat)
   or
 osTeleportOwner(string regionName, vector position, vector lookat)
   or
 osTeleportOwner(vector position, vector lookat)
-Teleports the owner of the object that holds the script to a specified location in the region, the grid, or the hypergrid. See documentation for details.
-(OpenSim only.)
+Teleports the owner of the object that holds the script to a specified location in the region, the grid, or the hypergrid.  
+(Aurora-Sim / OpenSim function)
   </string>
-
-  <!-- LightShare functions -->
+  <string name="LSLTipText_osAvatarPlayAnimation">
+osAvatarPlayAnimation(key UUID, string animation) 
+Triggers animations contained within the same prim as the script. Does not need the target avatar's permission.  
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osAvatarStopAnimation">
+osAvatarStopAnimation(key UUID, string animation) 
+Stops specified animation on the specified avatar.  
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osMovePen">
+osMovePen(string drawList, integer x, integer y) 
+Moves the pen's location to the coordinates specified by the x and y parameters, without drawing anything.  
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osDrawLine">
+POLYMORPHIC COMMAND  
+osDrawLine(string drawList, integer startX, integer startY, integer endX, integer endY)
+   OR
+osDrawLine(string drawList, integer endX, integer endY) 
+Draws a line on a dynamic texture.  
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osDrawText">
+osDrawText(string drawList, string text)
+Renders text on a dynamic texture.  
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osDrawEllipse">
+osDrawEllipse(string drawList, integer width, integer height) 
+Draws an ellipse on a dynamic texture.  
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osDrawRectangle">
+osDrawRectangle(string drawList, integer width, integer height) 
+Draws a rectangle on a dynamic texture.  
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osDrawFilledRectangle">
+osDrawFilledRectangle(string drawList, integer width, integer height) 
+Draws a rectangle on a dynamic texture, and fills it with the current pen color.  
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osDrawPolygon">
+osDrawPolygon (string drawList, list x, list y) 
+Draws a polygon on a dynamic texture.  
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osDrawFilledPolygon">
+osDrawFilledPolygon (string drawList, list x, list y) 
+Draws a polygon on a dynamic texture, and fills it with the current pen color.  
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osSetFontSize">
+osSetFontSize(string drawList, integer fontSize) 
+Sets the font size to be used in osDrawText.  
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osSetFontName">
+osSetFontName(string drawList, string fontName) 
+Sets current font to be used by osDrawText. Font must exist on region server to display.  
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osSetPenSize">
+osSetPenSize(string drawList, integer penSize) 
+Sets the pen size (line thickness) that is to be used when drawing dynamic textures.  
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osSetPenColor">
+osSetPenColor(string drawList, string color) 
+Sets the pen color that is to be used when drawing dynamic textures.  
+(Aurora-Sim / OpenSim function).  </string>
+  <string name="LSLTipText_osSetPenCap">
+osSetPenCap(string drawList, string direction, string type) 
+Apply a shape on the end of a line. This allows using arrow, diamond, round and flat caps.  
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osDrawImage">
+osDrawImage(string drawList, integer width, integer height, string imageUrl) 
+Retrieves an image specified by the imageUrl parameter and draws it at the specified height and width.  
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osGetDrawStringSize">
+vector osGetDrawStringSize(string contentType, string text, string fontName, integer fontSize) 
+Returns a vector containing the horizontal and vertical dimensions in pixels of the specified text.  
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osList2Double">
+double osList2Double(list src, integer index) 
+Returns double-precision value from src at index.  
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osSetRegionWaterHeight">
+osSetRegionWaterHeight(float height) 
+Adjusts water height on region.  
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osSetRegionSunSettings">
+osSetRegionSunSettings(integer useEstateSun, integer sunFixed, float sunHour) 
+Changes the estate sun settings, then triggers a sun update
+'sunFixed' TRUE to keep the sun stationary, FALSE to use global time
+'sunHour' The sun hour that is desired, 0...24, 0 is sunrise.
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osSetEstateSunSettings">
+osSetEstateSunSettings(integer sunFixed, float sunHour)
+sunFixed = TRUE or FALSE, sunHour = 00.00 to 24.00.  
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osGetCurrentSunHour">
+float osGetCurrentSunHour()
+Returns float value of current sun hour 0...24 0 is sunrise.  
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osGetSunParam">
+float osGetSunParam(string param)
+Returns current float values for param, where param = day_length, year_length, day_night_offset, update_interval.  
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osSetSunParam">
+osSetSunParam(string param, float value)
+Sets region's sun parameters, where param = day_length, year_length, day_night_offset, update_interval.
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osWindActiveModelPluginName">
+string osWindActiveModelPluginName()
+Returns the current working wind module installed
+These are SimpleRandomWind or ConfigurableWind.
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osSetWindParam">
+osSetWindParam(string plugin, string param, float value)
+Sets value of param for plugin.  SimpleRandomWind plugin param = strength.
+ConfigurableWind plugin params = avgStrength, avgDirection, varStrength, varDirection, rateChange.
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osGetWindParam">
+float osGetWindParam(string plugin, string param) 
+Returns float value of param for plugin.  SimpleRandomWind plugin param = strength.
+ConfigurableWind plugin params = avgStrength, avgDirection, varStrength, varDirection, rateChange.
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osParcelJoin">
+osParcelJoin(vector start, vector end)
+Where start = top corner, end = bottom corner.
+Subdivides from start vector to end vector.  Z is ignored but must exist in syntax
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osParcelSubdivide">
+osParcelSubdivide(vector start, vector end)
+Where start = top corner, end = bottom corner.
+Subdivides from start vector to end vector.  Z is ignored but must exist in syntax
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osSetParcelDetails">
+osSetParcelDetails(vector pos, list rules)
+Set parcel details at position x,y,x.
+Rules = PARCEL_DETAILS_NAME, PARCEL_DETAILS_DESC, PARCEL_DETAILS_OWNER, PARCEL_DETAILS_GROUP 
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osGetScriptEngineName">
+string osGetScriptEngineName()
+Returns the name of the script engine which is currently enabled on the server.
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osGetSimulatorVersion">
+string osGetSimulatorVersion()
+Returns current server version information as a string.
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osParseJSON">
+string osParseJSON(string JSON)
+Returns a hashtable containing the structured JSON contents.
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osMessageObject">
+osMessageObject(key UUID, string message)
+Sends string to object identified by UUID.
+Receiving object requires a dataserver(key queryid, string data) in a contained script(s).
+The queryid passed will be the id of the calling object.
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osMakeNotecard">
+osMakeNotecard(string notecardName, list contents)
+Write a Notecard contained in Prim with contents of list.
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osGetNotecardLine">
+string osGetNotecardLine(string name, integer line)
+Reads the requested notecard line and return its data as a string.
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osGetNotecard">
+string osGetNotecard(string name)
+Reads the entire notecard and return its data as a string.
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osGetNumberOfNotecardLines">
+integer osGetNumberOfNotecardLines(string name)
+Returns total number of lines in a notecard.
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osAvatarName2Key">
+key osAvatarName2Key(string firstname, string lastname)
+Returns the avatar's UUID from their firstname, lastname.
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osKey2Name">
+string osKey2Name(key UUID)
+Returns avatar name from their UUID key.
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osGetGridNick">
+string osGetGridNick()
+Returns the grid's nickname.
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osGetGridName">
+string osGetGridName()
+Returns the grid's name.
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osGetGridLoginURI">
+string osGetGridLoginURI()
+Returns the grid's LoginURI.
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osFormatString">
+string osFormatString(string to_format, list strings)
+Returns string. OsFormatString("My name is {0}, I'm located in {1}”, [llGetObjectName(), llGetRegionName()])
+Where {num} parameters must be incremented for each list item, starting at zero, surrounded by curly brackets.
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osMatchString">
+list osMatchString(string src, string pattern, integer start)
+Returns list of matches for the pattern and its components inside the source string. The pattern is a regular expression.
+Each match in the result is the string that matched and its position in the source.
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osLoadedCreationDate">
+string osLoadedCreationDate()
+Returns Creation Date from meta data of OAR.
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osLoadedCreationTime">
+string osLoadedCreationTime()
+Returns Creation Time from meta data of OAR.
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osLoadedCreationID">
+string osLoadedCreationID()
+Returns creation ID from meta data of OAR. Can not be used to identify a machine.
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osGetLinkPrimitiveParams">
+list osGetLinkPrimitiveParams(integer linknumber, list rules)
+Returns prim params for the linkset prims specified by linknum. 
+If using linkset constants (e.g. LINK_SET, LINK_ALL_CHILDREN, etc), the requested params of each relevant prim are concatenated to the end of the list. 
+Otherwise, usage is identical to llGetPrimitiveParams().
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osGetMapTexture">
+key osGetMapTexture()
+Returns the map texture UUID of current region.
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osGetRegionMapTexture">
+key osGetRegionMapTexture(string regionName)
+Returns the map texture UUID for the regionName requested.
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osGetRegionStats">
+list osGetRegionStats()
+Returns a list of float values representing a number of region statistics (21 of the values shown in the statistics bar of LL-based clients).
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osGetSimulatorMemory">
+integer osGetSimulatorMemory()
+Returns integer of current memory used by simulator instance.
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osKickAvatar">
+osKickAvatar(string FirstName, string LastName, string alert)
+Kicks avatar from region with an alert message.
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osSetSpeed">
+osSetSpeed(key UUID, float SpeedModifier)
+Multiplies the normal running, walking, and flying speed of the specified avatar.
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osCauseDamage">
+osCauseDamage(key UUID, float damage)
+Causes damage to specified avatar.  Region must be damage enabled.
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osCauseHealing">
+osCauseHealing(key UUID, float healing)
+Causes healing to specified avatar.
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osGetPrimitiveParams">
+list osGetPrimitiveParams(key prim, list rules)
+Gets the parameters of the primitive, specified by key.
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osSetPrimitiveParams">
+osSetPrimitiveParams(key prim, list rules)
+Sets primitive Params.
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osSetProjectionParams">
+POLYMORPHIC COMMAND
+osSetProjectionParams(key prim. integer projection, key texture, float fov, float focus, float ambience)
+ OR
+osSetProjectionParams(integer projection, key texture, float fov, float focus, float ambience)
+ OR
+osSetProjectionParams(key prim, integer projection, key texture, float fov, float focus, float ambience)
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osGetAvatarList">
+list osGetAvatarList()
+Returns strided list of the UUID, position, and name of each avatar in the region, except the owner.
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osUnixTimeToTimestamp">
+string osUnixTimeToTimestamp(integer unixtime)
+Converts unixtime to an llGetTimeStamp() formated string.
+(Aurora-Sim / OpenSim function)
+  </string>
+<!-- -->
+<!-- OSSL Functions OpenSim Unique current to Aug.30.2011. -->
+  <string name="LSLTipText_osSetStateEvents">
+osSetStateEvents(integer events)
+Used in the past as a workaround for a bug with Opensim, which has long since been fixed.
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osNpcCreate">
+key osNpcCreate(string firstname, string lastname, vector position, key UUID)
+Creates an NPC (Non Player Character) clone named firstname lastname at position from an already existing avatar specified by UUID. 
+(OpenSim Only function)
+  </string>
+  <string name="LSLTipText_osNpcSaveAppearance">
+osNpcSaveAppearance(key npc, string notecard)
+Save NPC's current body part, clothing and attachments data to notecard in prim inventory.
+The avatar must be present in the region when this function is invoked.
+The baked textures for the avatar (necessary to recreate appearance) are saved permanently.)
+(OpenSim Only function)
+  </string>
+  <string name="LSLTipText_osNpcLoadAppearance">
+osNpcLoadAppearance(key npc, string notecard)
+Load NPC appearance from notecard. 
+This notecard must contain appearance data created with the save appearance function.
+(OpenSim Only function)
+  </string>
+  <string name="LSLTipText_osNpcGetPos">
+vector osNpcGetPos(key npc)
+Returns current position vector of the NPC. 
+(OpenSim Only function)
+  </string>
+  <string name="LSLTipText_osNpcMoveTo">
+osNpcMoveTo(key npc, vector position)
+Moves an NPC to a location within the region.  
+(OpenSim Only function)
+  </string>
+  <string name="LSLTipText_osNpcMoveToTarget">
+osNpcMoveToTarget(key npc, vector target, integer options)
+Moves NPC to given target over time. Options = OS_NPC_FLY, OS_NPC_NO_FLY, OS_NPC_LAND_AT_TARGET 
+(OpenSim Only function)
+  </string>
+  <string name="LSLTipText_osNpcGetRot">
+rotation osNpcGetRot(key npc)
+Gets the rotation of the avatar. Only the rotation around the Z plane in Euler rotation (horizontal rotation) has any meaning. 
+(OpenSim Only function)
+  </string>
+  <string name="LSLTipText_osNpcSetRot">
+osNpcSetRot(key npc, rotation rot)
+Set the rotation of the NPC. Only setting the rotation in the Z plane in Euler rotation will have any meaningful effect (turning NPC facing direction). 
+Setting X or Y Euler values will result in the avatar rotating in an undefined manner.  
+(OpenSim Only function)
+  </string>
+  <string name="LSLTipText_osNpcStopMoveToTarget">
+osNpcStopMoveToTarget(key npc)
+Stop a current move to a target.  
+(OpenSim Only function)
+  </string>
+  <string name="LSLTipText_osNpcSay">
+osNpcSay(key npc, string message)
+Makes an NPC say something.
+(Aurora-Sim / OpenSim function)
+  </string>
+  <string name="LSLTipText_osNpcRemove">
+osNpcRemove(key npc)
+Removes an NPC.
+(OpenSim Only function)
+  </string>
+  <string name="LSLTipText_osOwnerSaveAppearance">
+osOwnerSaveAppearance(string notecard)
+Save Owner's current body part, clothing and attachments data to notecard in prim inventory.
+The avatar must be present in the region when this function is invoked.
+The baked textures for the avatar (necessary to recreate appearance) are saved permanently.)
+(OpenSim Only function)
+  </string>
+  <string name="LSLTipText_osAgentSaveAppearance">
+osAgentSaveAppearance(key agentId, string notecard)
+Save an Avatar's current body part, clothing and attachments data to specified notecard in prim inventory.
+The avatar must be present in the region when this function is invoked.
+The baked textures for the avatar (necessary to recreate appearance) are saved permanently.)
+(OpenSim Only function)
+  </string>
+<!-- -->
+<!-- OSSL Functions Aurora-Sim Unique current to Aug.30.2011. -->
+  <string name="LSLTipText_osReturnObject">
+osReturnObject(key userID)
+Returns object to specified avatars UUID.
+(Aurora-Sim Only function)
+  </string>
+  <string name="LSLTipText_osReturnObjects">
+osReturnObjects(float Parameter)
+Returns group of objects. Parameter's are numeric, values are owner objects = 0, everyone except owner objects = 1, group objects = 2.
+(Aurora-Sim Only function)
+  </string>
+  <string name="LSLTipText_osShutDown">
+osShutDown()
+Shut's down current Simulator.  Authorized Admin Only by config.  
+(Aurora-Sim Only function)
+  </string>
+  <string name="LSLTipText_osaddAgentToGroup">
+osAddAgentToGroup(key avatarID, string group_name, string role_name)
+Adds an avatar to a group.  Where group_name = name of the target group, role_name = role to assign within the group.   
+(Aurora-Sim Only function)
+   </string>
+  <string name="LSLTipText_osRezObject">
+osRezObject(string inventory, vector position, vector velocity, rotation rot, integer param, integer isRezAtRoot, integer doRecoil, integer SetDieAtEdge, integer CheckPos)
+Where inventory = object to rez.  Position = vector to rez object.  Velocity = initial velocity.  Rot = initial rotation.  Param = onrez event.  
+IzAtRoot = TRUE/FALSE flag changes llRezAtRoot to llRezObject.  doRecoil =TRUE/FALSE to push avatar.  SetDieAtEdge = TRUE/FALSE for rezzed object to die at edge of region.  
+CheckPos = TRUE/FALSE enable/disable 10m rez limit.   
+(Aurora-Sim Only function)
+  </string>
+<!-- -->
+<!-- LightShare functions (Careminster Variant) -->
   <string name="LSLTipText_cmSetWindlightScene">
-integer cmSetWindlightScene(list rules)
+cmSetWindlightScene(list rules)
 Set the current WindLight scene. Estate managers and owners only.
 (Reguires LightShare)
   </string>
   <string name="LSLTipText_cmSetWindlightSceneTargeted">
-integer cmSetWindlightSceneTargeted(list rules, key target)
+cmSetWindlightSceneTargeted(list rules, key target)
 Set the current WindLight scene directed at a specific avatar. Estate managers and owners only.
 (Reguires LightShare)
   </string>
   <string name="LSLTipText_cmGetWindlightScene">
 list cmGetWindlightScene(list rules)
-Get the current WindLight settings.
+Get the current LightShare settings.
 (Reguires LightShare)
   </string>
-  <!-- LightShare functions - alternate versions -->
-  <!-- don't ask me why they renamed 'em, but we need to include both versions - -  MC -->
+<!-- LightShare functions - alternate versions (os & aa variant)  -->
   <string name="LSLTipText_lsSetWindlightScene">
-integer lsSetWindlightScene(list rules)
+lsSetWindlightScene(list rules)
 Set the current WindLight scene. Estate managers and owners only.
 (Reguires LightShare)
   </string>
   <string name="LSLTipText_lsSetWindlightSceneTargeted">
-integer lsSetWindlightSceneTargeted(list rules, key target)
+lsSetWindlightSceneTargeted(list rules, key target)
 Set the current WindLight scene directed at a specific avatar. Estate managers and owners only.
 (Reguires LightShare)
   </string>
@@ -2244,4 +2329,240 @@ list lsGetWindlightScene(list rules)
 Get the current WindLight settings.
 (Reguires LightShare)
   </string>
+<!-- -->
+<!-- aaFunctions   Aurora-Sim ONLY current to Aug.30.2011. -->
+  <string name="LSLTipText_aaSetCloudDensity">
+aaSetCloudDensity(float density)
+AaSetCloudDensity(0.5)  Where float density values are 0.0 =  no cloud to 1.0 = 100% cloud.
+(Aurora-Sim Only)
+  </string>
+  <string name="LSLTipText_aaUpdateDatabase">
+aUpdateDatabase(string Key, string value, string token)
+Where Key = database field name, xmlDataToPutIntoTheDatabase = serialized XML data,  Token = data-password 
+(Aurora-Sim Only)
+  </string>
+  <string name="LSLTipText_aaQueryDatabase">
+aaQueryDatabase(string Key, string Token)
+Returns a list with first value is the token, the second the Key, and the third the value
+Where Key = database field name, Token = data-password
+(Aurora-Sim Only)
+  </string>
+  <string name="LSLTipText_aaSerializeXML">
+aaSerializeXML(list keys, list values)
+Returns xml formatted string of the keys and values.  Where keys = list of keys in the database, values = fields to retrieve from database.
+(Aurora-Sim Only)
+  </string>
+  <string name="LSLTipText_aaDeserializeXMLKeys">
+aaDeserializeXMLKeys(string xmlData)
+Returns a list of keys from XML data. Where xmlData = xml formatted data keys.
+(Aurora-Sim Only)
+  </string>
+  <string name="LSLTipText_aaDeserializeXMLValues">
+aaDeserializeXMLValues(string xmlData)
+Returns a list of Values from XML data. Where xmlData = xml formatted data Values.
+(Aurora-Sim Only)
+  </string>
+  <string name="LSLTipText_aaSetConeOfSilence">
+aaSetConeOfSilence(float radius)
+Where radius = metres radius from centre of scripted item.  This creates an area that sounds can only be heard by the people within the area(radius) and not heard outside and visa-versa.
+(Aurora-Sim Only)
+  </string>
+  <string name="LSLTipText_aaJoinCombatTeam">
+aaJoinCombatTeam(key uuid, string team)
+Where uuid = key of avatar, team = string of the team name.
+(Aurora-Sim Only)
+  </string>
+  <string name="LSLTipText_aaLeaveCombat">
+aaLeaveCombat(key uuid)
+Where uuid = avatar key.
+(Aurora-Sim Only)
+  </string>
+  <string name="LSLTipText_aaJoinCombat">
+aaJoinCombat(key uuid)
+Where uuid = avatar key.  If (PERMISSION_COMBAT == PERMISSION_COMBAT) and permission is granted then join combat.
+(Aurora-Sim Only)
+  </string>
+  <string name="LSLTipText_aaGetHealth">
+aaGetHealth(key uuid)
+Returns float value (0.0 to 100.0) of current health.  Where uuid = avatar key.
+(Aurora-Sim Only)
+  </string>
+  <string name="LSLTipText_aaGetTeam">
+aaGetTeam(key uuid)
+Returns a string of avatars team name.  Where uuid = avatar key.
+(Aurora-Sim Only)
+  </string>
+  <string name="LSLTipText_aaGetTeamMembers">
+aaGetTeamMembers(string team)
+Return a list of team members.  Where team = string of team name.
+(Aurora-Sim Only)
+  </string>
+  <string name="LSLTipText_aaGetLastOwner">
+POLYMORPHIC FUNCTION.
+aaGetLastOwner(string PrimID)  returns last owner UUID of PrimID where PrimID = uuid of prim.
+OR
+AaGetLastOwner()  returns last owner uuid of prim containg script. 
+(Aurora-Sim Only)
+  </string>
+  <string name="LSLTipText_aaSayDistance">
+aaSayDistance(integer channelID, float Distance, string text)
+Where channelID = channel to say on, Distance = float in meters  for distance to say, text = string to say. 
+(Aurora-Sim Only)
+  </string>
+  <string name="LSLTipText_aaSayTo">
+aaSayTo(key userID, string text)
+Where userID = avatar key, text = string msg.  Similar to llOwnerSay but can be directly targeted to an avatar. 
+(Aurora-Sim Only)
+  </string>
+  <string name="LSLTipText_aaGetText ">
+aaGetText()aaGetText() 
+Returns a string of the hover text of an object. 
+(Aurora-Sim Only)
+  </string>
+  <string name="LSLTipText_aaGetTextColor ">
+aaGetTextColor()
+Returns the hovertext color in rotation. Use Ex: rotation color = aaGetTextColor() to separate color.x, color.y, color.z, color.s  Where s = value of alpha in llSetText. 
+(Aurora-Sim Only)
+  </string>
+  <string name="LSLTipText_aaRaiseError">
+aaRaiseError(string message)
+Allows you to have errors that end the execution of the event and fire another event in the script. 
+(Aurora-Sim Only)
+  </string>
+  <string name="LSLTipText_aaFreezeAvatar">
+aaFreezeAvatar(key ID)
+Where ID = avatar uuid. If combat permission are granted then avatar can be frozen (no movement). 
+(Aurora-Sim Only)
+  </string>
+  <string name="LSLTipText_aaThawAvatar">
+aaThawAvatar(key ID)
+Where ID = avatar uuid. If combat permission are granted then avatar can be un-frozen (movement re-enabled). 
+(Aurora-Sim Only)
+  </string>
+  <string name="LSLTipText_aaRequestCombatPermission">
+aaRequestCombatPermission(key ID)
+Where ID = avatar uuid.  Requests target avatar for Permissions to enter into combat mode. 
+Raises a run_time_permissions event. (PERMISSION_COMBAT == PERMISSION_COMBAT). 
+(Aurora-Sim Only)
+  </string>
+  <string name="LSLTipText_aaGetWalkDisabled ">
+aaGetWalkDisabled(key ID)
+Returns integer of TRUE or FALSE for specifid ID.  Where ID = avatar uuid. 
+(Aurora-Sim Only)
+  </string>
+  <string name="LSLTipText_aaSetWalkDisabled">
+aaSetWalkDisabled(key ID, integer Value)
+Where ID = avatar uuid, Value = TRUE or FALSE. If PERMISSION_COMBAT is accepted, this disables walk, forcing avatar to fly. 
+(Aurora-Sim Only)
+  </string>
+  <string name="LSLTipText_aaGetFlyDisabled ">
+aaGetFlyDisabled(key ID)
+Returns integer of TRUE or FALSE for specifid ID. Where ID = avatar uuid. 
+(Aurora-Sim Only)
+  </string>
+  <string name="LSLTipText_aaSetFlyDisabled">
+aaSetFlyDisabled(key ID, integer Value)
+Where ID = avatar uuid, Value = TRUE or FALSE. If PERMISSION_COMBAT is accepted, this disables flying, forcing avatar to walk. 
+(Aurora-Sim Only)
+  </string>
+  <string name="LSLTipText_aaAvatarFullName2Key ">
+aaAvatarFullName2Key(string FullName)
+Returns the avatar uuid from their fullname.  Where FullName = "Firstname Lastname”. 
+(Aurora-Sim Only)
+  </string>
+  <string name="LSLTipText_aaSetCharacterStat">
+aaSetCharacterStat(key ID, string StatName, float statValue)
+Sets Character Stats.  Where ID = avatar uuid, StatName = stat to change, ststValue the value to change it to. 
+(Aurora-Sim Only)
+  </string>
+  <string name="LSLTipText_aaSetEnv ">
+aaSetEnv(string EnvName, list Value)
+Sets environment values.  Where EnvName = ENABLE_GRAVITY, GRAVITY_FORCE_X, GRAVITY_FORCE_Y, GRAVITY_FORCE_Z, ADD_GRAVITY_POINT, ADD_GRAVITY_FORCE, START_TIME_REVERSAL_SAVING, 
+STOP_TIME_REVERSAL_SAVING, START_TIME_REVERSAL, STOP_TIME_REVERSAL. 
+(Aurora-Sim Only)
+  </string>
+<!-- -->
+<!-- botFunctions   Aurora-Sim ONLY current to Aug.30.2011. -->
+  <string name="LSLTipText_botGetWaitingTime">
+botGetWaitingTime(integer waitTime)
+Returns waitTime as vector. 
+(Aurora-Sim Only)
+  </string>
+  <string name="LSLTipText_botSetMap">
+botSetMap(key keyOfBot, list positions, list movementType, integer flags)
+keyOfBot = bot uuid, positions = list of position vectors, movementType = corresponding list of move modes:  0 – walk, 1 – fly, 
+flags = BOT_FOLLOW_FLAG_NONE and BOT_FOLLOW_FLAG_INDEFINITELY. 
+(Aurora-Sim Only)
+  </string>
+  <string name="LSLTipText_botCreateBot">
+botCreateBot(string FirstName, string LastName, key idToClone, vector startPos)
+Where FirstName and LastName = strings for new bot name.  idToClone = uuid of prebuild avatar to clone OR another existing avatar.  startPos = vector of starting position on region. 
+(Aurora-Sim Only)
+  </string>
+  <string name="LSLTipText_botRemoveBot">
+botRemoveBot(key botID)
+Where botID = uuid of bot.  Removes bot identified by botID. 
+(Aurora-Sim Only)
+  </string>
+  <string name="LSLTipText_botPauseMovement">
+botPauseMovement(key botID)
+Where botID = bot uuid.  Pauses bot at current position. 
+(Aurora-Sim Only)
+  </string>
+  <string name="LSLTipText_botResumeMovement">
+botResumeMovement(key botID)
+Where botID = bot uuid.  Resumes bot movement. 
+(Aurora-Sim Only)
+  </string>
+  <string name="LSLTipText_botFollowAvatar">
+botFollowAvatar(key botID, string avName, float startFollowDistance, float endFollowDistance)
+Where botID = bot uuid.  AvName = sting of avatar name OR avatar uuid.  StartFollowDistance = distance to start following from.  EndFollowDistance = distance to stop following avatar. 
+(Aurora-Sim Only)
+  </string>
+  <string name="LSLTipText_botStopFollowAvatar">
+botStopFollowAvatar(key botID)
+Where botID = bot uuid.  Stops bot from following an avatar. 
+(Aurora-Sim Only)
+  </string>
+  <string name="LSLTipText_botSendChatMessage">
+botSendChatMessage(key botID, string message, integer channel, integer sayType)
+Where  botID = bot uuid.  Message = string msg.  Channel = channel to speak on.  SayType = (0=whisper, 1=say, 2=shout). 
+(Aurora-Sim Only)
+  </string>
+  <string name="LSLTipText_botSetShouldFly">
+botSetShouldFly(key botID, integer ShouldFly)
+Where botID = bot uuid.  ShouldFly = TRUE/FALSE.  Enables or disables flight mode. 
+(Aurora-Sim Only)
+  </string>
+  <string name="LSLTipText_botSitObject">
+botSitObject(key botID, key objectID, vector offset)
+Where botID = bot uuid,  objectID = uuid of object to sit on,  offset = Vector for sit position (note that VECTOR_ZERO = default sit pos). 
+(Aurora-Sim Only)
+  </string>
+  <string name="LSLTipText_botStandUp">
+botStandUp(key botID)
+Where botID = bot uuid.  Command bot to stand up. 
+(Aurora-Sim Only)
+  </string>
+  <string name="LSLTipText_botTouchObject">
+botTouchObject(key botID, key objectID)
+Where botID = bot uuid,  objectID = object uuid.  Causes bot to touch object identified. 
+(Aurora-Sim Only)
+  </string>
+  <string name="LSLTipText_botAddTag">
+botAddTag(key botID, string tag)
+Where botID = bot uuid,  tag = string tag over bot. 
+(Aurora-Sim Only)
+  </string>
+  <string name="LSLTipText_botGetBotsWithTag">
+botGetBotsWithTag(string tag)
+Where tag = tag string to match.  Return a list of bot UUID's in region with the matching tag. 
+(Aurora-Sim Only)
+  </string>
+  <string name="LSLTipText_botRemoveBotsWithTag">
+botRemoveBotsWithTag(string tag)
+Where tag = tag string to match.  Removes bot's matching the tag. 
+(Aurora-Sim Only)
+  </string>
 </strings>
+
