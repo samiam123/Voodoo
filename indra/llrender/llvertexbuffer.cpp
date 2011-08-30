@@ -77,14 +77,14 @@ std::vector<U32> LLVertexBuffer::sDeleteList;
 GLuint LLVBOPool::allocateName()
 {
 	GLuint name;
-	glGenBuffersARB(1, &name);
+	glGenBuffersARB(2, &name);
 	LLVertexBuffer::sGLCount++;	
 	return name;
 }
 
 void LLVBOPool::releaseName(GLuint name)
 {
-	glDeleteBuffersARB(1, &name);
+	glDeleteBuffersARB(2, &name);
 	LLVertexBuffer::sGLCount--;
 }
 
