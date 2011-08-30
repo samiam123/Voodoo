@@ -587,10 +587,10 @@ void LLScriptLibrary::init()
     addFunction(10.f, 0.f, dummy_func, "osNpcCreate", "k", "ssvk");
     addFunction(10.f, 0.f, dummy_func, "osNpcSaveAppearance", NULL, "ks");
     addFunction(10.f, 0.f, dummy_func, "osNpcLoadAppearance", NULL,"ks");
-    addFunction(10.f, 0.f, dummy_func, "osNpcGetPos",k,"k");
+    addFunction(10.f, 0.f, dummy_func, "osNpcGetPos","k","k");
     addFunction(10.f, 0.f, dummy_func, "osNpcMoveTo", NULL, "kv");
     addFunction(10.f, 0.f, dummy_func, "osNpcMoveToTarget",NULL,"kvi");
-    addFunction(10.f, 0.f, dummy_func, "osNpcGetRot",r,"k");
+    addFunction(10.f, 0.f, dummy_func, "osNpcGetRot","r","k");
     addFunction(10.f, 0.f, dummy_func, "osNpcSetRot", NULL, "kr");
     addFunction(10.f, 0.f, dummy_func, "osNpcStopMoveToTarget", NULL, "k");
     addFunction(10.f, 0.f, dummy_func, "osNpcSay", NULL, "ks");
@@ -601,8 +601,8 @@ void LLScriptLibrary::init()
 // OSSL Functions Aurora-Sim Unique current to Aug.19.2011.
     addFunction(10.f, 0.f, dummy_func, "osReturnObject", NULL, "k");
     addFunction(10.f, 0.f, dummy_func, "osReturnObjects", NULL, "f");
-    addFunction(10.f, 0.f, dummy_func, "osShutDown", NULL, NULL";
-    addFunction(10.f, 0.f, dummy_func, "osaddAgentToGroup", NULL, ""kss);
+    addFunction(10.f, 0.f, dummy_func, "osShutDown", NULL, NULL);
+    addFunction(10.f, 0.f, dummy_func, "osAddAgentToGroup", NULL, "kss");
     addFunction(10.f, 0.f, dummy_func, "osRezObject", NULL, "svvriiiii");
 //
 // LightShare functions (Careminster Variant)
