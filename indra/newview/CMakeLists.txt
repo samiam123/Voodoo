@@ -1119,13 +1119,13 @@ if (WINDOWS)
     # at this point use it.
     set_source_files_properties(llviewerprecompiledheaders.cpp
         PROPERTIES
-        COMPILE_FLAGS "/Ycllviewerprecompiledheaders.h"
+        COMPILE_FLAGS "/Y-"
         )        
     foreach( src_file ${viewer_SOURCE_FILES} )
         set_source_files_properties(
             ${src_file}
             PROPERTIES
-            COMPILE_FLAGS "/Yullviewerprecompiledheaders.h"
+            COMPILE_FLAGS "/Y-"
             )        
     endforeach( src_file ${viewer_SOURCE_FILES} )
     list(APPEND viewer_SOURCE_FILES llviewerprecompiledheaders.cpp)
