@@ -546,7 +546,7 @@ set(viewer_SOURCE_FILES
     )
 
 # This gets renamed in the packaging step
-set(VIEWER_BINARY_NAME "secondlife-bin" CACHE STRING
+set(VIEWER_BINARY_NAME "astraviewer" CACHE STRING
     "The name of the viewer executable to create.")
 
 if ((LINUX OR DARWIN) AND NOT DARWIN_PPC)
