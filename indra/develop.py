@@ -598,6 +598,7 @@ class WindowsSetup(PlatformSetup):
             key = _winreg.OpenKey(reg, key_str)
             value = _winreg.QueryValueEx(key, value_str)[0]+"IDE"
             print 'Found: %s' % value
+            self.using_express = True
             return value
         except WindowsError, err:
             print >> sys.stderr, "Didn't find ", self.gens[gen]['gen']
@@ -620,6 +621,7 @@ class WindowsSetup(PlatformSetup):
             key = _winreg.OpenKey(reg, key_str)
             value = _winreg.QueryValueEx(key, value_str)[0]+"IDE"
             print 'Found: %s' % value
+            self.using_express = True
             return value
         except WindowsError, err:
             print >> sys.stderr, "Didn't find ", self.gens[gen]['gen']
