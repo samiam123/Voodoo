@@ -1,4 +1,4 @@
-/* Copyright (c) 2009
+ /* Copyright (c) 2009
  *
  * Modular Systems All rights reserved.
  *
