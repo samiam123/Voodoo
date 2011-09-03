@@ -9,7 +9,7 @@
     <!-- Nova -->
     <map>
       <key>gridname</key>
-      <string>Nova</string>
+      <string>Nova...Powered by Aurora-Sim</string>
       <key>platform</key>
       <string>Aurora</string>
       <key>loginuri</key>

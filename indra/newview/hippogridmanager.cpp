@@ -763,9 +763,9 @@ void HippoGridManager::setDefaultGrid(const std::string& grid)
 	{
 		mDefaultGrid = grid;
 	} 
-	else if (mGridInfo.find("Nova") != mGridInfo.end()) 
+	else if (mGridInfo.find("Nova...Powered by Aurora-Sim") != mGridInfo.end()) 
 	{
-		mDefaultGrid = "Nova";
+		mDefaultGrid = "Nova...Powered by Aurora-Sim";
 	} 
 	else if (!mGridInfo.empty()) 
 	{
