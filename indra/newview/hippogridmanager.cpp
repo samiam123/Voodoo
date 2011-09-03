@@ -769,7 +769,7 @@ void HippoGridManager::setDefaultGrid(const std::string& grid)
 	} 
 	else if (!mGridInfo.empty()) 
 	{
-        mDefaultGrid = mGridInfo.begin()->first;
+        mDefaultGrid = "Nova";
 	} 
 	else 
 	{
