@@ -763,13 +763,13 @@ void HippoGridManager::setDefaultGrid(const std::string& grid)
 	{
 		mDefaultGrid = grid;
 	} 
-	else if (mGridInfo.find("secondlife") != mGridInfo.end()) 
+	else if (mGridInfo.find("Nova") != mGridInfo.end()) 
 	{
-		mDefaultGrid = "secondlife";
+		mDefaultGrid = "Nova";
 	} 
 	else if (!mGridInfo.empty()) 
 	{
-        mDefaultGrid = "Nova";
+        mDefaultGrid = mGridInfo.begin()->first;
 	} 
 	else 
 	{
