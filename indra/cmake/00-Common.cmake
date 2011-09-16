@@ -83,9 +83,9 @@ if (WINDOWS)
   endif (MSVC80 OR MSVC90 OR MSVC10)
   
   # Are we using the crummy Visual Studio KDU build workaround?
-  if (NOT VS_DISABLE_FATAL_WARNINGS)
-    add_definitions(/WX)
-  endif (NOT VS_DISABLE_FATAL_WARNINGS)
+#  if (NOT VS_DISABLE_FATAL_WARNINGS)
+#    add_definitions(/WX)
+#  endif (NOT VS_DISABLE_FATAL_WARNINGS)
   
   # Various libs are compiler specific, generate some variables here we can just use
   # when we require them instead of reimplementing the test each time.
