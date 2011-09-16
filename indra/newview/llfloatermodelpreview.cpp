@@ -1065,7 +1065,7 @@ void LLFloaterModelPreview::initDecompControls()
 		LLButton* button = getChild<LLButton>(stage[j].mName);
 		if (button)
 		{
-			button->setCommitCallback(onPhysicsStageExecute, (void*) &stage[j]);
+			button->setCommitCallback(onPhysicsStageExecute((LLUICtrl*)button, (void*) &stage[j]));
 		}
 
 		gMeshRepo.mDecompThread->mStageID[stage[j].mName] = j;
