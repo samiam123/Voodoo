@@ -65,6 +65,7 @@
 #include "llinventorymodel.h"
 #include "llfoldertype.h"
 #include "llviewerparcelmgr.h"
+#include "rlvviewer2.h"
 
 #include "boost/lexical_cast.hpp"
 #ifndef LL_WINDOWS
@@ -1208,7 +1209,7 @@ LLMeshUploadThread::LLMeshUploadThread(LLMeshUploadThread::instance_list& data, 
 	mUploadTextures = upload_textures;
 	mUploadSkin = upload_skin;
 	mUploadJoints = upload_joints;
-	mMutex = new LLMutex(NULL);
+	mMutex = new LLMutex();//NULL);
 	mCurlRequest = NULL;
 	mPendingUploads = 0;
 	mFinished = false;
@@ -2307,6 +2308,7 @@ void LLMeshRepository::notifyLoadedMeshes()
 				}
 			}
 
+			/* where is this defined ??? 
 			on_new_single_inventory_upload_complete(
 				asset_type,
 				inventory_type,
@@ -2316,6 +2318,7 @@ void LLMeshRepository::notifyLoadedMeshes()
 				data.mPostData["description"],
 				data.mResponse,
 				data.mResponse["upload_price"]);
+			*/
 			//}
 			
 			mInventoryQ.pop();
