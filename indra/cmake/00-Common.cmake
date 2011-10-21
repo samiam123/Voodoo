@@ -43,10 +43,10 @@ if (WINDOWS)
       "${CMAKE_C_FLAGS_RELEASE} ${LL_C_FLAGS} /O2 /MD /MP /arch:SSE /fp:fast"
       CACHE STRING "C compiler release options" FORCE)
   set(CMAKE_CXX_FLAGS_RELEASESSE2
-      "${CMAKE_CXX_FLAGS_RELEASESSE2} ${LL_CXX_FLAGS} /O2 /MD /MP /arch:SSE2 /fp:fast"
+      "${CMAKE_CXX_FLAGS_RELEASESSE2} ${LL_CXX_FLAGS} /O2 /Ob2 /Ot /GT /MD /MP /arch:SSE2 /fp:fast"
       CACHE STRING "C++ compiler release-SSE2 options" FORCE)
   set(CMAKE_C_FLAGS_RELEASESSE2
-      "${CMAKE_C_FLAGS_RELEASESSE2} ${LL_C_FLAGS} /Zm500 /O2 /MD /MP /arch:SSE2 /fp:fast"
+      "${CMAKE_C_FLAGS_RELEASESSE2} ${LL_C_FLAGS} /Zm500 /O2 /Ob2 /Ot /GT /MD /MP /arch:SSE2 /fp:fast"
       CACHE STRING "C compiler release-SSE2 options" FORCE)
 
   set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /LARGEADDRESSAWARE")
