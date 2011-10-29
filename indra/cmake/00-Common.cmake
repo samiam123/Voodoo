@@ -60,7 +60,6 @@ if (WINDOWS)
       /D_UNICODE 
       /GS
       /TP
-      /W3
       /c
       /Zc:forScope
       /nologo
