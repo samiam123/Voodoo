@@ -73,6 +73,11 @@ class ViewerManifest(LLManifest):
             self.path("*.ttf")
             self.path("*.txt")
             self.end_prefix("fonts")
+            
+        # Include the local_assets directory recursively
+        if self.prefix(src="local_assets"):
+            self.path("*.j2c")
+            self.end_prefix("local_assets")
 
         # skins
         if self.prefix(src="skins"):
@@ -323,6 +328,14 @@ class WindowsManifest(ViewerManifest):
         # pull in the crash logger and updater from other projects
         self.path(src='../win_crash_logger/%s/windows-crash-logger.exe' % self.args['configuration'], dst="win_crash_logger.exe")
         self.path(src='../win_updater/%s/windows-updater.exe' % self.args['configuration'], dst="updater.exe")
+        
+        # Visual C++ runtimes for 2k8 and 2k10
+        if self.prefix(src="../../libraries/i686-win32/lib/release", dst=""):
+            self.path("vcredist_x86_2k8.exe")
+            self.path("vcredist_x86_2k10.exe")
+            self.end_prefix()
+        # Visual C++ runtimes for 2k8 and 2k10
+        # self.path(src='../../libraries/i686-win32/lib/release", dst="")
 
 
     def nsi_file_commands(self, install=True):

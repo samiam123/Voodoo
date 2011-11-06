@@ -699,6 +699,7 @@ Call CheckIfAlreadyCurrent		; Make sure that we haven't already installed this v
 Call CloseSecondLife			; Make sure we're not running
 #Call CheckNetworkConnection		; ping secondlife.com
 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Don't remove cache files during a regular install, removing the inventory cache on upgrades results in lots of damage to the servers.
 ;Call RemoveCacheFiles			; Installing over removes potentially corrupted
@@ -728,6 +729,16 @@ Call RemoveOldAboutLandSilver
 
 # Pass the installer's language to the client to use as a default
 StrCpy $SHORTCUT_LANG_PARAM "--set InstallLanguage $(LanguageCode)"
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Make sure that the Visual C++ runtimes are installed 2k8 *and* 2k10
+;Section -Prerequisites
+;  SetOutPath $INSTDIR
+  File ".\vcredist_x86_2k8.exe"
+  ExecWait ".\vcredist_x86_2k8.exe /q"
+  File ".\vcredist_x86_2k10.exe"
+  ExecWait ".\vcredist_x86_2k10.exe /q"
+;SectionEnd
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Shortcuts in start menu
