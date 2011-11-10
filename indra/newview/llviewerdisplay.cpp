@@ -83,7 +83,7 @@
 #include "llwlparammanager.h"
 #include "llwaterparammanager.h"
 #include "llpostprocess.h"
-#include "hippoLimits.h"
+#include "hippolimits.h"
 
 // [RLVa:KB]
 #include "rlvhandler.h"

@@ -43,7 +43,7 @@
 #include "llregionhandle.h"
 #include "llresizebar.h"
 #include "lluictrlfactory.h"
-#include "hippoLimits.h"
+#include "hippolimits.h"
 #include "panelradar.h"
 
 // [RLVa:KB]

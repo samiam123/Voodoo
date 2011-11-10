@@ -289,6 +289,7 @@ void LLWLParamManager::updateShaderUniforms(LLGLSLShader * shader)
 
 void LLWLParamManager::updateShaderLinks()
 {
+#if LL_WINDOWS
 	mShaderList.clear();
 	LLViewerShaderMgr::shader_iter shaders_iter, end_shaders;
 	end_shaders = LLViewerShaderMgr::instance()->endShaders();
@@ -304,6 +305,7 @@ void LLWLParamManager::updateShaderLinks()
 			mShaderList.push_back(&(*shaders_iter));
 		}
 	}
+#endif
 }
 
 void LLWLParamManager::propagateParameters(void)
@@ -355,7 +357,7 @@ void LLWLParamManager::propagateParameters(void)
 	}
 
 	mCurParams.set("lightnorm", mLightDir);
-
+#if LL_WINDOWS
 	// bind the variables for all shaders only if we're using WindLight
 	LLViewerShaderMgr::shader_iter shaders_iter, end_shaders;
 	end_shaders = mShaderList.end();
@@ -363,7 +365,7 @@ void LLWLParamManager::propagateParameters(void)
 	{
 		shaders_iter->mUniformsDirty = TRUE;
 	}
-
+#endif
 	// get the cfr version of the sun's direction
 	LLVector3 cfrSunDir(sunDir.mV[2], sunDir.mV[0], sunDir.mV[1]);
 
@@ -414,13 +416,14 @@ void LLWLParamManager::update(LLViewerCamera * cam)
 		LLVector3 lightNorm3(mLightDir);	
 		lightNorm3 *= LLQuaternion(-(camYaw + camYawDelta), LLVector3(0.f, 1.f, 0.f));
 		mRotatedLightDir = LLVector4(lightNorm3, 0.f);
-
+#if LL_WINDOWS
 		LLViewerShaderMgr::shader_iter shaders_iter, end_shaders;
 		end_shaders = mShaderList.end();
 		for(shaders_iter = mShaderList.begin(); shaders_iter != end_shaders; ++shaders_iter)
 		{
 			shaders_iter->mUniformsDirty = TRUE;
 		}
+#endif
 	}
 }
 

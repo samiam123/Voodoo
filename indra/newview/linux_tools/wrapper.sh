@@ -97,7 +97,7 @@ cd "${RUN_PATH}"
 export SAVED_LD_LIBRARY_PATH="${LD_LIBRARY_PATH}"
 
 if [ -n "$LL_TCMALLOC" ]; then
-    tcmalloc_libs='/usr/lib/libtcmalloc.so.0 /usr/lib/libstacktrace.so.0 /lib/libpthread.so.0'
+    tcmalloc_libs='/usr/local/lib/libtcmalloc.so.0 /usr/local/lib/libstacktrace.so.0 /lib/libpthread.so.0'
     all=1
     for f in $tcmalloc_libs; do
         if [ ! -f $f ]; then
@@ -114,7 +114,7 @@ if [ -n "$LL_TCMALLOC" ]; then
     fi
 fi
 
-export VIEWER_BINARY='singularity-do-not-run-directly'
+export VIEWER_BINARY='Astra-do-not-run-directly'
 BINARY_TYPE=$(expr match "$(file -b bin/$VIEWER_BINARY)" '\(.*executable\)')
 if [ "${BINARY_TYPE}" == "ELF 64-bit LSB executable" ]; then
 	export SL_ENV='LD_LIBRARY_PATH="`pwd`"/lib64:"`pwd`"/lib32:"${LD_LIBRARY_PATH}"'
@@ -122,11 +122,12 @@ else
 	export SL_ENV='LD_LIBRARY_PATH="`pwd`"/lib:"${LD_LIBRARY_PATH}"'
 fi
 
-export SL_CMD='$LL_WRAPPER bin/$VIEWER_BINARY'
+export SL_CMD='$LL_WRAPPER ./bin/$VIEWER_BINARY'
 export SL_OPT="`cat gridargs.dat` $@"
 
 # Run the program
-eval ${SL_ENV} ${SL_CMD} ${SL_OPT} || LL_RUN_ERR=runerr
+eval ${SL_ENV} ${SL_CMD} ${SL_OPT}
+# || LL_RUN_ERR=runerr
 
 # Handle any resulting errors
 if [ -n "$LL_RUN_ERR" ]; then

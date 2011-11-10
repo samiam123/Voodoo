@@ -223,6 +223,7 @@ void LLWaterParamManager::savePreset(const std::string & name)
 
 void LLWaterParamManager::propagateParameters(void)
 {
+#if LL_WINDOWS
 	// bind the variables only if we're using shaders
 	if(gPipeline.canUseVertexShaders())
 	{
@@ -233,7 +234,7 @@ void LLWaterParamManager::propagateParameters(void)
 			shaders_iter->mUniformsDirty = TRUE;
 		}
 	}
-
+#endif
 	bool err;
 	F32 fog_density_slider = 
 		log(mCurParams.getFloat(mFogDensity.mName, err)) / 
@@ -258,6 +259,7 @@ void LLWaterParamManager::updateShaderUniforms(LLGLSLShader * shader)
 
 void LLWaterParamManager::updateShaderLinks()
 {
+#if LL_WINDOWS
 	mShaderList.clear();
 	LLViewerShaderMgr::shader_iter shaders_iter, end_shaders;
 	end_shaders = LLViewerShaderMgr::instance()->endShaders();
@@ -276,6 +278,7 @@ void LLWaterParamManager::updateShaderLinks()
 			mShaderList.push_back(&(*shaders_iter));
 		}
 	}
+#endif
 }
 
 void LLWaterParamManager::update(LLViewerCamera * cam)
@@ -332,13 +335,14 @@ void LLWaterParamManager::update(LLViewerCamera * cam)
 		}
 		sunMoonDir.normVec();
 		mWaterFogKS = 1.f/llmax(sunMoonDir.mV[2], WATER_FOG_LIGHT_CLAMP);
-
+#if LL_WINDOWS
 		LLViewerShaderMgr::shader_iter shaders_iter, end_shaders;
 		end_shaders = mShaderList.end();
 		for(shaders_iter = mShaderList.begin(); shaders_iter != end_shaders; ++shaders_iter)
 		{
 			shaders_iter->mUniformsDirty = TRUE;
 		}
+#endif
 	}
 }
 

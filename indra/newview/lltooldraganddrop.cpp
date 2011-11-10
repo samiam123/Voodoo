@@ -77,7 +77,7 @@
 // </edit>
 #include "object_flags.h"
 #include "llimview.h"
-#include "hippoLimits.h"
+#include "hippolimits.h"
 
 // [RLVa:KB] - Checked: 2010-03-04 (RLVa-1.2.0a)
 #include "rlvhandler.h"
