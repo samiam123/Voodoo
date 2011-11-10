@@ -33,9 +33,9 @@ set(llaudio_SOURCE_FILES
     llaudiodecodemgr.cpp
     llvorbisdecode.cpp
     llvorbisencode.cpp
-    llaudioengine_fmod.cpp
-    llstreamingaudio_fmod.cpp
-    lllistener_fmod.cpp
+#    llaudioengine_fmod.cpp
+#    llstreamingaudio_fmod.cpp
+#    lllistener_fmod.cpp
     )
 
 set(llaudio_HEADER_FILES
@@ -43,15 +43,15 @@ set(llaudio_HEADER_FILES
 
     llaudioengine.h
     lllistener.h
-    lllistener_fmod.h
-    llstreamingaudio_fmod.h
+#    lllistener_fmod.h
+#    llstreamingaudio_fmod.h
     llaudiodecodemgr.h
     llvorbisdecode.h
     llvorbisencode.h
     llwindgen.h
     )
 
-if (FMOD)
+if (LL_FMOD)
     list(APPEND llaudio_SOURCE_FILES
          llaudioengine_fmod.cpp
          lllistener_fmod.cpp
@@ -70,7 +70,7 @@ if (FMOD)
                                     COMPILE_FLAGS -Wno-error=write-strings)
       endif (${CXX_VERSION} MATCHES "4.[23]")
     endif (LINUX)
-endif (FMOD)
+endif (LL_FMOD)
 
 if (OPENAL)
   list(APPEND llaudio_SOURCE_FILES
