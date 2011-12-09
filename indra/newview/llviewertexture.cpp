@@ -3122,6 +3122,12 @@ void LLViewerLODTexture::processTextureStats()
 		S32 current_discard = getDiscardLevel();
 		if (sDesiredDiscardBias > 0.0f && mBoostLevel < LLViewerTexture::BOOST_SCULPTED && current_discard >= 0)
 		{
+			// SH-2516 fix.
+			if(desired_discard_bias_max <= sDesiredDiscardBias && !mForceToSaveRawImage)
+			{
+				//needs to release texture memory urgently
+				scaleDown() ;
+			}
 			// Limit the amount of GL memory bound each frame
 			if ( BYTES_TO_MEGA_BYTES(sBoundTextureMemoryInBytes) > sMaxBoundTextureMemInMegaBytes * texmem_middle_bound_scale &&
 				(!getBoundRecently() || mDesiredDiscardLevel >= mCachedRawDiscardLevel))
@@ -3133,7 +3139,6 @@ void LLViewerLODTexture::processTextureStats()
 				(!getBoundRecently() || mDesiredDiscardLevel >= mCachedRawDiscardLevel))
 			{
 				scaleDown() ;
-				
 			}
 		}
 	}
