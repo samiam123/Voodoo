@@ -96,6 +96,7 @@
       <key>register</key><string>http://secondlife.com/registration/</string>
       <key>password</key><string>http://secondlife.com/account/request.php</string>
       <key>render_compat</key><boolean>0</boolean>
+	  <key>search</key><string>http://search.secondlife.com/client_search.php?</string>
 	  <key>meshurlhelper</key><string>http://secondlife.com/my/account/mesh.php</string>
     </map>
 
@@ -109,6 +110,7 @@
       <key>register</key><string>http://secondlife.com/registration/</string>
       <key>render_compat</key><boolean>0</boolean>
       <key>support</key><string>http://secondlife.com/support/</string>
+	  <key>search</key><string>http://search.secondlife.com/client_search.php?</string>
       <key>version</key><integer>0</integer>
       <key>website</key><string>http://secondlife.com/</string>
 	  <key>meshurlhelper</key><string>http://secondlife.aditi.lindenlab.com/my/account/mesh.php</string>
