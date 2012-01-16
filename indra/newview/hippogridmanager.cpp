@@ -207,11 +207,11 @@ void HippoGridInfo::setPlatform(const std::string& platform)
 	{
 		setPlatform(PLATFORM_SECONDLIFE);
 	} 
-	else 
-	{
-		setPlatform(PLATFORM_OTHER);
-		llwarns << "Unknown platform '" << platform << "' for " << mGridName << "." << llendl;
-	}
+	//else 
+	//{
+	//	setPlatform(PLATFORM_OTHER);
+	//	llwarns << "Unknown platform '" << platform << "' for " << mGridName << "." << llendl;
+	//}
 }
 
 void HippoGridInfo::setGridName(const std::string& gridName)
@@ -560,11 +560,11 @@ const char* HippoGridInfo::getPlatformString(Platform platform)
 {
 	static const char* platformStrings[PLATFORM_LAST] = 
 	{
-		"Other", "Aurora", "OpenSim", "SecondLife"
+		"Aurora", "OpenSim", "SecondLife"
 	};
 
-	if ((platform < PLATFORM_OTHER) || (platform >= PLATFORM_LAST))
-		platform = PLATFORM_OTHER;
+	if ((platform < PLATFORM_AURORA) || (platform >= PLATFORM_LAST))
+		platform = PLATFORM_AURORA;
 	return platformStrings[platform];
 }
 
