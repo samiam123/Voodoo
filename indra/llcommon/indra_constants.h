@@ -104,7 +104,7 @@ const 	F32 	DEFAULT_AGENT_HEIGHT	= 1.9f;
 const 	F32 	MAX_AGENT_HEIGHT		= 2.45f;
 
 // For linked sets
-const S32 MAX_CHILDREN_PER_TASK = 255;
+const S32 MAX_CHILDREN_PER_TASK = 1000;
 const S32 MAX_CHILDREN_PER_PHYSICAL_TASK = 32;
 
 const S32 MAX_JOINTS_PER_OBJECT = 1;	// limiting to 1 until Havok 2.x
