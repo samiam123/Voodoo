@@ -41,7 +41,7 @@
         <key>loginpage</key>
             <string>https://www.anskygrid.ca/loginscreen/</string>
         <key>loginuri</key>
-            <string>http://login.anskygrid.ca</string>
+            <string>http://login.anskygrid.ca:8002</string>
         <key>password</key>
             <string />
         <key>platform</key>
