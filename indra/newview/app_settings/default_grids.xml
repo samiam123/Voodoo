@@ -15,19 +15,19 @@
       <key>loginuri</key>
       <string>http://aurora.4d-web.eu:8002/</string>
       <key>helperuri</key>
-      <string>http://hgexchange.com/helpers/</string>
+      <string>http://aurora.4d-web.eu:8002/</string>
       <key>loginpage</key>
       <string>http://aurora.4d-web.eu/cool/loginscreen</string>
       <key>search</key>
-      <string>http://world.4d-web.eu</string>
+      <string>http://aurora.4d-web.eu</string>
       <key>support</key>
-      <string>http://world.4d-web.eu</string>
+      <string>http://aurora.4d-web.eu/cool/index.php?page=chat</string>
       <key>website</key>
-      <string>http://world.4d-web.eu</string>
+      <string>http://aurora.4d-web.eu</string>
       <key>password</key>
-      <string>http://world.4d-web.eu</string>
+      <string>http://aurora.4d-web.eu/cool/index.php?page=forgotpass</string>
       <key>register</key>
-      <string>http://world.4d-web.eu</string>
+      <string>http://aurora.4d-web.eu/cool/index.php?page=register</string>
       <key>render_compat</key>
       <boolean>1</boolean>
     </map>
