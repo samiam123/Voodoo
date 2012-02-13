@@ -22,7 +22,8 @@ class HippoGridInfo
 {
 public:
 	enum Platform {
-		PLATFORM_AURORA = 0,
+		//PLATFORM_AURORA=0,
+		PLATFORM_AURORA,
 		PLATFORM_OPENSIM,
 		PLATFORM_SECONDLIFE,
 		PLATFORM_OTHER,
@@ -38,6 +39,7 @@ public:
 
 	Platform           getPlatform();
 	bool isOpenSimulator() const;
+	bool isAurora() const;
 	bool isSecondLife() const;
 	const std::string& getGridName()        const;
 	const std::string& getGridOwner()       const;	

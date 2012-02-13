@@ -877,7 +877,8 @@ void LLTextureFetchWorker::setupPacketData()
 
 U32 LLTextureFetchWorker::calcWorkPriority()
 {
-// 	llassert_always(mImagePriority >= 0 && mImagePriority <= LLViewerTexture::maxDecodePriority());
+// uncommented to see what this does below 1 ln sams voodoo	NOT USED
+//	llassert_always(mImagePriority >= 0 && mImagePriority <= LLViewerTexture::maxDecodePriority());
 	static const F32 PRIORITY_SCALE = (F32)LLWorkerThread::PRIORITY_LOWBITS / LLViewerFetchedTexture::maxDecodePriority();
 	mWorkPriority = llmin((U32)LLWorkerThread::PRIORITY_LOWBITS, (U32)(mImagePriority * PRIORITY_SCALE));
 	return mWorkPriority;
@@ -1377,6 +1378,8 @@ bool LLTextureFetchWorker::doWork(S32 param)
 					//roll back to try UDP
 					if(mCanUseNET)
 					{
+						// added one line below sams voodoo
+						resetFormattedData();
 						mState = INIT ;
 						mCanUseHTTP = false ;
 						setPriority(LLWorkerThread::PRIORITY_HIGH | mWorkPriority);
@@ -1926,7 +1929,7 @@ void LLTextureFetchWorker::callbackDecoded(bool success, LLImageRaw* raw, LLImag
 			LL_WARNS("Texture") << "DECODE FAILED: id = " << mID << ", mFormattedImage is Null!" << LL_ENDL;
 		}
 		removeFromCache();
-		mDecodedDiscard = -1; // Redundant, here for clarity and paranoia
+		//mDecodedDiscard = -1; // Redundant, here for clarity and paranoia
 	}
 	mDecoded = TRUE;
 // 	llinfos << mID << " : DECODE COMPLETE " << llendl;
@@ -2509,7 +2512,7 @@ void LLTextureFetch::sendRequestListToSimulators()
 			req->mLastPacket >= req->mTotalPackets-1)
 		{
 			// We have all the packets... make sure this is high priority
-// 			req->setPriority(LLWorkerThread::PRIORITY_HIGH | req->mWorkPriority);
+ 			req->setPriority(LLWorkerThread::PRIORITY_HIGH | req->mWorkPriority);
 			continue;
 		}
 		F32 elapsed = req->mRequestedTimer.getElapsedTimeF32();

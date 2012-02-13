@@ -5,14 +5,16 @@
 #include "hippogridmanager.h"
 
 #include <cctype>
-
+#include <climits>
+#include <cstring>
+#include <algorithm>
 #include <stdtypes.h>
-#include <lldir.h>
-#include <lleconomy.h>
-#include <llerror.h>
-#include <llfile.h>
-#include <llhttpclient.h>
-#include <llsdserialize.h>
+#include "lldir.h"
+#include "lleconomy.h"
+#include "llerror.h"
+#include "llfile.h"
+#include "llhttpclient.h"
+#include "llsdserialize.h"
 #include "lltrans.h"
 #include "llviewercontrol.h"
 #include "llweb.h"
@@ -40,7 +42,9 @@ HippoGridInfo HippoGridInfo::FALLBACK_GRIDINFO("");
 // Initialize
 
 HippoGridInfo::HippoGridInfo(const std::string& gridName) :
-	mPlatform(PLATFORM_AURORA),
+ //HippoGridInfo::HippoGridInfo(const std::string &gridNick) :
+//{
+    mPlatform(PLATFORM_OTHER),
 	mGridName(gridName),
 	mLoginUri(LLStringUtil::null),
 	mLoginPage(LLStringUtil::null),
@@ -63,8 +67,14 @@ HippoGridInfo::HippoGridInfo(const std::string& gridName) :
 	mCurrencySymbol("OS$"),
 	mRealCurrencySymbol("US$"),
 	mDirectoryFee(30)
-{
-}
+	{
+	}
+//void HippoGridInfo::setPlatform(Platform platform)
+//{
+//	mPlatform = platform;
+//	if (mPlatform == PLATFORM_SECONDLIFE) mCurrencySymbol = "L$";
+//}
+
 
 
 // ********************************************************************
@@ -72,7 +82,8 @@ HippoGridInfo::HippoGridInfo(const std::string& gridName) :
 
 HippoGridInfo::Platform HippoGridInfo::getPlatform()
 {
-	return mPlatform;
+    return mPlatform;
+   //mPlatform = platform;
 }
 
 bool HippoGridInfo::isOpenSimulator() const
@@ -84,6 +95,14 @@ bool HippoGridInfo::isSecondLife() const
 {
 	return (mPlatform == HippoGridInfo::PLATFORM_SECONDLIFE);
 }
+bool HippoGridInfo::isAurora() const
+{
+	return (mPlatform == HippoGridInfo::PLATFORM_AURORA);
+}
+//bool HippoGridInfo::isOther() const
+//{
+//	return (mPlatform == HippoGridInfo::PLATFORM_OTHER);
+//}
 
 const std::string& HippoGridInfo::getGridName() const
 {
@@ -186,6 +205,10 @@ void HippoGridInfo::setPlatform(Platform platform)
 	{
 		mCurrencySymbol = "L$";
 	}
+	else if (mPlatform == PLATFORM_AURORA)
+	{
+        mCurrencySymbol = "A$";
+	}
 }
 
 
@@ -198,6 +221,7 @@ void HippoGridInfo::setPlatform(const std::string& platform)
 	if (tmp == "aurora") 
 	{
 		setPlatform(PLATFORM_AURORA);
+
 	} 
 	else if (tmp == "opensim") 
 	{
@@ -208,7 +232,7 @@ void HippoGridInfo::setPlatform(const std::string& platform)
 		setPlatform(PLATFORM_SECONDLIFE);
 	} 
 	else 
-	{
+    {
 		setPlatform(PLATFORM_OTHER);
 		llwarns << "Unknown platform '" << platform << "' for " << mGridName << "." << llendl;
 	}
@@ -353,7 +377,7 @@ std::string HippoGridInfo::getSearchUrl(SearchType ty, bool is_web) const
 				return "";
 			}
 		}
-		else
+		else if (mPlatform == PLATFORM_OPENSIM)
 		{
 			// OpenSim and other web search defaults
 			if (ty == SEARCH_ALL_EMPTY) 
@@ -373,9 +397,10 @@ std::string HippoGridInfo::getSearchUrl(SearchType ty, bool is_web) const
 				llinfos << "Illegal search URL type " << ty << llendl;
 				return "";
 			}
-		} 
+		}
+		return "";
 	}
-	else 
+	else if (mPlatform == PLATFORM_AURORA)
 	{
         // Use the old search all
         if (ty == SEARCH_ALL_EMPTY) 
@@ -396,6 +421,7 @@ std::string HippoGridInfo::getSearchUrl(SearchType ty, bool is_web) const
             return "";
         }
     }
+	return "";
 }
 
 
@@ -560,26 +586,29 @@ const char* HippoGridInfo::getPlatformString(Platform platform)
 {
 	static const char* platformStrings[PLATFORM_LAST] = 
 	{
-		"Other", "Aurora", "OpenSim", "SecondLife"
+		"Aurora", "OpenSim", "SecondLife", "Other"
 	};
-
-	if ((platform < PLATFORM_OTHER) || (platform >= PLATFORM_LAST))
-		platform = PLATFORM_OTHER;
+    if ((platform < PLATFORM_AURORA) || (platform >= PLATFORM_LAST)) 
+        platform = PLATFORM_AURORA;
 	return platformStrings[platform];
+
+	//if ((platform < PLATFORM_OTHER) || (platform >= PLATFORM_LAST))
+	//	platform = PLATFORM_OTHER;
+      //  return platformStrings[platform];
 }
 
 // static
 std::string HippoGridInfo::sanitizeUri(std::string &uri)
 {
-	// if (uri.empty()) {
-	// 	return "";
-	// }
+	 if (uri.empty()) {
+	 	return "";
+	 }
 
 	// // If last character in uri is not "/"
 	// // NOTE: This wrongly assumes that all URIs should end with "/"!
-	// if (uri.compare(uri.length()-1, 1, "/") != 0) {
-	// 	return uri + '/';
-	// }
+	 if (uri.compare(uri.length()-1, 1, "/") != 0) {
+	 	return uri + '/';
+	 }
 
 	return uri;
 }
@@ -763,9 +792,9 @@ void HippoGridManager::setDefaultGrid(const std::string& grid)
 	{
 		mDefaultGrid = grid;
 	} 
-	else if (mGridInfo.find("Nova...Powered by Aurora-Sim") != mGridInfo.end()) 
+	else if (mGridInfo.find("Nova") != mGridInfo.end()) 
 	{
-		mDefaultGrid = "Nova...Powered by Aurora-Sim";
+		mDefaultGrid = "Nova";
 	} 
 	else if (!mGridInfo.empty()) 
 	{
@@ -942,7 +971,8 @@ void HippoGridManager::saveFile()
 	for (it = mGridInfo.begin(); it != end; ++it, i++) 
 	{
 		HippoGridInfo* grid = it->second;
-		gridInfo[i]["platform"] = HippoGridInfo::getPlatformString(grid->getPlatform());
+		//gridInfo[i]["platform"] = HippoGridInfo::getPlatformString(grid->getPlatform());
+		gridInfo[i]["platform"] = grid->getPlatform();
 		gridInfo[i]["gridname"] = grid->getGridName();
 		gridInfo[i]["loginuri"] = grid->getLoginUri();
 		gridInfo[i]["loginpage"] = grid->getLoginPage();

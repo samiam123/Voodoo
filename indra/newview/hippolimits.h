@@ -30,7 +30,7 @@ public:
 	bool  mAllowMinimap;
 	bool  mAllowPhysicalPrims;
 	bool  mRenderWater;
-
+    void setAuroraLimits();
 	void setOpenSimLimits();
 	void setSecondLifeLimits();
 };

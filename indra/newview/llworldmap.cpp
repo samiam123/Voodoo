@@ -47,7 +47,7 @@
 #include "llviewertexturelist.h"
 #include "llviewerregion.h"
 #include "llregionflags.h"
- #include "hippogridmanager.h"
+#include "hippogridmanager.h"
 bool LLWorldMap::sGotMapURL =  false;
 const F32 AGENTS_UPDATE_TIMER = 60.0;			// Seconds between 2 agent requests for a region
 const F32 REQUEST_ITEMS_TIMER =  10.f * 60.f; // 10 minutes
@@ -633,8 +633,13 @@ void LLWorldMap::processMapLayerReply(LLMessageSystem* msg, void**)
 // public static
 bool LLWorldMap::useWebMapTiles()
 {
+	//if(useWebMapTiles()== 1)
 	return gSavedSettings.getBOOL("UseWebMapTiles") &&
 		   (( gHippoGridManager->getConnectedGrid()->isSecondLife() || sGotMapURL) && LLWorldMap::getInstance()->mCurrentMap == 0);
+	//else
+
+    //return gSavedSettings.getBOOL("UseWebMapTiles") &&
+		  // (( gHippoGridManager->getConnectedGrid()->isAurora() || sGotMapURL) && LLWorldMap::getInstance()->mCurrentMap == 0);
 }
 
 // public static

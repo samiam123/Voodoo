@@ -348,11 +348,14 @@ void LLWorldMapView::draw()
 	gGL.setAlphaRejectSettings(LLRender::CF_DEFAULT);
 	gGL.setColorMask(true, true);
 	gGL.setSceneBlendType(LLRender::BT_ALPHA);
-
-	if(gHippoGridManager->getConnectedGrid()->isSecondLife())
+// Prob dont need to do this check for platform but mipmap displays warp3d maps right on aurora Sams voodo
+	//if(gHippoGridManager->getConnectedGrid()->isSecondLife())
 		drawMipmap(width, height);
-	else
-		drawTiles(width, height);
+	//else if(gHippoGridManager->getConnectedGrid()->isAuora())
+		//drawMipmap(width, height);
+	//else
+		//drawMipmap(width, height);
+		//drawTiles(width, height);
 	gGL.flush();	
 	LLFontGL* font = LLFontGL::getFontSansSerifSmall();
 

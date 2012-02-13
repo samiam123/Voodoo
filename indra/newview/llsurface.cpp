@@ -654,7 +654,8 @@ BOOL LLSurface::idleUpdate(F32 max_update_time)
 		LLSurfacePatch *patchp = *curiter;
 		patchp->updateNormals();
 		patchp->updateVerticalStats();
-		if (max_update_time == 0.f || update_timer.getElapsedTimeF32() < max_update_time)
+		// was 0 trying 1 to see sams voodoo dident seem to care
+		if (max_update_time == 1.f || update_timer.getElapsedTimeF32() < max_update_time)
 		{
 			if (patchp->updateTexture())
 			{

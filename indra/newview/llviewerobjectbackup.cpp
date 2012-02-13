@@ -395,21 +395,24 @@ void LLObjectBackup::exportObject_continued(AIFilePicker* filepicker)
 
 bool LLObjectBackup::validatePerms(const LLPermissions *item_permissions)
 {
-	/*if (gHippoGridManager->getConnectedGrid()->isSecondLife())
-	{
-		 In Second Life, you must be the creator to be permitted to export the asset.
-		return (gAgent.getID() == item_permissions->getOwner() &&
-				gAgent.getID() == item_permissions->getCreator());
-	}
-	else
-	{
-		 Out of Second Life, simply check that the asset is full perms.*/
-		return (gAgent.getID() == item_permissions->getOwner() && gAgent.getID() == item_permissions->getCreator() &&
-				(item_permissions->getMaskOwner() & PERM_ITEM_UNRESTRICTED) == PERM_ITEM_UNRESTRICTED);
+	//if (!gHippoGridManager->getConnectedGrid()->isSecondLife())
+	//{
+		 //In Second Life, you must be the creator to be permitted to export the asset.
+		//return (gAgent.getID() == item_permissions->getOwner() &&
+		//		gAgent.getID() == item_permissions->getCreator());
+	//}
+	//else
+	//{
+		
+		//if (gHippoGridManager->getConnectedGrid()->isAurora())
+		 //Out of Second Life, simply check that the asset is full perms.
+		return (gAgent.getID() == item_permissions->getOwner() && 
+		//gAgent.getID() == item_permissions->getCreator() &&
+		(item_permissions->getMaskOwner() & PERM_ITEM_UNRESTRICTED) == PERM_ITEM_UNRESTRICTED);
 	//}
 }
 
-// So far, only Second Life forces TPVs to verify the creator for textures...
+// So far, only Second Life forces TPVs to verify the creator for textures....
 // which sucks, because there is no other way to check for the texture
 // permissions or creator than to try and find the asset(s) corresponding to
 // the texture in the inventory and check the permissions/creator on the said
@@ -771,7 +774,7 @@ void LLObjectBackup::exportNextTexture()
 		if (imagep != NULL)
 		{
 			S32 cur_discard = imagep->getDiscardLevel();
-			if (cur_discard > 0)
+			//if (cur_discard > 1)
 			{
 				if (imagep->getBoostLevel() != LLViewerTexture::BOOST_PREVIEW)
 				{
@@ -779,7 +782,7 @@ void LLObjectBackup::exportNextTexture()
 					imagep->setBoostLevel(LLViewerTexture::BOOST_PREVIEW);
 				}
 			}
-			else
+			//else
 			{
 				break;
 			}

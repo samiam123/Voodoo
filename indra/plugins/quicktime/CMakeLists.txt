@@ -30,7 +30,7 @@ if (DARWIN)
     find_library(CARBON_LIBRARY Carbon)
 endif (DARWIN)
 
-### media_plugin_quicktime
+#### media_plugin_quicktime
 
 set(media_plugin_quicktime_SOURCE_FILES
     media_plugin_quicktime.cpp

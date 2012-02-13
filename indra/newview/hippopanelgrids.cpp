@@ -139,9 +139,10 @@ BOOL HippoPanelGridsImpl::postBuild()
 	
 	LLComboBox *platform = getChild<LLComboBox>("platform");
 	platform->removeall();
-	for (int p=HippoGridInfo::PLATFORM_OTHER; p<HippoGridInfo::PLATFORM_LAST; p++)
-		platform->add(HippoGridInfo::getPlatformString(static_cast<HippoGridInfo::Platform>(p)));
-	
+	//for (int p=HippoGridInfo::PLATFORM_OTHER; p<HippoGridInfo::PLATFORM_LAST; p++)
+		//platform->add(HippoGridInfo::getPlatformString(static_cast<HippoGridInfo::Platform>(p)));
+	for (int p=HippoGridInfo::PLATFORM_AURORA; p<HippoGridInfo::PLATFORM_LAST; p++)
+	platform->add(HippoGridInfo::getPlatformString(static_cast<HippoGridInfo::Platform>(p)));
 	childSetAction("btn_delete", onClickDelete, this);
 	childSetAction("btn_add", onClickAdd, this);
 	childSetAction("btn_copy", onClickCopy, this);
@@ -264,6 +265,8 @@ void HippoPanelGridsImpl::loadCurGrid()
 		std::string empty = "";
 		LLComboBox *platform = getChild<LLComboBox>("platform");
 		if (platform) platform->setCurrentByIndex(HippoGridInfo::PLATFORM_OTHER);
+		else if (platform) platform->setCurrentByIndex(HippoGridInfo::PLATFORM_AURORA);
+		for (int p=HippoGridInfo::PLATFORM_AURORA; p<HippoGridInfo::PLATFORM_LAST; p++)
 		childSetText("gridname", empty);
 		childSetText("loginuri", empty);
 		childSetText("loginpage", empty);
@@ -395,8 +398,10 @@ void HippoPanelGridsImpl::retrieveGridInfo()
 	}
 	
 	grid->setLoginUri(loginuri);
-	if (grid->retrieveGridInfo()) {
-		if (grid->getPlatform() != HippoGridInfo::PLATFORM_OTHER)
+	if (grid->retrieveGridInfo())
+	{
+		//if (grid->getPlatform() != HippoGridInfo::PLATFORM_OTHER)
+		if (grid->getPlatform() != "")
 			getChild<LLComboBox>("platform")->setCurrentByIndex(grid->getPlatform());
 		if (grid->getGridName() != "") childSetText("gridname", grid->getGridName());
 		if (grid->getLoginUri() != "") childSetText("loginuri", grid->getLoginUri());

@@ -3132,6 +3132,7 @@ void LLViewerObject::boostTexturePriority(BOOL boost_children /* = TRUE */)
 	for (i = 0; i < tex_count; i++)
 	{
  		getTEImage(i)->setBoostLevel(LLViewerTexture::BOOST_SELECTED);
+		//if (imagep != NULL)
 	}
 
 

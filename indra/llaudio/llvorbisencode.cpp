@@ -400,7 +400,7 @@ S32 encode_vorbis_file(const std::string& in_fname, const std::string& out_fname
 			 {
 				 if (bytes_per_sample == 2)
 				 {
-					 /* uninterleave samples */
+					 /* //uninterleave samples */
 					 for(i=0; i<samples ;i++)
 					 {
 					 	 temp =  ((signed char *)readbuffer)[i*4+1];	/*Flawfinder: ignore*/
