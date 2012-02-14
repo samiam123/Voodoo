@@ -564,7 +564,13 @@ void LLPreviewGesture::addModifiers()
 	combo->add( CTRL_LABEL,  ADD_BOTTOM );
 	combo->setCurrentByIndex(0);
 }
-
+ // singu patch added to allow for most any key for gestures sams voodoo
+static const std::string valid_key_to_string(KEY key) 
+{ 
+std::string skey(1,(char)key); 
+std::string strkey = LLKeyboard::stringFromKey(key); 
+   return ((skey == strkey && key >= ' ' && key <= '~') || (skey != strkey) ) ? strkey : "";
+}
 void LLPreviewGesture::addKeys()
 {
 	LLComboBox* combo = mKeyCombo;
@@ -573,12 +579,18 @@ void LLPreviewGesture::addKeys()
 
 	// <edit>
 	//define for the lulz
-#define addKey(k) combo->add( LLKeyboard::stringFromKey(k), ADD_BOTTOM );
-	for (KEY key = KEY_F2; key <= KEY_F12; key++)
-		addKey(key)
-	for (KEY key = ' '; key <= '~'; key++)
-		addKey(key)
+//#define addKey(k) combo->add( LLKeyboard::stringFromKey(k), ADD_BOTTOM );
+//	for (KEY key = KEY_F2; key <= KEY_F12; key++)
+//		addKey(key)
+//	for (KEY key = ' '; key <= '~'; key++)
+//		addKey(key)
 	// </edit>
+	for (KEY key = ' '; key < KEY_NONE; key++) 
+  {
+    std::string keystr = valid_key_to_string(key); 
+    if(keystr != "")combo->add( keystr, ADD_BOTTOM ); 
+  }
+//-------------------------------------------------------------------------------
 	combo->setCurrentByIndex(0);
 }
 

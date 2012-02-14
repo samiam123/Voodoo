@@ -32,9 +32,7 @@
 
 #include "linden_common.h"
 #include <iostream>
-
 #include "llsaleinfo.h"
-
 #include "llerror.h"
 #include "message.h"
 #include "llsdutil.h"
