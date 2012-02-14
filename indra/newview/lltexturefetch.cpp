@@ -1378,7 +1378,7 @@ bool LLTextureFetchWorker::doWork(S32 param)
 					//roll back to try UDP
 					if(mCanUseNET)
 					{
-						// added one line below sams voodoo
+						// singu attempt at preventing borked texturedata on fetch fallback added one line below sams voodoo
 						resetFormattedData();
 						mState = INIT ;
 						mCanUseHTTP = false ;
