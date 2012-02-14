@@ -2291,13 +2291,22 @@ void LLViewerFetchedTexture::pauseLoadedCallbacks(const LLLoadedCallbackEntry::s
 
 bool LLViewerFetchedTexture::doLoadedCallbacks()
 {
-	static const F32 MAX_INACTIVE_TIME = 120.f ; //seconds
+	// changed this value expermentaly lower is faster, sl has it at 900 .. ick  sams voodoo
+	static const F32 MAX_INACTIVE_TIME = 8.f ; //seconds
 
 	if (mNeedsCreateTexture)
 	{
 		return false;
 	}
-	if(sCurrentTime - mLastCallBackActiveTime > MAX_INACTIVE_TIME)
+	// Nahh lets not this makes for a big delay for everything and isant a fix sams voodoo
+	//if(sCurrentTime - mLastCallBackActiveTime > MAX_INACTIVE_TIME)
+    if (mPauseLoadedCallBacks)
+    {
+    destroyRawImage();
+    return false; //paused
+    }
+    if (sCurrentTime - mLastCallBackActiveTime > MAX_INACTIVE_TIME && !mIsFetching)
+    // ------------------------------------------------------------------------------------
 	{
 		clearCallbackEntryList() ; //remove all callbacks.
 		return false ;
@@ -2320,11 +2329,13 @@ bool LLViewerFetchedTexture::doLoadedCallbacks()
 
 		// Remove ourself from the global list of textures with callbacks
 		gTextureList.mCallbackList.erase(this);
-	}
-	if(mPauseLoadedCallBacks)
-	{
-		destroyRawImage();
-		return res; //paused
+		// Nahh this is wacky to.. chop chop sams voodoo
+	    //}
+	    //if(mPauseLoadedCallBacks)
+	    //{
+	    //	destroyRawImage();
+	    //	return res; //paused
+        return false ;
 	}
 
 	S32 gl_discard = getDiscardLevel();

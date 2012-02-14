@@ -774,7 +774,7 @@ void LLObjectBackup::exportNextTexture()
 		if (imagep != NULL)
 		{
 			S32 cur_discard = imagep->getDiscardLevel();
-			//if (cur_discard > 1)
+			if (cur_discard > 1)
 			{
 				if (imagep->getBoostLevel() != LLViewerTexture::BOOST_PREVIEW)
 				{
@@ -782,7 +782,7 @@ void LLObjectBackup::exportNextTexture()
 					imagep->setBoostLevel(LLViewerTexture::BOOST_PREVIEW);
 				}
 			}
-			//else
+			else
 			{
 				break;
 			}
@@ -834,10 +834,17 @@ void LLObjectBackup::importObject_continued(AIFilePicker* filepicker)
 	std::string file_name = filepicker->getFilename();	
 	mFolder = gDirUtilp->getDirName(file_name);
 	llifstream import_file(file_name);
-	LLSDSerialize::fromXML(mLLSD, import_file);
+	// Bug fix if the xml file is bad sams voodoo
+	//LLSDSerialize::fromXML(mLLSD, import_file);
+	S32 status = LLSDSerialize::fromXML(mLLSD, import_file);
 	import_file.close();
 	show(false);
-
+    if (LLSDParser::PARSE_FAILURE == status)
+    {
+    llwarns << "invalid xml file." << llendl;
+    return;
+    }
+	//----------------------------------------------------
 	mAgentPos = gAgent.getPositionAgent();
 	mAgentRot = LLQuaternion(gAgent.getAtAxis(), gAgent.getLeftAxis(), gAgent.getUpAxis());
 
