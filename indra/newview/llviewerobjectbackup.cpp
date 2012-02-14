@@ -834,11 +834,11 @@ void LLObjectBackup::importObject_continued(AIFilePicker* filepicker)
 	std::string file_name = filepicker->getFilename();	
 	mFolder = gDirUtilp->getDirName(file_name);
 	llifstream import_file(file_name);
-	LLSDSerialize::fromXML(mLLSD, import_file);
+	// Bug fix if the xml file is bad sams voodoo
+	//LLSDSerialize::fromXML(mLLSD, import_file);
+	S32 status = LLSDSerialize::fromXML(mLLSD, import_file);
 	import_file.close();
 	show(false);
-	// Bug fix if the xml file is bad sams voodoo
-    S32 status = LLSDSerialize::fromXML(mLLSD, import_file);
     if (LLSDParser::PARSE_FAILURE == status)
     {
     llwarns << "invalid xml file." << llendl;
