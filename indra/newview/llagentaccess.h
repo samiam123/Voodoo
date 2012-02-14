@@ -72,7 +72,7 @@ public:
 	void setTransition();	// sets the transition bit, which defaults to false
 	bool isInTransition() const;
 	
-private:
+public:
 	U8 mAccess;	// SIM_ACCESS_MATURE etc
 	U8 mGodLevel;
 	bool mAdminOverride;

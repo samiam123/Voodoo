@@ -348,7 +348,7 @@ void LLWorldMapView::draw()
 	gGL.setAlphaRejectSettings(LLRender::CF_DEFAULT);
 	gGL.setColorMask(true, true);
 	gGL.setSceneBlendType(LLRender::BT_ALPHA);
-// Prob dont need to do this check for platform but mipmap displays warp3d maps right on aurora Sams voodo
+// Prob dont need to do this check for platform but mipmap displays warp3d maps right on aurora Sams voodoo
 	//if(gHippoGridManager->getConnectedGrid()->isSecondLife())
 		drawMipmap(width, height);
 	//else if(gHippoGridManager->getConnectedGrid()->isAuora())
@@ -399,14 +399,14 @@ void LLWorldMapView::draw()
 		}
 		else if (sMapScale < sThresholdB)
 		{
-			//	mesg = llformat( info->mAgents);
+				//mesg = llformat( info->mAgents);
 		}
 		else
 		{
 			//mesg = llformat("%d / %s (%s)",
-			//			info->mAgents,
-			//			info->mName.c_str(),
-			//			LLViewerRegion::accessToShortString(info->mAccess).c_str() );
+					//	info->mAgents,
+					//	info->mName.c_str(),
+					//	LLViewerRegion::accessToShortString(info->mAccess).c_str() );
 			// [RLVa:KB] - Alternate: Snowglobe-1.2.4 | Checked: 2009-07-04 (RLVa-1.0.0a)
 			if (gRlvHandler.hasBehaviour(RLV_BHVR_SHOWLOC))
 			{
@@ -569,7 +569,7 @@ void LLWorldMapView::draw()
 	{
 		if (LLWorldMap::getInstance()->mInvalidLocation)
 		{
-			// We know this location to be invalid
+			// We know this location to be invalid so dont
 			LLColor4 loading_color(0.0, 0.5, 1.0, 1.0);
 			drawTracking( LLWorldMap::getInstance()->mUnknownLocation, loading_color, TRUE, "Invalid Location", "");
 		}

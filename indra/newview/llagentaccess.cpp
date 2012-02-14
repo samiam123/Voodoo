@@ -40,7 +40,7 @@ LLAgentAccess::LLAgentAccess(LLControlGroup& savedSettings) :
 	mAccess(SIM_ACCESS_PG),
 	mAdminOverride(false),
 	mGodLevel(GOD_NOT),
-	mAOTransition(false)
+	mAOTransition(true)
 {
 }
 
