@@ -3708,6 +3708,14 @@ void LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, std::
 			{ //paranoia check to make sure GL doesn't try to read non-existant normals
 				fullbright = TRUE;
 			}
+			// added so ppl can have fb huds sams voodoo
+			// well maby line below was if (hud_group) will see
+			//sadly this makes every thing in the hud FB so ill put it back for now
+           // if (group)
+    		//	{ //all hud attachments are fullbright
+     		//		fullbright = TRUE;
+    		//	}
+			//-----------------------------------------
 
 			const LLTextureEntry* te = facep->getTextureEntry();
 
@@ -3740,6 +3748,7 @@ void LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, std::
 				}
 			}
 			else if (gPipeline.canUseVertexShaders()
+				// comment out 1 line below fb hud thing sams voodooo
 				&& group->mSpatialPartition->mPartitionType != LLViewerRegion::PARTITION_HUD 
 				&& LLPipeline::sRenderBump 
 				&& te->getShiny())
@@ -3806,8 +3815,14 @@ void LLVolumeGeometryManager::genDrawInfo(LLSpatialGroup* group, U32 mask, std::
 				}
 				
 				//not sure why this is here -- shiny HUD attachments maybe?  -- davep 5/11/2010
+				// cuz it is there now sams voodoo well part of it anyway reverted for now
 				if (!is_alpha && te->getShiny() && LLPipeline::sRenderBump)
 				{
+				//if (!gPipeline.canUseVertexShaders() && 
+    				//	!is_alpha && 
+    				//	te->getShiny() && 
+    				//	LLPipeline::sRenderBump)
+    				//{ //shiny as an extra pass when shaders are disabled
 					registerFace(group, facep, LLRenderPass::PASS_SHINY);
 				}
 			}

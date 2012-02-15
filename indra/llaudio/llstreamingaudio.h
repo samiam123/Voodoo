@@ -41,7 +41,6 @@ class LLStreamingAudioInterface
 {
  public:
 	virtual ~LLStreamingAudioInterface() {}
-
 	virtual void start(const std::string& url) = 0;
 	virtual void stop() = 0;
 	virtual void pause(int pause) = 0;
@@ -51,6 +50,10 @@ class LLStreamingAudioInterface
 	virtual void setGain(F32 vol) = 0;
 	virtual F32 getGain() = 0;
 	virtual std::string getURL() = 0;
+	// These three are Phoenix additions and thus optional.
+	virtual bool hasNewMetadata() { return false; }
+	virtual std::string getCurrentArtist() { return NULL; }
+	virtual std::string getCurrentTitle() { return NULL; }
 };
 
 #endif // LL_STREAMINGAUDIO_H

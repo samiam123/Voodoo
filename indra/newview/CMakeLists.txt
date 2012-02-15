@@ -543,6 +543,7 @@ set(viewer_SOURCE_FILES
     rlvfloaterbehaviour.cpp
     rlvviewer2.cpp
 	shcommandhandler.cpp
+	streamtitledisplay.cpp
     )
 
 # This gets renamed in the packaging step
@@ -1049,6 +1050,7 @@ set(viewer_HEADER_FILES
     rlvfloaterbehaviour.h
     rlvviewer2.h
     shcommandhandler.h
+    streamtitledisplay.h
     )
 
 source_group("CMake Rules" FILES ViewerInstall.cmake)

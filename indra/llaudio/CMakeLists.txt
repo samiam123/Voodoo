@@ -44,6 +44,7 @@ set(llaudio_HEADER_FILES
     llaudioengine.h
     lllistener.h
     lllistener_fmod.h
+    llstreamingaudio.h
     llstreamingaudio_fmod.h
     llaudiodecodemgr.h
     llvorbisdecode.h
