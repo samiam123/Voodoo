@@ -455,9 +455,9 @@ void LLWorldMapView::draw()
 			
 			// If map texture is still loading,
 			// display "Loading" placeholder text.
-			/*if ((simimage != NULL) &&
-				simimage->getDiscardLevel() != 1 &&
-				simimage->getDiscardLevel() != 0)
+			/* if ((SimImage != NULL) &&
+				SimImage->getDiscardLevel() != 1 &&
+				SimImage->getDiscardLevel() != 0)
 			{
 				font->renderUTF8(
 						sStringsMap["loading"], 0,
