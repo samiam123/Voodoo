@@ -71,14 +71,17 @@ public:
 	std::string getCurrentArtist();
 	std::string getCurrentTitle();
 
-	const std::string& getURL() 	{ return mInternetStreamURL; }
+const std::string& getURL()
+	{
+	 return mInternetStreamURL;
+	}
 
 	int getOpenState();
 protected:
 	static signed char F_CALLBACKAPI metadataCallback(char *name, char *value, void *userdata);
 	FSOUND_STREAM* mInternetStream;
 	bool mReady;
-
+    //more work needed somthings missing
 	std::string mInternetStreamURL;
 	std::string mArtist;
 	std::string mTitle;
