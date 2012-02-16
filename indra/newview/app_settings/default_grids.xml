@@ -15,19 +15,19 @@
       <key>loginuri</key>
       <string>http://aurora.4d-web.eu:8002/</string>
       <key>helperuri</key>
-      <string>http://hgexchange.com/helpers/</string>
+      <string>http://aurora.4d-web.eu:8002/</string>
       <key>loginpage</key>
       <string>http://aurora.4d-web.eu/cool/loginscreen</string>
       <key>search</key>
-      <string>http://world.4d-web.eu</string>
+      <string>http://aurora.4d-web.eu</string>
       <key>support</key>
-      <string>http://world.4d-web.eu</string>
+      <string>http://aurora.4d-web.eu/cool/index.php?page=chat</string>
       <key>website</key>
-      <string>http://world.4d-web.eu</string>
+      <string>http://aurora.4d-web.eu</string>
       <key>password</key>
-      <string>http://world.4d-web.eu</string>
+      <string>http://aurora.4d-web.eu/cool/index.php?page=forgotpass</string>
       <key>register</key>
-      <string>http://world.4d-web.eu</string>
+      <string>http://aurora.4d-web.eu/cool/index.php?page=register</string>
       <key>render_compat</key>
       <boolean>1</boolean>
     </map>
@@ -37,23 +37,23 @@
         <key>gridnick</key>
             <string>ansky</string>
         <key>helperuri</key>
-            <string>http://grid.ansky.ca</string>
+            <string>http://login.anskygrid.ca</string>
         <key>loginpage</key>
-            <string>https://grid.ansky.ca/loginscreen/</string>
+            <string>https://www.anskygrid.ca/loginscreen/</string>
         <key>loginuri</key>
-            <string>http://grid.ansky.ca</string>
+            <string>http://login.anskygrid.ca:8002</string>
         <key>password</key>
             <string />
         <key>platform</key>
             <string>OpenSim</string>
         <key>register</key>
-            <string>https://grid.ansky.ca/index.php?page=register</string>
+            <string>https://www.anskygrid.ca/index.php?page=register</string>
         <key>render_compat</key>
             <boolean>0</boolean>
         <key>search</key>
             <string />
         <key>support</key>
-            <string />
+            <string>http://anskygrid.ca/index.php?page=chat</string>
         <key>website</key>
             <string>http://www.ansky.ca/</string>
         </map>
