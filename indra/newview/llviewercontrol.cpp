@@ -451,7 +451,11 @@ static bool handleRenderUseFBOChanged(const LLSD& newvalue)
 	{
 		gPipeline.releaseGLBuffers();
 		gPipeline.createGLBuffers();
-		if (LLPipeline::sRenderDeferred && LLRenderTarget::sUseFBO)
+		// Some hoodoo for sams voodoo Turning off Lights and Shadows disables Glow - by Bao Linden
+		// added vertex reset line below and the above patch
+		gPipeline.resetVertexBuffers();
+		//if (LLPipeline::sRenderDeferred && LLRenderTarget::sUseFBO)
+        if (LLPipeline::sRenderDeferred == (BOOL)LLRenderTarget::sUseFBO)
 		{
 			LLViewerShaderMgr::instance()->setShaders();
 		}

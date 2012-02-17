@@ -60,6 +60,9 @@ F32 const LLMaterialTable::FRICTION_RUBBER 	= 0.9f; 	//
 F32 const LLMaterialTable::FRICTION_MAX 	= 0.95f; 	//
 */
 
+// Note to selph aurora uses ODE not the same as Havok, these values may not be the same
+// and possably a good place to add in a platform det subset of these.
+
 // #if LL_CURRENT_HAVOK_VERSION == LL_HAVOK_VERSION_460
 // Havok4 has more correct friction dynamics, however here we have to use
 // the "incorrect" equivalents for the legacy Havok1 behavior
@@ -84,8 +87,8 @@ F32 const LLMaterialTable::RESTITUTION_METAL 	= 0.4f; 	// steel
 F32 const LLMaterialTable::RESTITUTION_WOOD 	= 0.5f; 	// southern pine
 F32 const LLMaterialTable::RESTITUTION_GLASS 	= 0.7f; 	// borosilicate glass
 F32 const LLMaterialTable::RESTITUTION_PLASTIC	= 0.7f; 	// HDPE
-F32 const LLMaterialTable::RESTITUTION_LIGHT 	= 0.7f; 	//
-F32 const LLMaterialTable::RESTITUTION_RUBBER 	= 0.9f; 	//
+F32 const LLMaterialTable::RESTITUTION_LIGHT 	= 0.7f;
+F32 const LLMaterialTable::RESTITUTION_RUBBER 	= 0.9f;
 F32 const LLMaterialTable::RESTITUTION_MAX		= 0.95f;
 
 F32 const LLMaterialTable::DEFAULT_FRICTION = 0.5f;
@@ -148,8 +151,8 @@ void LLMaterialTable::initBasicTable()
 	addDensity(LL_MCODE_WOOD,10.f); 
 	addDensity(LL_MCODE_FLESH,10.f);
 	addDensity(LL_MCODE_PLASTIC,5.f);
-	addDensity(LL_MCODE_RUBBER,0.5f); //
-	addDensity(LL_MCODE_LIGHT,20.f); //
+	addDensity(LL_MCODE_RUBBER,0.5f);
+	addDensity(LL_MCODE_LIGHT,20.f);
 
 	// add damage and energy values
 	addDamageAndEnergy(LL_MCODE_STONE, 1.f, 1.f, 1.f);	// concrete
@@ -179,6 +182,7 @@ void LLMaterialTable::initBasicTable()
 	addRestitution(LL_MCODE_RUBBER,0.9f); //
 	addRestitution(LL_MCODE_LIGHT,0.7f); //
 
+    // Check these see if they work right and are current uuids sams voodoo
 	addShatterSound(LL_MCODE_STONE,LLUUID("ea296329-0f09-4993-af1b-e6784bab1dc9"));
 	addShatterSound(LL_MCODE_METAL,LLUUID("d1375446-1c4d-470b-9135-30132433b678"));
 	addShatterSound(LL_MCODE_GLASS,LLUUID("85cda060-b393-48e6-81c8-2cfdfb275351"));
