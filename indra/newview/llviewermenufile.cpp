@@ -522,27 +522,25 @@ class LLFileTakeSnapshotToDisk : public view_listener_t
 #endif //ignore
 		}
 
-		if (gViewerWindow->rawSnapshot(raw,
-									   width,
-									   height,
-									   TRUE,
-									   FALSE,
-									   gSavedSettings.getBOOL("RenderUIInSnapshot"),
-									   FALSE,
-									   LLViewerWindow::SNAPSHOT_TYPE_COLOR,
-									   6144,
-									   supersample))
+		if (gViewerWindow->rawSnapshot(raw,width,height,
+		TRUE,FALSE,gSavedSettings.getBOOL("RenderUIInSnapshot"),FALSE,LLViewerWindow::SNAPSHOT_TYPE_COLOR,6144,supersample))
 		{
 			LLPointer<LLImageFormatted> formatted;
+			//Below line can go when sw type is set up sams voodoo
 			switch(LLFloaterSnapshot::ESnapshotFormat(gSavedSettings.getS32("SnapshotFormat")))
+            // Define these later on sams voodoo 
+            //switch (type)
 			{
 			  case LLFloaterSnapshot::SNAPSHOT_FORMAT_JPEG:
+				 // case LLFilePicker::FFSAVE_JPEG:
 				formatted = new LLImageJPEG(gSavedSettings.getS32("SnapshotQuality"));
 				break;
 			  case LLFloaterSnapshot::SNAPSHOT_FORMAT_PNG:
+				  //case LLFilePicker::FFSAVE_PNG:
 				formatted = new LLImagePNG;
 				break;
-			  case LLFloaterSnapshot::SNAPSHOT_FORMAT_BMP: 
+			  case LLFloaterSnapshot::SNAPSHOT_FORMAT_BMP:
+				  //case LLFilePicker::FFSAVE_BMP:
 				formatted = new LLImageBMP;
 				break;
 			  default: 

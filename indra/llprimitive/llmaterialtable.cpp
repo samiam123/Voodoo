@@ -543,7 +543,9 @@ std::string LLMaterialTable::getName(U8 mcode)
 
 	// <edit>
 	//return NULL;
-	return llformat("MCode%d", mcode);
+	// lets not crash for now. advanced materials are there but wount show up for now till the crash can be sorted out ok sams voodoo
+	return std::string();
+	//return llformat("MCode%d", mcode);
 	// </edit>
 }
 

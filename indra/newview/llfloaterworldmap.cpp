@@ -1614,11 +1614,15 @@ void LLFloaterWorldMap::updateSims(bool found_null_sim)
 	if (match_found)
 	{
 		mExactMatch = TRUE;
+		//Added one line for search sort sams voodoo
+        list->sortByColumn("sim_name", TRUE);
 		childSetFocus("search_results");
 		onCommitSearchResult(NULL, this);
 	}
 	else if (!mExactMatch && num_results > 0)
 	{
+		//Added one line for search sort sams voodoo
+		list->sortByColumn("sim_name", TRUE);
 		list->selectFirstItem(); // select first item by default
 		childSetFocus("search_results");
 		onCommitSearchResult(NULL, this);

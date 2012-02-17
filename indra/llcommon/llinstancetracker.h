@@ -36,7 +36,8 @@
 #define LL_LLINSTANCETRACKER_H
 
 #include <map>
-
+// Callin typeinfo v3 backport added one include below sams voodoo
+#include <typeinfo>
 #include "string_table.h"
 #include <boost/utility.hpp>
 #include <boost/function.hpp>
@@ -94,8 +95,16 @@ public:
 	}
 	static S32 instanceCount() { return getMap_().size(); }
 protected:
+	// testing comment out one line added 6  Sams voodoo
 	LLInstanceTracker(KEY key) { add_(key); }
+    //LLInstanceTracker(KEY key)
+	//{
+    // make sure static data outlives all instances
+    //getStatic();
+    //add_(key); 
+    //}
 	virtual ~LLInstanceTracker() { remove_(); }
+	// it's unsafe to delete instances of this type while all instances are being iterated over.
 	virtual void setKey(KEY key) { remove_(); add_(key); }
 	virtual const KEY& getKey() const { return mKey; }
 
@@ -169,6 +178,8 @@ protected:
 	{
 		// it's safe but unpredictable to create instances of this type while all instances are being iterated over.  I hate unpredictable.  This assert will probably be turned on early in the next development cycle.
 		//llassert(sIterationNestDepth == 0);
+		// make sure static data outlives all instances sams voodoo added one ln below
+        //getStatic();
 		getSet_().insert(static_cast<T*>(this));
 	}
 	virtual ~LLInstanceTracker()
