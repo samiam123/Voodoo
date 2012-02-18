@@ -35,10 +35,10 @@
 
 const S32 LL_VERSION_MAJOR = 1;
 const S32 LL_VERSION_MINOR = 0;
-const S32 LL_VERSION_PATCH = 1;
-const S32 LL_VERSION_BUILD = 0;
+const S32 LL_VERSION_PATCH = 2;
+const S32 LL_VERSION_BUILD = 1;
 
-const char * const LL_CHANNEL = "VooDoo";
+const char * const LL_CHANNEL = "Voodoo";
 
 #if LL_DARWIN
 const char * const LL_VERSION_BUNDLE_ID = "com.secondlife.Astra.viewer";
