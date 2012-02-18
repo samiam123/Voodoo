@@ -37,15 +37,22 @@
 
 #include "indra_constants.h"
 
+
+
+
+
 // For Listeners
 #include "llaudioengine.h"
 #include "llagent.h"
 #include "llagentcamera.h"
 #include "llavatarnamecache.h"
 #include "llconsole.h"
+
+
 #include "lldrawpoolterrain.h"
 #include "llflexibleobject.h"
 #include "llfeaturemanager.h"
+
 #include "llviewershadermgr.h"
 #include "llpanelgeneral.h"
 #include "llpanelinput.h"
@@ -80,13 +87,19 @@
 #include "statemachine/aistatemachine.h"
 #include "aithreadsafe.h"
 #include "lldrawpoolbump.h"
+
+
+
 #include "emeraldboobutils.h"
+
 
 #ifdef TOGGLE_HACKED_GODLIKE_VIEWER
 BOOL 				gHackGodmode = FALSE;
 #endif
 
 AITHREADSAFE(settings_map_type, gSettings,);
+
+
 LLControlGroup gSavedSettings("Global");	// saved at end of session
 LLControlGroup gSavedPerAccountSettings("PerAccount"); // saved at end of session
 LLControlGroup gColors("Colors");	// saved at end of session
@@ -111,6 +124,7 @@ static bool handleRenderFarClipChanged(const LLSD& newvalue)
 {
 	F32 draw_distance = (F32) newvalue.asReal();
 	gAgentCamera.mDrawDistance = draw_distance; //Force it to a sane value. I've had drawdistance get knocked down to 0.. and BAD things happen.
+
 	LLWorld::getInstance()->setLandFarClip(draw_distance);
 	return true;
 }
@@ -135,6 +149,7 @@ static bool handleSetShaderChanged(const LLSD& newvalue)
 
 	// Changing shader also changes the terrain detail to high, reflect that change here
 	if (newvalue.asBoolean())
+
 	{
 		// shaders enabled, set terrain detail to high
 		gSavedSettings.setS32("RenderTerrainDetail", 1);
@@ -188,19 +203,24 @@ static bool handleAvatarBoobXYInfluence(const LLSD& newvalue)
 }
 
 static bool handleSetSelfInvisible( const LLSD& newvalue)
+
 {
 	LLVOAvatar::onChangeSelfInvisible( newvalue.asBoolean() );
+
 	return true;
 }
 
 bool handleRenderTransparentWaterChanged(const LLSD& newvalue)
+
 {
 	LLWorld::getInstance()->updateWaterObjects();
+
 	return true;
 }
 
 static bool handleReleaseGLBufferChanged(const LLSD& newvalue)
 {
+
 	if (gPipeline.isInit())
 	{
 		gPipeline.releaseGLBuffers();
@@ -352,7 +372,15 @@ static bool handleAudioStreamMusicChanged(const LLSD& newvalue)
 				// otherwise music will briefly stop
 				if ( !gAudiop->isInternetStreamPlaying() )
 				{
-					LLViewerParcelMedia::playStreamingMusic(LLViewerParcelMgr::getInstance()->getAgentParcel());
+					//LLViewerParcelMedia::playStreamingMusic(LLViewerParcelMgr::getInstance()->getAgentParcel());
+                    //if (gSavedSettings.getBOOL("MediaEnableFilter"))
+					//{
+					//	LLViewerParcelMedia::filterAudioUrl(LLViewerParcelMgr::getInstance()->getAgentParcel()->getMusicURL());
+					//}
+					//else
+					//{
+						gAudiop->startInternetStream(LLViewerParcelMgr::getInstance()->getAgentParcel()->getMusicURL());
+					//}
 				}
 			}
 		}
@@ -376,6 +404,7 @@ static bool handleUploadBakedTexOldChanged(const LLSD& newvalue)
 	LLPipeline::sForceOldBakedUpload = newvalue.asBoolean();
 	return true;
 }
+
 
 static bool handleNumpadControlChanged(const LLSD& newvalue)
 {
@@ -449,6 +478,7 @@ static bool handleRenderUseFBOChanged(const LLSD& newvalue)
 	LLRenderTarget::sUseFBO = newvalue.asBoolean();
 	if (gPipeline.isInit())
 	{
+
 		gPipeline.releaseGLBuffers();
 		gPipeline.createGLBuffers();
 		// Some hoodoo for sams voodoo Turning off Lights and Shadows disables Glow - by Bao Linden
@@ -494,6 +524,15 @@ static bool handleRenderResolutionDivisorChanged(const LLSD&)
 	return true;
 }
 
+
+
+
+
+
+
+
+
+
 static bool handleDebugViewsChanged(const LLSD& newvalue)
 {
 	LLView::sDebugRects = newvalue.asBoolean();
@@ -529,11 +568,14 @@ bool handleVectorizeChanged(const LLSD& newvalue)
 bool handleVoiceClientPrefsChanged(const LLSD& newvalue)
 {
 	if(gVoiceClient)
+
 	{
 		gVoiceClient->updateSettings();
 	}
 	return true;
 }
+
+
 
 bool handleTranslateChatPrefsChanged(const LLSD& newvalue)
 {
@@ -547,6 +589,7 @@ bool handleTranslateChatPrefsChanged(const LLSD& newvalue)
 	return true;
 }
 
+
 bool handleCloudSettingsChanged(const LLSD& newvalue)
 {
 	bool bCloudsEnabled = gSavedSettings.getBOOL("CloudsEnabled");
@@ -557,17 +600,26 @@ bool handleCloudSettingsChanged(const LLSD& newvalue)
 
 	if((bool)LLPipeline::hasRenderTypeControl((void*)LLPipeline::RENDER_TYPE_CLASSIC_CLOUDS)!=bCloudsEnabled )
 		LLPipeline::toggleRenderTypeControl((void*)LLPipeline::RENDER_TYPE_CLASSIC_CLOUDS);
+
 	return true;
 }
 
 bool handleAscentSelfTag(const LLSD& newvalue)
+
+
 {
 	if(gAgent.getAvatarObject())
 		gAgent.getAvatarObject()->mClientTag = "";
+
+
+
+
 	return true;
 }
 
+
 bool handleAscentGlobalTag(const LLSD& newvalue)
+
 {
 	S32 object_count = gObjectList.getNumObjects();
 	for (S32 i = 0; i < object_count; i++)
@@ -576,6 +628,7 @@ bool handleAscentGlobalTag(const LLSD& newvalue)
 		if (objectp && objectp->isAvatar())
 			((LLVOAvatar*)objectp)->mClientTag = "";
 	}
+
 	return true;
 }
 
@@ -583,16 +636,24 @@ bool handleAscentAvatarModifier(const LLSD& newvalue)
 {
 	llinfos << "Calling gAgent.sendAgentSetAppearance() because AscentAvatar*Modifier changed." << llendl;
 	gAgent.sendAgentSetAppearance();
+
 	return true;
 }
 
 // [Ansariel: Display name support]
 static bool handlePhoenixNameSystemChanged(const LLSD& newvalue)
+
 {
 	S32 dnval = (S32)newvalue.asInteger();
 	if (dnval <= 0 || dnval > 2) LLAvatarNameCache::setUseDisplayNames(false);
 	else LLAvatarNameCache::setUseDisplayNames(true);
 	LLVOAvatar::invalidateNameTags();
+
+
+
+
+
+
 	return true;
 }
 // [/Ansariel: Display name support]
@@ -604,8 +665,11 @@ static bool handleAllowLargeSounds(const LLSD& newvalue)
 	return true;
 }
 ////////////////////////////////////////////////////////////////////////////
+
 void settings_setup_listeners()
 {
+
+
 	gSavedSettings.getControl("FirstPersonAvatarVisible")->getSignal()->connect(boost::bind(&handleRenderAvatarMouselookChanged, _2));
 	gSavedSettings.getControl("RenderFarClip")->getSignal()->connect(boost::bind(&handleRenderFarClipChanged, _2));
 	gSavedSettings.getControl("RenderTerrainDetail")->getSignal()->connect(boost::bind(&handleTerrainDetailChanged, _2));
@@ -637,6 +701,7 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("RenderAvatarPhysicsLODFactor")->getSignal()->connect(boost::bind(&handleAvatarPhysicsLODChanged, _2));
 	gSavedSettings.getControl("RenderTerrainLODFactor")->getSignal()->connect(boost::bind(&handleTerrainLODChanged, _2));
 	gSavedSettings.getControl("RenderTreeLODFactor")->getSignal()->connect(boost::bind(&handleTreeLODChanged, _2));
+
 	gSavedSettings.getControl("RenderFlexTimeFactor")->getSignal()->connect(boost::bind(&handleFlexLODChanged, _2));
 	gSavedSettings.getControl("ThrottleBandwidthKBPS")->getSignal()->connect(boost::bind(&handleBandwidthChanged, _2));
 	gSavedSettings.getControl("RenderGamma")->getSignal()->connect(boost::bind(&handleGammaChanged, _2));
@@ -662,6 +727,8 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("RenderShadowDetail")->getSignal()->connect(boost::bind(&handleSetShaderChanged, _2));
 	gSavedSettings.getControl("RenderDeferredSSAO")->getSignal()->connect(boost::bind(&handleSetShaderChanged, _2));
 	gSavedSettings.getControl("RenderDeferredGI")->getSignal()->connect(boost::bind(&handleSetShaderChanged, _2));
+
+
 	gSavedSettings.getControl("TextureMemory")->getSignal()->connect(boost::bind(&handleVideoMemoryChanged, _2));
 	gSavedSettings.getControl("AuditTexture")->getSignal()->connect(boost::bind(&handleAuditTextureChanged, _2));
 	gSavedSettings.getControl("ChatFontSize")->getSignal()->connect(boost::bind(&handleChatFontSizeChanged, _2));
@@ -678,6 +745,7 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("AudioLevelDoppler")->getSignal()->connect(boost::bind(&handleAudioVolumeChanged, _2));
 	gSavedSettings.getControl("AudioLevelRolloff")->getSignal()->connect(boost::bind(&handleAudioVolumeChanged, _2));
 	gSavedSettings.getControl("AudioStreamingMusic")->getSignal()->connect(boost::bind(&handleAudioStreamMusicChanged, _2));
+
 	gSavedSettings.getControl("MuteAudio")->getSignal()->connect(boost::bind(&handleAudioVolumeChanged, _2));
 	gSavedSettings.getControl("MuteMusic")->getSignal()->connect(boost::bind(&handleAudioVolumeChanged, _2));
 	gSavedSettings.getControl("MuteMedia")->getSignal()->connect(boost::bind(&handleAudioVolumeChanged, _2));
@@ -686,8 +754,11 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("MuteUI")->getSignal()->connect(boost::bind(&handleAudioVolumeChanged, _2));
 	gSavedSettings.getControl("RenderVBOEnable")->getSignal()->connect(boost::bind(&handleRenderUseVBOChanged, _2));
 	gSavedSettings.getControl("RenderVBOMappingDisable")->getSignal()->connect(boost::bind(&handleRenderUseVBOMappingChanged, _2));
+
+
 	gSavedSettings.getControl("RenderPreferStreamDraw")->getSignal()->connect(boost::bind(&handleResetVertexBuffersChanged, _2));
 	gSavedSettings.getControl("WLSkyDetail")->getSignal()->connect(boost::bind(&handleWLSkyDetailChanged, _2));
+
 	gSavedSettings.getControl("NumpadControl")->getSignal()->connect(boost::bind(&handleNumpadControlChanged, _2));
 	gSavedSettings.getControl("JoystickAxis0")->getSignal()->connect(boost::bind(&handleJoystickChanged, _2));
 	gSavedSettings.getControl("JoystickAxis1")->getSignal()->connect(boost::bind(&handleJoystickChanged, _2));
@@ -764,6 +835,7 @@ void settings_setup_listeners()
 	gSavedSettings.getControl("EmeraldBoobFriction")->getSignal()->connect(boost::bind(&handleAvatarBoobFrictionChanged, _2));
 	gSavedSettings.getControl("EmeraldBoobVelMin")->getSignal()->connect(boost::bind(&handleAvatarBoobVelMinChanged, _2));
 	gSavedSettings.getControl("EmeraldBreastPhysicsToggle")->getSignal()->connect(boost::bind(&handleAvatarBoobToggleChanged, _2));
+
 	gSavedSettings.getControl("EmeraldBoobXYInfluence")->getSignal()->connect(boost::bind(&handleAvatarBoobXYInfluence, _2));
 	
 	gSavedSettings.getControl("AscentUseTag")->getSignal()->connect(boost::bind(&handleAscentSelfTag,_2));

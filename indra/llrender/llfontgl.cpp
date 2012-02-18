@@ -34,15 +34,16 @@
 
 #include <boost/tokenizer.hpp>
 
-#include "llfont.h"
+//#include "llfont.h"
 #include "llfontgl.h"
-#include "llfontbitmapcache.h"
-#include "llfontregistry.h"
-#include "llgl.h"
-#include "llrender.h"
-#include "v4color.h"
-#include "llstl.h"
+
 #include "llfasttimer.h"
+#include "llfontbitmapcache.h"
+#include "llgl.h"
+#include "llfontregistry.h"
+#include "llrender.h"
+#include "llstl.h"
+#include "v4color.h"
 
 const S32 BOLD_OFFSET = 1;
 

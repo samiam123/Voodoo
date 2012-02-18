@@ -1631,8 +1631,10 @@ BOOL LLFace::calcPixelArea(F32& cos_angle_to_view_dir, F32& radius)
 	LLVector4a x_axis;
 	x_axis.load3(camera->getXAxis().mV);
 	cos_angle_to_view_dir = lookAt.dot3(x_axis).getF32();
-
-	if(dist < mBoundingSphereRadius) //camera is very close
+ 
+	
+	// Ansariel: Disable check for everything within 10m radius to greatly reduce memory usage
+     if (dist < mBoundingSphereRadius /*|| dist < 10.0f*/) //camera is very close
 	{
 		cos_angle_to_view_dir = 1.0f;
 		mImportanceToCamera = 1.0f;
