@@ -592,11 +592,11 @@ LLFloaterStats::LLFloaterStats(const LLSD& val)
 
 {
 	LLUICtrlFactory::getInstance()->buildFloater(this, "floater_statistics.xml", NULL, FALSE);
-
-	if(gSavedSettings.getBOOL("PhoenixStatsBarChrome"))
-	{
+    // Comment out not sure of what this would be a choice of yet.  skins im guessing sams voodoo
+	//if(gSavedSettings.getBOOL("PhoenixStatsBarChrome"))
+	//{
 		setIsChrome(TRUE);
-	}
+	//}
 	
 	LLRect stats_rect(0, getRect().getHeight() - LLFLOATER_HEADER_SIZE,
 					  getRect().getWidth() - LLFLOATER_CLOSE_BOX_SIZE, 0);
