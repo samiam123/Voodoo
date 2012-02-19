@@ -39,7 +39,7 @@
 //#include "lltrans.h"
 #include "streamtitledisplay.h"
 
-StreamTitleDisplay::StreamTitleDisplay():LLEventTimer(2){};
+StreamTitleDisplay::StreamTitleDisplay():LLEventTimer(2){ };
 BOOL StreamTitleDisplay::tick()
 {
 	checkMetadata();

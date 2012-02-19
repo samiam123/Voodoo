@@ -364,8 +364,8 @@ BOOL LLVOTree::idleUpdate(LLAgent &agent, LLWorld &world, const F64 &time)
 	}
 	
 	//it's cheaper to check if wind is enabled first
-	static const LLCachedControl<bool> enable_wind("WindEnabled",false); 
-	static const LLCachedControl<bool> render_animate_trees("RenderAnimateTrees",false); 
+	static const LLCachedControl<bool> enable_wind("WindEnabled",true); 
+	static const LLCachedControl<bool> render_animate_trees("RenderAnimateTrees",true); 
 	if (enable_wind && render_animate_trees)
 	{
 		F32 mass_inv; 
@@ -469,6 +469,8 @@ void LLVOTree::setPixelAreaAndAngle(LLAgent &agent)
 	F32 range = dist - getMinScale()/2;
 	if (range < F_ALMOST_ZERO || isHUDAttachment())		// range == zero
 	{
+		// Lest set it anyway sams voodoo
+		range = 0;
 		mAppAngle = 180.f;
 	}
 	else

@@ -23,6 +23,12 @@
 	<panel border="true" bottom="-195" enabled="true" filename="panel_audio.xml"
 	     follows="left|top|right|bottom" height="180" label="Volume" left="148"
 	     mouse_opaque="true" name="Volume Panel" width="260" />
+  <check_box bottom_delta="-20" enabled="true"
+       follows="left|top" font="SansSerifSmall" height="16" 
+       label="Show stream information in chat" 
+       left="142" mouse_opaque="true" name="PhoenixShowStreamMetadata" radio_style="false" 
+       width="270" control_name="PhoenixShowStreamMetadata" 
+       tool_tip="Displays the name and artist of the song currently playing on the stream in chat."/>
 	<check_box bottom="-220" control_name="AudioStreamingMusic" enabled="true"
 	     follows="left|top" font="SansSerifSmall" height="16" initial_value="true"
 	     label="Play Streaming Music When Available (uses more bandwidth)"

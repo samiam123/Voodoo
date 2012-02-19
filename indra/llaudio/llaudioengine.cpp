@@ -259,7 +259,7 @@ void LLAudioEngine::idle(F32 max_decode_time)
 	
 	// "Update" all of our audio sources, clean up dead ones.
 	// Primarily does position updating, cleanup of unused audio sources.
-	// Also does regeneration of the current priority of each audio source.
+	/// Also does regeneration of the current priority of each audio source.
 
 	S32 i;
 	for (i = 0; i < MAX_BUFFERS; i++)

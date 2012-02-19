@@ -740,8 +740,7 @@ bool idle_startup()
 			web_login_key = gLoginHandler.getWebLoginKey();
 
 			// Show the login screen if we don't have everything
-			show_connect_box = 
-				firstname.empty() || lastname.empty() || web_login_key.isNull();
+			show_connect_box = firstname.empty() || lastname.empty() || web_login_key.isNull();
 		}
         else if(gSavedSettings.getLLSD("UserLoginInfo").size() == 3)
         {
@@ -1173,15 +1172,15 @@ bool idle_startup()
 		requested_options.clear();
 		requested_options.push_back("inventory-root");
 		requested_options.push_back("inventory-skeleton");
-		//requested_options.push_back("inventory-meat");
-		//requested_options.push_back("inventory-skel-targets");
+		requested_options.push_back("inventory-meat");
+		requested_options.push_back("inventory-skel-targets");
 #if (!defined LL_MINIMIAL_REQUESTED_OPTIONS)
 		if(FALSE == gSavedSettings.getBOOL("NoInventoryLibrary"))
 		{
 			requested_options.push_back("inventory-lib-root");
 			requested_options.push_back("inventory-lib-owner");
 			requested_options.push_back("inventory-skel-lib");
-		//	requested_options.push_back("inventory-meat-lib");
+			requested_options.push_back("inventory-meat-lib");
 		}
 
 		requested_options.push_back("initial-outfit");
@@ -1190,7 +1189,7 @@ bool idle_startup()
 		requested_options.push_back("event_notifications");
 		requested_options.push_back("classified_categories");
 		requested_options.push_back("adult_compliant");
-		//requested_options.push_back("inventory-targets");
+		requested_options.push_back("inventory-targets");
 		requested_options.push_back("buddy-list");
 		requested_options.push_back("ui-config");
 #endif

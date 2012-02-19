@@ -8624,6 +8624,17 @@
       <key>Value</key>
       <real>0.0</real>
     </map>
+    <key>PhoenixShowStreamMetadata</key>
+    <map>
+      <key>Comment</key>
+      <string>Display stream metadata in chat when it changes.</string>
+      <key>Persist</key>
+      <integer>1</integer>
+      <key>Type</key>
+      <string>Boolean</string>
+      <key>Value</key>
+      <integer>1</integer>
+    </map>
     <key>ParcelMediaAutoPlayEnable</key>
     <map>
       <key>Comment</key>
@@ -9608,7 +9619,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>1</integer>
     </map>
 
   <key>RenderGIRange</key>
