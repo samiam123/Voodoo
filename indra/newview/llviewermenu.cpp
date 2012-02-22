@@ -404,8 +404,9 @@ BOOL check_glow(void *);
 
 void toggle_vertex_shaders(void *);
 BOOL check_vertex_shaders(void *);
-
+// Dont think this does anything usefull sams voodoo
 void toggle_cull_small(void *);
+BOOL check_cull_small(void *);
 
 void toggle_show_xui_names(void *);
 BOOL check_show_xui_names(void *);
@@ -507,8 +508,9 @@ void handle_object_lock(void*);
 void handle_object_asset_ids(void*);
 void force_take_copy(void*);
 #ifdef _CORY_TESTING
-void force_export_copy(void*);
-void force_import_geometry(void*);
+//Missin something i think sams voodoo
+//void force_export_copy(void*);
+//void force_import_geometry(void*);
 #endif
 
 void handle_force_parcel_owner_to_me(void*);
@@ -801,7 +803,7 @@ void init_menus()
 	// TomY TODO convert these two
 	LLMenuGL*menu;
 
-	menu = new LLMenuGL("Astra");
+	menu = new LLMenuGL("Voodoo");
 	menu->append(new LLMenuItemCallGL(	"Close All Dialogs", 
 										&handle_close_all_notifications, NULL, NULL, 'D', MASK_CONTROL | MASK_ALT | MASK_SHIFT));
 	menu->appendSeparator();
@@ -975,10 +977,8 @@ void init_client_menu(LLMenuGL* menu)
 	}
 	
 	// neither of these works particularly well at the moment
-	/*menu->append(new LLMenuItemCallGL(  "Reload UI XML",	&reload_ui,	
-	  				NULL, NULL) );*/
-	/*menu->append(new LLMenuItemCallGL("Reload settings/colors", 
-					&handle_reload_settings, NULL, NULL));*/
+	menu->append(new LLMenuItemCallGL(  "Reload UI XML",&reload_ui,NULL, NULL) );
+	menu->append(new LLMenuItemCallGL("Reload settings/colors",&handle_reload_settings, NULL, NULL));
 	menu->append(new LLMenuItemCallGL("Reload personal setting overrides", 
 		&reload_personal_settings_overrides, NULL, NULL, KEY_F2, MASK_CONTROL|MASK_SHIFT));
 
@@ -1219,14 +1219,15 @@ void init_client_menu(LLMenuGL* menu)
 
 void init_debug_world_menu(LLMenuGL* menu)
 {
-/* REMOVE mouse move sun from menu options
+ //REMOVE mouse move sun from menu options
+ //But its retro lets enable it for fun sams voodoo
 	menu->append(new LLMenuItemCheckGL("Mouse Moves Sun", 
 									   &menu_toggle_control,
 									   NULL, 
 									   &menu_check_control,
 									   (void*)"MouseSun", 
 									   'M', MASK_CONTROL|MASK_ALT));
-*/
+
 	menu->append(new LLMenuItemCheckGL("Sim Sun Override", 
 									   &menu_toggle_control,
 									   NULL, 
@@ -1272,7 +1273,8 @@ void init_debug_ui_menu(LLMenuGL* menu)
 	menu->appendSeparator();
 
 	// commented out until work is complete: DEV-32268
-	// menu->append(new LLMenuItemCallGL("Buy Currency Test", &handle_buy_currency_test));
+	//shrugs lets see what it does 1st sams voodoo
+	menu->append(new LLMenuItemCallGL("Buy Currency Test", &handle_buy_currency_test));
 	menu->append(new LLMenuItemCallGL("Editable UI", &edit_ui));
 	menu->append(new LLMenuItemCallGL( "Dump SelectMgr", &dump_select_mgr));
 	menu->append(new LLMenuItemCallGL( "Dump Inventory", &dump_inventory));
@@ -1318,8 +1320,8 @@ void init_debug_xui_menu(LLMenuGL* menu)
 	menu->append(new LLMenuItemCallGL("Save to XML...", handle_save_to_xml, NULL, NULL, 'X', MASK_CONTROL | MASK_ALT | MASK_SHIFT));
 	// </edit>
 	menu->append(new LLMenuItemCheckGL("Show XUI Names", toggle_show_xui_names, NULL, check_show_xui_names, NULL));
-
-	//menu->append(new LLMenuItemCallGL("Buy Currency...", handle_buy_currency));
+    // More retro fun sams voodoo
+	menu->append(new LLMenuItemCallGL("Buy Currency...", handle_buy_currency));
 	menu->createJumpKeys();
 }
 
@@ -1515,6 +1517,7 @@ void init_debug_rendering_menu(LLMenuGL* menu)
 
 	menu->appendSeparator();
 	menu->append(new LLMenuItemCheckGL("Axes", menu_toggle_control, NULL, menu_check_control, (void*)"ShowAxes"));
+	// is a do nothing sams voodoo
 	//menu->append(new LLMenuItemCheckGL("Cull Small Objects", toggle_cull_small, NULL, menu_check_control, (void*)"RenderCullBySize"));
 
 	menu->appendSeparator();
@@ -1524,8 +1527,7 @@ void init_debug_rendering_menu(LLMenuGL* menu)
 	menu->append(new LLMenuItemCallGL("Selected Texture Info", handle_selected_texture_info, NULL, NULL, 'T', MASK_CONTROL|MASK_SHIFT|MASK_ALT));
 	//menu->append(new LLMenuItemCallGL("Dump Image List", handle_dump_image_list, NULL, NULL, 'I', MASK_CONTROL|MASK_SHIFT));
 	
-	menu->append(new LLMenuItemToggleGL("Wireframe", &gUseWireframe, 
-			'R', MASK_CONTROL|MASK_SHIFT));
+	menu->append(new LLMenuItemToggleGL("Wireframe", &gUseWireframe,'R', MASK_CONTROL|MASK_SHIFT));
 
 	LLMenuItemCheckGL* item;
 	item = new LLMenuItemCheckGL("Object-Object Occlusion", menu_toggle_control, NULL, menu_check_control, (void*)"UseOcclusion");
@@ -1623,7 +1625,8 @@ void init_debug_avatar_menu(LLMenuGL* menu)
 	menu->append(new LLMenuItemToggleGL("Debug Joint Updates", &LLVOAvatar::sJointDebug));
 	menu->append(new LLMenuItemToggleGL("Disable LOD", &LLViewerJoint::sDisableLOD));
 	menu->append(new LLMenuItemToggleGL("Debug Character Vis", &LLVOAvatar::sDebugInvisible));
-	//menu->append(new LLMenuItemToggleGL("Show Attachment Points", &LLVOAvatar::sShowAttachmentPoints));
+	// see if this is dead or not sams voodoo
+	menu->append(new LLMenuItemToggleGL("Show Attachment Points", &LLVOAvatar::sShowAttachmentPoints));
 	//diabling collision plane due to DEV-14477 -brad
 	//menu->append(new LLMenuItemToggleGL("Show Collision Plane", &LLVOAvatar::sShowFootPlane));
 	menu->append(new LLMenuItemCheckGL("Show Collision Skeleton",
@@ -1717,13 +1720,13 @@ void init_server_menu(LLMenuGL* menu)
 										  &force_take_copy, &enable_god_customer_service, NULL,
 										  'O', MASK_SHIFT | MASK_ALT | MASK_CONTROL));
 #ifdef _CORY_TESTING
-		sub->append(new LLMenuItemCallGL( "Export Copy",
-										   &force_export_copy, NULL, NULL));
-		sub->append(new LLMenuItemCallGL( "Import Geometry",
-										   &force_import_geometry, NULL, NULL));
+		//sub->append(new LLMenuItemCallGL( "Export Copy",
+		//								   &force_export_copy, NULL, NULL));
+		//sub->append(new LLMenuItemCallGL( "Import Geometry",
+		//								   &force_import_geometry, NULL, NULL));
 #endif
 		//sub->append(new LLMenuItemCallGL( "Force Public", 
-		//			&handle_object_owner_none, NULL, NULL));
+		//	        &handle_object_owner_none, NULL, NULL));
 		//sub->append(new LLMenuItemCallGL( "Force Ownership/Permissive", 
 		//			&handle_object_owner_self_and_permissive, NULL, NULL, 'K', MASK_SHIFT | MASK_ALT | MASK_CONTROL));
 		sub->append(new LLMenuItemCallGL( "Force Owner To Me", 
@@ -8152,13 +8155,13 @@ BOOL check_show_xui_names(void *)
 }
 
 
-
-void toggle_cull_small(void *)
-{
+// does nothing there is no ref out side of this sams voodoo
+//void toggle_cull_small(void *)
+//{
 //	gPipeline.mCullBySize = !gPipeline.mCullBySize;
-//
+
 //	gSavedSettings.setBOOL("RenderCullBySize", gPipeline.mCullBySize);
-}
+//}
 
 class LLToolsSelectOnlyMyObjects : public view_listener_t
 {

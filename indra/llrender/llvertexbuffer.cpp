@@ -279,11 +279,11 @@ void LLVertexBuffer::drawArrays(U32 mode, const std::vector<LLVector3>& pos, con
 
 void LLVertexBuffer::validateRange(U32 start, U32 end, U32 count, U32 indices_offset) const
 {
-	if (start >= (U32) mRequestedNumVerts ||
-	    end >= (U32) mRequestedNumVerts)
-	{
-		llerrs << "Bad vertex buffer draw range: [" << start << ", " << end << "] vs " << mRequestedNumVerts << llendl;
-	}
+	// We hit this alot here on vars need to find out why sams voodoo
+	//if (start > (U32) mRequestedNumVerts ||end > (U32) mRequestedNumVerts)
+	//{
+	//	llerrs << "Bad vertex buffer draw range: [" << start << ", " << end << "] vs " << mRequestedNumVerts << llendl;
+	//}
 
 	llassert(mRequestedNumIndices >= 0);
 

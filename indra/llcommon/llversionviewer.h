@@ -41,7 +41,7 @@ const S32 LL_VERSION_BUILD = 2;
 const char * const LL_CHANNEL = "Voodoo";
 
 #if LL_DARWIN
-const char * const LL_VERSION_BUNDLE_ID = "com.secondlife.Astra.viewer";
+const char * const LL_VERSION_BUNDLE_ID = "com.secondlife.Voodoo.viewer";
 #endif
 
 #endif

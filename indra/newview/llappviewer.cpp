@@ -329,7 +329,7 @@ static BOOL gDoDisconnect = FALSE;
 static std::string gLaunchFileOnQuit;
 
 // Used on Win32 for other apps to identify our window (eg, win_setup)
-const char* const VIEWER_WINDOW_CLASSNAME = "Astra Viewer"; // Don't change
+const char* const VIEWER_WINDOW_CLASSNAME = "Voodoo Viewer"; // Don't change
 
 //----------------------------------------------------------------------------
 // File scope definitons

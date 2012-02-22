@@ -141,7 +141,7 @@ class ViewerManifest(LLManifest):
     def installer_prefix(self):
         mapping={"secondlife":'SecondLife_',
                  "snowglobe":'Snowglobe_',
-                 "Astra":'Astra_'}
+                 "Voodoo":'Voodoo_'}
         return mapping[self.viewer_branding_id()]
 
     def flags_list(self):
@@ -177,14 +177,14 @@ class ViewerManifest(LLManifest):
 
 class WindowsManifest(ViewerManifest):
     def final_exe(self):
-        return 'AstraViewer.exe'
+        return 'Voodoo.exe'
 
 
     def construct(self):
         super(WindowsManifest, self).construct()
         # the final exe is complicated because we're not sure where it's coming from,
         # nor do we have a fixed name for the executable
-        self.path(src='%s/astraviewer.exe' % self.args['configuration'], dst=self.final_exe())
+        self.path(src='%s/Voodoo.exe' % self.args['configuration'], dst=self.final_exe())
 
         # Plugin host application
         self.path(os.path.join(os.pardir,
@@ -403,17 +403,17 @@ class WindowsManifest(ViewerManifest):
         !define VERSION_LONG "%(version)s"
         !define VERSION_DASHES "%(version_dashes)s"
         """ % substitution_strings
-        installer_file = "Astra_%(version_short)s_Setup.exe"
+        installer_file = "Voodoo_%(version_short)s_Setup.exe"
         grid_vars_template = """
         OutFile "%(installer_file)s"
-        !define VIEWERNAME "Astra Viewer"
+        !define VIEWERNAME "Voodoo"
         !define INSTFLAGS "%(flags)s"
-        !define INSTNAME   "AstraViewer"
-        !define SHORTCUT   "Astra Viewer"
+        !define INSTNAME   "Voodoo"
+        !define SHORTCUT   "Voodoo"
         !define URLNAME   "secondlife"
         !define INSTALL_ICON "install_icon_Astra.ico"
-        !define UNINSTALL_ICON "install_icon_Astra.ico"
-        Caption "Astra Viewer ${VERSION}"
+        !define UNINSTALL_ICON "uninstall_icon_Astra.ico"
+        Caption "Voodoo ${VERSION}"
         """
         if 'installer_name' in self.args:
             installer_file = self.args['installer_name']
@@ -496,7 +496,7 @@ class DarwinManifest(ViewerManifest):
                 self.path("SecondLife.nib")
 
    			  # SG:TODO
-                self.path("../newview/res/Astra.icns", dst="Astra.icns")
+                self.path("../newview/res/voodo.icns", dst="voodo.icns")
 
                 # Translations
                 self.path("English.lproj")
@@ -590,10 +590,10 @@ class DarwinManifest(ViewerManifest):
                                  { 'viewer_binary' : self.dst_path_of('Contents/MacOS/'+self.app_name())})
 
     def app_name(self):
-        return "Astra"
+        return "Voodoo"
         
     def info_plist_name(self):
-        return "Info-Astra.plist"
+        return "Info-Voodoo.plist"
 
     def package_finish(self):
         channel_standin = self.app_name()
@@ -707,7 +707,7 @@ class LinuxManifest(ViewerManifest):
             self.path("secondlife-stripped","bin/"+self.binary_name())
             self.path("../linux_crash_logger/linux-crash-logger-stripped","linux-crash-logger.bin")
         else:
-            self.path("astraviewer","bin/"+self.binary_name())
+            self.path("voodoo","bin/"+self.binary_name())
             self.path("../linux_crash_logger/linux-crash-logger","linux-crash-logger.bin")
 
         self.path("linux_tools/launch_url.sh","launch_url.sh")
@@ -727,13 +727,13 @@ class LinuxManifest(ViewerManifest):
         self.path("featuretable_linux.txt")
 
     def wrapper_name(self):
-        return 'Astra'
+        return 'Voodoo'
 
     def binary_name(self):
-        return 'Astra-do-not-run-directly'
+        return 'Voodoo-do-not-run-directly'
     
     def icon_name(self):
-        return "Astra_icon.png"
+        return "voodo.png"
 
     def package_finish(self):
         if 'installer_name' in self.args:
