@@ -52,6 +52,7 @@ protected:
 		return (a + (1 << b) - 1) >> b;
 	}
 
+
 };
 
 #endif

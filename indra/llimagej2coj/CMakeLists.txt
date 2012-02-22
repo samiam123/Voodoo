@@ -25,6 +25,22 @@ set(llimagej2coj_HEADER_FILES
     llimagej2coj.h
     )
 
+set(COREIMAGE_LIBRARIES)
+
+if (DARWIN)
+  list(APPEND llimagej2coj_SOURCE_FILES
+    llimagej2cquartz.mm
+    )
+  list(APPEND llimagej2coj_HEADER_FILES
+    llimagej2cquartz.h
+    )
+  
+  find_library(QUARTZCORE_LIBRARY QuartzCore)
+  find_library(ACCELERATE_LIBRARY Accelerate)
+
+  list(APPEND COREIMAGE_LIBRARIES ${QUARTZCORE_LIBRARY})
+  list(APPEND COREIMAGE_LIBRARIES  ${ACCELERATE_LIBRARY})
+endif (DARWIN)
 
 set_source_files_properties(${llimagej2coj_HEADER_FILES}
                             PROPERTIES HEADER_FILE_ONLY TRUE)
@@ -45,5 +61,5 @@ add_dependencies(llimagej2coj prepare)
 target_link_libraries(
     llimagej2coj
     ${OPENJPEG_LIBRARIES}
+    ${COREIMAGE_LIBRARIES}
     )
-
