@@ -792,9 +792,9 @@ void HippoGridManager::setDefaultGrid(const std::string& grid)
 	{
 		mDefaultGrid = grid;
 	} 
-	else if (mGridInfo.find("Nova") != mGridInfo.end()) 
+	else if (mGridInfo.find("Talon") != mGridInfo.end()) 
 	{
-		mDefaultGrid = "Nova";
+		mDefaultGrid = "Talon";
 	} 
 	else if (!mGridInfo.empty()) 
 	{

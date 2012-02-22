@@ -32,7 +32,9 @@
 #include "linden_common.h"
 
 #include "llcommon.h"
+#include "llmemory.h"
 #include "llthread.h"
+#include "lltimer.h"
 
 //static
 void LLCommon::initClass()

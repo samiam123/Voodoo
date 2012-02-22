@@ -1,11 +1,11 @@
 <?xml version="1.0" ?><notifications>
 
   <global name="VIEWER_NAME">
-    Astra Viewer
+    Voodoo
   </global>
 
   <global name="VIEWER_SITE">
-    http://www.aurora-sim.org/
+    http://grid.kicks-ass.net/
   </global>
   
   <global name="skipnexttime">
@@ -525,7 +525,7 @@ Selecting &quot;Show in Search&quot; will show:
    icon="alertmodal.tga"
    name="ClickPartnerHelpAvatar"
    type="alertmodal">
-You can propose to another Resident or dissolve an existing partnership through the [SECOND_LIFE] website.
+You can propose to another Resident or dissolve an existing partnership through the [Voodoo] website.
 
 Go to the [GRID_NAME] web site for more information on partnering?
     <usetemplate
@@ -856,7 +856,7 @@ There was a problem uploading a report screenshot due to the following reason: [
    icon="alertmodal.tga"
    name="MustAgreeToLogIn"
    type="alertmodal">
-You must agree to the Terms of Service to continue logging into [SECOND_LIFE].
+You must agree to the Terms of Service to continue logging into [Voodoo].
   </notification>
 
   <notification
@@ -966,7 +966,7 @@ Delete pick [PICK]?
    icon="alertmodal.tga"
    name="PromptGoToEventsPage"
    type="alertmodal">
-Go to the [SECOND_LIFE] events web page?
+Go to the [Voodoo] events web page?
     <usetemplate
      name="okcancelbuttons"
      notext="Cancel"
@@ -1013,14 +1013,14 @@ Would you like to disable all popups which can be skipped?
    icon="notify.tga"
    name="CacheWillClear"
    type="notify">
-Cache will be cleared after you restart [SECOND_LIFE].
+Cache will be cleared after you restart [Voodoo].
   </notification>
 
   <notification
    icon="notify.tga"
    name="CacheWillBeMoved"
    type="notify">
-Cache will be moved after you restart [SECOND_LIFE].
+Cache will be moved after you restart [Voodoo].
 Note: This will clear the cache.
   </notification>
 
@@ -1028,14 +1028,14 @@ Note: This will clear the cache.
    icon="notify.tga"
    name="ChangeConnectionPort"
    type="notify">
-Port settings take effect after you restart [SECOND_LIFE].
+Port settings take effect after you restart [Voodoo].
   </notification>
 
   <notification
    icon="notify.tga"
    name="ProxyNeedRestart"
    type="notify">
-Socks proxy settings will take effect after you restart [SECOND_LIFE].
+Socks proxy settings will take effect after you restart [Voodoo].
   </notification>
 
   <notification
@@ -1091,14 +1091,14 @@ Could not connect to Socks5 proxy server "[PROXY]"
    icon="notify.tga"
    name="ChangeSkin"
    type="notfy">
-The new skin will appear after you restart [SECOND_LIFE].
+The new skin will appear after you restart [Voodoo].
   </notification>
 
   <notification
    icon="alertmodal.tga"
    name="GoToAuctionPage"
    type="alertmodal">
-Go to the [SECOND_LIFE] web page to see auction details or make a bid?
+Go to the [Voodoo] web page to see auction details or make a bid?
     <usetemplate
      name="okcancelbuttons"
      notext="Cancel"
@@ -1256,7 +1256,7 @@ This is often the case with new hardware we haven&apos;t had a chance to test.  
    icon="alertmodal.tga"
    name="DisplaySettingsNoShaders"
    type="alertmodal">
-[SECOND_LIFE] crashed while initializing graphics drivers.
+[Voodoo] crashed while initializing graphics drivers.
 Graphics Quality will be set to low to avoid some common driver errors.
 This will disable some graphics features.
 We recommend updating your graphics card drivers.
@@ -2182,9 +2182,9 @@ and provide details about your network setup.
    icon="alertmodal.tga"
    name="YouHaveBeenLoggedOut"
    type="alertmodal">
-You have been logged out of [SECOND_LIFE]:
+You have been logged out of [Voodoo]:
             [MESSAGE]
-You can still look at existing IM and chat by clicking &apos;View IM &amp; Chat&apos;. Otherwise, click &apos;Quit&apos; to exit [SECOND_LIFE] immediately.
+You can still look at existing IM and chat by clicking &apos;View IM &amp; Chat&apos;. Otherwise, click &apos;Quit&apos; to exit [Voodoo] immediately.
     <usetemplate
      name="okcancelbuttons"
      notext="Quit"
@@ -2525,7 +2525,7 @@ You have been moved into a nearby region.
    name="ClothingLoading"
    type="alertmodal">
 Your clothing is still downloading.
-You can use [SECOND_LIFE] normally and other users will see you correctly.
+You can use [Voodoo] normally and other users will see you correctly.
     <form name="form">
       <ignore name="ignore"
        text="When clothing is taking a long time to download"/>
@@ -2536,9 +2536,9 @@ You can use [SECOND_LIFE] normally and other users will see you correctly.
    icon="alertmodal.tga"
    name="FirstRun"
    type="alertmodal">
-[SECOND_LIFE] installation is complete.
+[Voodoo] installation is complete.
 
-If this is your first time using [SECOND_LIFE], you will need to create an account before you can log on.
+If this is your first time using [Voodoo], you will need to create an account before you can log on.
 Return to www.secondlife.com to create a new account?
     <usetemplate
      name="okcancelbuttons"
@@ -2577,7 +2577,7 @@ You can either check your internet connection and try again in a few minutes, cl
 Your character will appear in a moment.
 
 Use arrow keys to walk.
-Press the F1 key at any time for help or to learn more about [SECOND_LIFE].
+Press the F1 key at any time for help or to learn more about [Voodoo].
 Please choose the male or female avatar. You can change your mind later.
     <usetemplate
      name="okcancelbuttons"
@@ -2779,9 +2779,9 @@ Finished download of raw terrain file to:
    icon="alertmodal.tga"
    name="DownloadWindowsMandatory"
    type="alertmodal">
-A new version of [SECOND_LIFE] is available.
+A new version of [VOODOO] is available.
 [MESSAGE]
-You must download this update to use [SECOND_LIFE].
+You must download this update to use [VOODOOO].
     <usetemplate
      name="okcancelbuttons"
      notext="Quit"
@@ -2792,7 +2792,7 @@ You must download this update to use [SECOND_LIFE].
    icon="alertmodal.tga"
    name="DownloadWindows"
    type="alertmodal">
-An updated version of [SECOND_LIFE] is available.
+An updated version of [VOODOOO] is available.
 [MESSAGE]
 This update is not required, but we suggest you install it to improve performance and stability.
     <usetemplate
@@ -2805,7 +2805,7 @@ This update is not required, but we suggest you install it to improve performanc
    icon="alertmodal.tga"
    name="DownloadWindowsReleaseForDownload"
    type="alertmodal">
-An updated version of [SECOND_LIFE] is available.
+An updated version of [VOODOO] is available.
 [MESSAGE]
 This update is not required, but we suggest you install it to improve performance and stability.
     <usetemplate
@@ -2818,9 +2818,9 @@ This update is not required, but we suggest you install it to improve performanc
    icon="alertmodal.tga"
    name="DownloadMacMandatory"
    type="alertmodal">
-A new version of [SECOND_LIFE] is available.
+A new version of [VOODOO] is available.
 [MESSAGE]
-You must download this update to use [SECOND_LIFE].
+You must download this update to use [VOOODOOO].
 
 Download to your Applications folder?
     <usetemplate
@@ -2833,7 +2833,7 @@ Download to your Applications folder?
    icon="alertmodal.tga"
    name="DownloadMac"
    type="alertmodal">
-An updated version of [SECOND_LIFE] is available.
+An updated version of [Voodoo] is available.
 [MESSAGE]
 This update is not required, but we suggest you install it to improve performance and stability.
 
@@ -2848,7 +2848,7 @@ Download to your Applications folder?
    icon="alertmodal.tga"
    name="DownloadMacReleaseForDownload"
    type="alertmodal">
-An updated version of [SECOND_LIFE] is available.
+An updated version of [Voodoo] is available.
 [MESSAGE]
 This update is not required, but we suggest you install it to improve performance and stability.
 
@@ -2900,7 +2900,7 @@ Go to www.secondlife.com to manage your account?
    icon="alertmodal.tga"
    name="WebLaunchBugReport101"
    type="alertmodal">
-Visit the [SECOND_LIFE] Wiki and learn how to report bugs correctly.
+Visit the [Voodoo] Wiki and learn how to report bugs correctly.
     <usetemplate
      ignoretext="When launching web browser to view the Bug Reporting 101 Wiki"
      name="okcancelignore"
@@ -2912,7 +2912,7 @@ Visit the [SECOND_LIFE] Wiki and learn how to report bugs correctly.
    icon="alertmodal.tga"
    name="WebLaunchSecurityIssues"
    type="alertmodal">
-Visit the [SECOND_LIFE] Wiki for details of how to report a security issue.
+Visit the [Voodoo] Wiki for details of how to report a security issue.
     <usetemplate
      ignoretext="When launching web browser to view Security Issues Wiki"
      name="okcancelignore"
@@ -2924,7 +2924,7 @@ Visit the [SECOND_LIFE] Wiki for details of how to report a security issue.
    icon="alertmodal.tga"
    name="WebLaunchQAWiki"
    type="alertmodal">
-Visit the [SECOND_LIFE] QA Wiki.
+Visit the [Voodoo] QA Wiki.
     <usetemplate
      ignoretext="When launching web browser to view the QA Wiki"
      name="okcancelignore"
@@ -2936,7 +2936,7 @@ Visit the [SECOND_LIFE] QA Wiki.
    icon="alertmodal.tga"
    name="WebLaunchPublicIssue"
    type="alertmodal">
-Visit the [SECOND_LIFE] Public Issue Tracker, where you can report bugs and other issues.
+Visit the [Voodoo] Public Issue Tracker, where you can report bugs and other issues.
     <usetemplate
      ignoretext="When launching web browser to view the Public Issue Tracker"
      name="okcancelignore"
@@ -2948,7 +2948,7 @@ Visit the [SECOND_LIFE] Public Issue Tracker, where you can report bugs and othe
    icon="alertmodal.tga"
    name="WebLaunchPublicIssueHelp"
    type="alertmodal">
-Visit the [SECOND_LIFE] Wiki for info on how to use the Public Issue Tracker.
+Visit the [Voodoo] Wiki for info on how to use the Public Issue Tracker.
     <usetemplate
      ignoretext="When launching web browser to view Public Issue Tracker Wiki"
      name="okcancelignore"
@@ -6436,7 +6436,7 @@ Use the controls on the right to find things and display different backgrounds.
    icon="notify.tga"
    name="FirstBuild"
    type="notify">
-You can build new objects in some areas of [SECOND_LIFE].
+You can build new objects in some areas of [Voodoo].
 Use the tools in the upper left to build, and try holding down Ctrl or Alt to rapidly switch tools.
 Press Esc to stop building.
   </notification>

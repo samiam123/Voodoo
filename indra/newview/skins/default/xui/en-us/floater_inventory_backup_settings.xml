@@ -2,7 +2,7 @@
 <floater can_close="true" can_drag_on_left="false" can_minimize="false" can_resize="false"
      width="200" height="300" name="inventory_backup_settings" title="Download Options">
 	<check_box bottom_delta="-50" follows="left|top" left="10" name="chk_textures" label="Textures" />
-    <check_box bottom_delta="-20" follows="left|top" left="10" name="chk_sounds" label="Sounds" />
+  <check_box bottom_delta="-20" follows="left|top" left="10" name="chk_sounds" label="Sounds" />
 	<check_box bottom_delta="-20" follows="left|top" left="10" name="chk_callingcards" label="Calling Cards" />
 	<check_box bottom_delta="-20" follows="left|top" left="10" name="chk_landmarks" label="Landmarks" />
 	<check_box bottom_delta="-20" follows="left|top" left="10" name="chk_scripts" label="Scripts" />

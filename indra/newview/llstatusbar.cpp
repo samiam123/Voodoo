@@ -182,7 +182,7 @@ mSquareMetersCommitted(0)
 	childSetActionTextbox("BalanceText", onClickBalance );
 
 	// TODO: Disable buying currency when connected to non-SL grids
-	// that don't support currency yet -- MC
+	// that don't support currency yet --- MC
 	LLButton* buybtn = getChild<LLButton>("buycurrency");
 	buybtn->setLabelArg("[CURRENCY]", gHippoGridManager->getConnectedGrid()->getCurrencySymbol());
 	

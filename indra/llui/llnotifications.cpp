@@ -41,7 +41,7 @@
 
 #include <algorithm>
 #if LL_MSVC
-#pragma warning( disable       : 4265 )	// "class has virtual functions, but destructor is not virtual"
+#pragma warning( disable: 4265 )	// "class has virtual functions, but destructor is not virtual"
 #endif
 #include <boost/regex.hpp>
 
@@ -608,10 +608,10 @@ void LLNotification::init(const std::string& template_name, const LLSD& form_ele
 	// add default substitutions
 	// TODO: change this to read from the translatable strings file!
 	if (gHippoGridManager->getConnectedGrid()->isSecondLife()) {
-		mSubstitutions["[SECOND_LIFE]"] = "Second Life";
+		mSubstitutions["[Voodoo]"] = "Second Life";
 	}
 	else {
-		mSubstitutions["[SECOND_LIFE]"] = gHippoGridManager->getConnectedGrid()->getGridName();
+		mSubstitutions["[Voodoo]"] = gHippoGridManager->getConnectedGrid()->getGridName();
 	} 
 	mSubstitutions["[VIEWER_NAME]"] = LLNotifications::instance().getGlobalString("VIEWER_NAME");
 	mSubstitutions["[VIEWER_SITE]"] = LLNotifications::instance().getGlobalString("VIEWER_SITE");

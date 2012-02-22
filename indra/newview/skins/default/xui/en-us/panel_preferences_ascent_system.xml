@@ -306,7 +306,7 @@ Pivot Point
         label="Values are percent" left_delta="-5" mouse_opaque="true"
         tool_tip="Default settings are Percentages and every axis set at 50"
         name="EmPivotPercToggle" radio_style="false" width="100" control_name="AscentBuildPrefs_PivotIsPercent"/>
-      <check_box bottom_delta="60" enabled="false" follows="left|top" font="SansSerifSmall" height="16"
+      <check_box bottom_delta="60" enabled="true" follows="left|top" font="SansSerifSmall" height="16"
         initial_value="true" label="Enable highlighting of selected prims" left_delta="140"
         mouse_opaque="true" name="EmBuildPrefsRenderHighlight_toggle" control_name="AscentRenderHighlightSelections"
         radio_style="false" width="270"/>

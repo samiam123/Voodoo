@@ -5,58 +5,32 @@
       <key>default_grids_version</key><string>2</string>
     </map>
 
-
-    <!-- Nova -->
+<!-- Talon -->
     <map>
       <key>gridname</key>
-      <string>Nova...Powered by Aurora-Sim</string>
+      <string>Talon</string>
       <key>platform</key>
       <string>Aurora</string>
       <key>loginuri</key>
-      <string>http://aurora.4d-web.eu:8002/</string>
+      <string>http://grid.kicks-ass.net:8002/</string>
       <key>helperuri</key>
-      <string>http://aurora.4d-web.eu:8002/</string>
+      <string>http://grid.kicks-ass.net:8002/</string>
       <key>loginpage</key>
-      <string>http://aurora.4d-web.eu/cool/loginscreen</string>
+      <string>http://grid.kicks-ass.net/loginscreen/</string>
       <key>search</key>
-      <string>http://aurora.4d-web.eu</string>
+      <string>http://grid.kicks-ass.net:8080/</string>
       <key>support</key>
-      <string>http://aurora.4d-web.eu/cool/index.php?page=chat</string>
+      <string>http://grid.kicks-ass.net/index.php?page=chat</string>
       <key>website</key>
-      <string>http://aurora.4d-web.eu</string>
+      <string>http://grid.kicks-ass.net</string>
       <key>password</key>
-      <string>http://aurora.4d-web.eu/cool/index.php?page=forgotpass</string>
+      <string>http://grid.kicks-ass.net/index.php?page=forgotpass</string>
       <key>register</key>
-      <string>http://aurora.4d-web.eu/cool/index.php?page=register</string>
+      <string>http://grid.kicks-ass.net/index.php?page=register</string>
       <key>render_compat</key>
-      <boolean>1</boolean>
+      <boolean>0</boolean>
     </map>
-         <map>
-        <key>gridname</key>
-            <string>AnSky Grid</string>
-        <key>gridnick</key>
-            <string>ansky</string>
-        <key>helperuri</key>
-            <string>http://login.anskygrid.ca</string>
-        <key>loginpage</key>
-            <string>https://www.anskygrid.ca/loginscreen/</string>
-        <key>loginuri</key>
-            <string>http://login.anskygrid.ca:8002</string>
-        <key>password</key>
-            <string />
-        <key>platform</key>
-            <string>OpenSim</string>
-        <key>register</key>
-            <string>https://www.anskygrid.ca/index.php?page=register</string>
-        <key>render_compat</key>
-            <boolean>0</boolean>
-        <key>search</key>
-            <string />
-        <key>support</key>
-            <string>http://anskygrid.ca/index.php?page=chat</string>
-        <key>website</key>
-            <string>http://www.ansky.ca/</string>
-        </map>
+    
     <!-- Local Host -->
     <map>
       <key>gridname</key>

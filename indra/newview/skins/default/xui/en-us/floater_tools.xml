@@ -705,10 +705,7 @@
 			     tool_tip="Paste Rotation"  width="20" />
 			<button bottom_delta="-18" follows="top|right" font="SansSerifSmall" halign="center"
 			     height="18" label="p" left_delta="0" mouse_opaque="true" name="pasterotclip"  enabled="true"
-			     tool_tip="Paste Rotation from Clipboard"  width="20" />
-							 
-							 
-				 
+			     tool_tip="Paste Rotation from Clipboard"  width="20" />			 
 			<text bg_visible="false" border_drop_shadow_visible="false" border_visible="false"
 			     bottom_delta="-16" drop_shadow_visible="true" follows="left|top"
 			     font="SansSerifSmall" h_pad="0" halign="left" height="10" left="10"
@@ -1048,7 +1045,7 @@
 			     left="10" max_val="10" min_val="-10" mouse_opaque="true" name="FlexGravity"
 			     width="108" />
 			<spinner bottom_delta="-20" decimal_digits="5" follows="left|top" height="16"
-			     increment="0.5" initial_val="2" label="Drag" label_width="545" left="10"
+			     increment="0.5" initial_val="2" label="Drag" label_width="45" left="10"
 			     max_val="10" min_val="0" mouse_opaque="true" name="FlexFriction"
 			     width="108" />
 			<spinner bottom_delta="-20" decimal_digits="5" follows="left|top" height="16"
@@ -1059,20 +1056,16 @@
 			     max_val="10" min_val="0" mouse_opaque="true" name="FlexTension" width="108" />
 			<spinner bottom_delta="-20" decimal_digits="5" follows="left|top" height="16"
 			     increment="0.01" initial_val="0" label="Force X" label_width="45" left="10"
-			     max_val="10" min_val="-10" mouse_opaque="true" name="FlexForceX"
-			     width="108" />
+			     max_val="10" min_val="-10" mouse_opaque="true" name="FlexForceX" width="108" />
 			<spinner bottom_delta="-20" decimal_digits="5" follows="left|top" height="16"
 			     increment="0.01" initial_val="0" label="Force Y" label_width="45" left="10"
-			     max_val="10" min_val="-10" mouse_opaque="true" name="FlexForceY"
-			     width="108" />
+			     max_val="10" min_val="-10" mouse_opaque="true" name="FlexForceY" width="108" />
 			<spinner bottom_delta="-20" decimal_digits="5" follows="left|top" height="16"
 			     increment="0.01" initial_val="0" label="Force Z" label_width="45" left="10"
-			     max_val="10" min_val="-10" mouse_opaque="true" name="FlexForceZ"
-			     width="108" />
+			     max_val="10" min_val="-10" mouse_opaque="true" name="FlexForceZ" width="108" />
 			<check_box bottom_delta="-30" follows="left|top" font="SansSerifSmall" height="16"
 			     initial_value="false" label="Light" left="10" mouse_opaque="true"
-			     name="Light Checkbox Ctrl" tool_tip="Causes object to emit light"
-			     width="121" />
+			     name="Light Checkbox Ctrl" tool_tip="Causes object to emit light" width="121" />
 			<text bg_visible="false" border_drop_shadow_visible="false" border_visible="false"
 			     bottom_delta="-21" drop_shadow_visible="true" follows="left|top"
 			     font="SansSerifSmall" h_pad="0" halign="left" height="10" left_delta="0"
@@ -1616,7 +1609,7 @@
 		Attachment
 	</string>
   <string name="status_selectprimequiv">
-    , Cost: [SEL_WEIGHT]
+    Cost: [SEL_WEIGHT]
   </string>
   <string name="status_selectcount">
     Primitives: [COUNT][PE_STRING]

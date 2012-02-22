@@ -3361,9 +3361,9 @@ void LLPipeline::renderGeom(LLCamera& camera, BOOL forceVBOUpdate)
 	//fake vertex buffer updating
 	//to guaranttee at least updating one VBO buffer every frame
 	//to walk around the bug caused by ATI card --> DEV-3855
-	//
-	//if(forceVBOUpdate)
-	//	gSky.mVOSkyp->updateDummyVertexBuffer() ;
+	//Re-enabling temp sams voodoo
+	if(forceVBOUpdate)
+	gSky.mVOSkyp->updateDummyVertexBuffer() ;
 
 	gFrameStats.start(LLFrameStats::RENDER_GEOM);
 

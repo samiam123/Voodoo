@@ -484,7 +484,7 @@
       <key>Type</key>
       <string>U32</string>
       <key>Value</key>
-      <integer>0</integer>
+      <integer>2</integer>
     </map>
 
     <key>ResetFocusOnSelfClick</key>
@@ -10675,7 +10675,7 @@
       <key>Type</key>
       <string>Boolean</string>
       <key>Value</key>
-      <integer>1</integer>
+      <integer>0</integer>
     </map>
     <key>RenderMaxPartCount</key>
     <map>
@@ -10697,7 +10697,7 @@
       <key>Type</key>
       <string>S32</string>
       <key>Value</key>
-      <integer>65536</integer>
+      <integer>65535</integer>
     </map>
     <key>RenderMaxVBOSize</key>
     <map>
