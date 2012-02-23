@@ -43,7 +43,7 @@ typedef void (*DestroyLLImageJ2CFunction)(LLImageJ2CImpl*);
 typedef const char* (*EngineInfoLLImageJ2CFunction)();
 
 //some "private static" variables so we only attempt to load
-//dynamic libaries once
+///dynamic libaries once
 CreateLLImageJ2CFunction j2cimpl_create_func;
 DestroyLLImageJ2CFunction j2cimpl_destroy_func;
 EngineInfoLLImageJ2CFunction j2cimpl_engineinfo_func;

@@ -114,7 +114,7 @@ std::map<std::string,std::string> LLImageMetaDataReader::ExtractKDUUploadComment
 			//result["full"]=fullComment;
 			//a=abbee3b5-fbe0-4cfa-8d15-323d6800448e&h=480&w=640&z=20081118204138&c=26961aff
 			S32 pos = 0;//where we are in the string
-			while(pos<fullComment.length())
+			while(pos < fullComment.length())
 			{
 				S32 equalsPos = fullComment.find("=",pos);
 				std::string infoType = fullComment.substr(pos,equalsPos-pos);
