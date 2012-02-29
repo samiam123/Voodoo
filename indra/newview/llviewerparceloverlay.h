@@ -36,9 +36,12 @@
 // The ownership data for land parcels.
 // One of these structures per region.
 
+
 #include "lldarray.h"
 #include "llframetimer.h"
+
 #include "lluuid.h"
+
 #include "llviewertexture.h"
 #include "llgl.h"
 
@@ -54,12 +57,18 @@ public:
 	~LLViewerParcelOverlay();
 
 	// ACCESS
-	LLViewerTexture*		getTexture() const		{ return mTexture; }
+	LLViewerTexture* getTexture() const	{ return mTexture; }
 
 	BOOL			isOwned(const LLVector3& pos) const;
 	BOOL			isOwnedSelf(const LLVector3& pos) const;
 	BOOL			isOwnedGroup(const LLVector3& pos) const;
 	BOOL			isOwnedOther(const LLVector3& pos) const;
+
+
+
+
+
+
 	BOOL			isSoundLocal(const LLVector3& pos) const;
 
 	BOOL			isBuildCameraAllowed(const LLVector3& pos) const;
@@ -95,11 +104,13 @@ private:
 	void 	updateOverlayTexture();
 	void	updatePropertyLines();
 	
+
 private:
 	// Back pointer to the region that owns this structure.
 	LLViewerRegion*	mRegion;
 
 	S32				mParcelGridsPerEdge;
+
 	S32             mRegionSize;
 
 	LLPointer<LLViewerTexture> mTexture;

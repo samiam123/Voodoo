@@ -2,7 +2,7 @@ install(TARGETS ${VIEWER_BINARY_NAME}
         DESTINATION ${APP_BIN_DIR}
         )
 
-# Install artwork lying inside the source tree.
+ # Install artwork lying inside the source tree.
 install(DIRECTORY res skins app_settings local_assets
         DESTINATION ${APP_SHARE_DIR}
         PATTERN ".svn" EXCLUDE

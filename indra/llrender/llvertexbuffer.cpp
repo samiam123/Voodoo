@@ -778,8 +778,9 @@ void LLVertexBuffer::updateNumVerts(S32 nverts)
 
 	if (nverts >= 65535)
 	{
-		llwarns << "Vertex buffer overflow!" << llendl;
-		nverts = 65535;
+		//llwarns << "Vertex buffer overflow!" << llendl;
+		//nverts = 65535;
+		llinfos << "More vertices than 65535 (#" << nverts << ")" <<llendl;
 	}
 
 	mRequestedNumVerts = nverts;
@@ -829,11 +830,19 @@ void LLVertexBuffer::allocateBuffer(S32 nverts, S32 nindices, bool create)
 {
 	LLMemType mt(LLMemType::MTYPE_VERTEX_DATA);
 		
-	if (nverts < 0 || nindices < 0 ||
-		nverts > 65535)
-	{
-		llerrs << "Bad vertex buffer allocation: " << nverts << " : " << nindices << llendl;
-	}
+	//if (nverts < 0 || nindices < 0 ||
+	//	nverts > 65535)
+	//{
+	//	llerrs << "Bad vertex buffer allocation: " << nverts << " : " << nindices << llendl;
+	//}
+	if( nverts < 0 || nindices < 0 )
+      		llerrs << "Bad vertex buffer allocation: " << nverts << " : " << nindices << llendl;
+    	//}
+    
+    	if( nverts > 0xFFFF )
+    		llinfos << "More vertices than 65535 (#" << nverts << ")" <<llendl;
+    	
+    	// </FS:ND>
 
 	updateNumVerts(nverts);
 	updateNumIndices(nindices);

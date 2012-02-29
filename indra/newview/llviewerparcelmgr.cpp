@@ -139,6 +139,7 @@ LLViewerParcelMgr::LLViewerParcelMgr()
 	mCollisionParcel = new LLParcel();
 	mBlockedImage = LLViewerTextureManager::getFetchedTextureFromFile("noentrylines.j2c");
 	mPassImage = LLViewerTextureManager::getFetchedTextureFromFile("noentrypasslines.j2c");
+    init(256); //huh? wasent in here but was removed in singu voodoo sams
 } 
 
 //moved this stuff out of the constructor and into a function that we can call again after we get the region size.
@@ -153,6 +154,8 @@ void LLViewerParcelMgr::init(F32 region_size)
 	mCollisionSegments = new U8[(mParcelsPerEdge+1)*(mParcelsPerEdge+1)];
 	resetSegments(mCollisionSegments);
 
+
+	
 	S32 mParcelOverLayChunks = region_size * region_size / (128 * 128);
 	S32 overlay_size = mParcelsPerEdge * mParcelsPerEdge / mParcelOverLayChunks;
 	sPackedOverlay = new U8[overlay_size];
@@ -239,7 +242,7 @@ void LLViewerParcelMgr::getDisplayInfo(S32* area_out, S32* claim_out,
 	S32 price = 0;
 	S32 rent = 0;
 	BOOL for_sale = FALSE;
-	F32 dwell = 0.f;
+	F32 dwell = 0.f; //F32 dwell = DWELL_NAN;
 
 	if (mSelected)
 	{
@@ -585,7 +588,7 @@ void LLViewerParcelMgr::deselectLand()
 		mCurrentParcel->mBanList.clear();
 		//mCurrentParcel->mRenterList.reset();
 
-		mSelectedDwell = 0.f;
+		mSelectedDwell = 0.f; //F32 dwell = DWELL_NAN;
 
 		// invalidate parcel selection so that existing users of this selection can clean up
 		mCurrentParcelSelection->setParcel(NULL);
@@ -1423,7 +1426,8 @@ void LLViewerParcelMgr::processParcelProperties(LLMessageSystem *msg, void **use
 	BOOL	region_deny_age_unverified_override = false;
 
 	S32		other_clean_time = 0;
-
+    //Phe added the line below comment out till i know why voodoo sam
+	//LLViewerParcelMgr* parcelmgr = LLViewerParcelMgr::getInstance();
 	msg->getS32Fast(_PREHASH_ParcelData, _PREHASH_RequestResult, request_result );
 	msg->getS32Fast(_PREHASH_ParcelData, _PREHASH_SequenceID, sequence_id );
 
@@ -1536,9 +1540,7 @@ void LLViewerParcelMgr::processParcelProperties(LLMessageSystem *msg, void **use
 
 		if (parcel == LLViewerParcelMgr::getInstance()->mAgentParcel)
 		{
-			S32 bitmap_size =	LLViewerParcelMgr::getInstance()->mParcelsPerEdge
-								* LLViewerParcelMgr::getInstance()->mParcelsPerEdge
-								/ 8;
+			S32 bitmap_size =	LLViewerParcelMgr::getInstance()->mParcelsPerEdge * LLViewerParcelMgr::getInstance()->mParcelsPerEdge/ 8;
 			U8* bitmap = new U8[ bitmap_size ];
 			msg->getBinaryDataFast(_PREHASH_ParcelData, _PREHASH_Bitmap, bitmap, bitmap_size);
 
@@ -1558,8 +1560,9 @@ void LLViewerParcelMgr::processParcelProperties(LLMessageSystem *msg, void **use
 		LLViewerParcelMgr::getInstance()->mCurrentParcelSelection->mSelectedOtherCount = other_count;
 		LLViewerParcelMgr::getInstance()->mCurrentParcelSelection->mSelectedPublicCount = public_count;
 
-		LLViewerParcelMgr::getInstance()->mCurrentParcelSelection->mSelectedMultipleOwners =
-							(request_result == PARCEL_RESULT_MULTIPLE);
+		LLViewerParcelMgr::getInstance()->mCurrentParcelSelection->mSelectedMultipleOwners = (request_result == PARCEL_RESULT_MULTIPLE);
+
+		
 
 		// Select the whole parcel
 		LLViewerRegion* region = LLWorld::getInstance()->getRegion( msg->getSender() );
@@ -1600,9 +1603,10 @@ void LLViewerParcelMgr::processParcelProperties(LLMessageSystem *msg, void **use
 				LLViewerParcelMgr::getInstance()->mEastNorth = region->getPosGlobalFromRegion( aabb_max );
 
 				// Owned land, highlight the boundaries
-				S32 bitmap_size =	LLViewerParcelMgr::getInstance()->mParcelsPerEdge
-									* LLViewerParcelMgr::getInstance()->mParcelsPerEdge
-									/ 8;
+				S32 bitmap_size =	LLViewerParcelMgr::getInstance()->mParcelsPerEdge * LLViewerParcelMgr::getInstance()->mParcelsPerEdge/ 8;
+
+				
+				
 				U8* bitmap = new U8[ bitmap_size ];
 				msg->getBinaryDataFast(_PREHASH_ParcelData, _PREHASH_Bitmap, bitmap, bitmap_size);
 

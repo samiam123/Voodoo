@@ -3,6 +3,7 @@
 project(llimage)
 
 include(00-Common)
+include(LLAddBuildTest)
 include(LLCommon)
 include(LLImage)
 include(LLMath)
@@ -18,7 +19,7 @@ include_directories(
     )
 
 set(llimage_SOURCE_FILES
-    aes.cpp
+     aes.cpp
     llimagebmp.cpp
     llimage.cpp
     llimagedxt.cpp
@@ -33,7 +34,7 @@ set(llimage_SOURCE_FILES
 
 set(llimage_HEADER_FILES
     CMakeLists.txt
-    aes.h
+     aes.h
     llimage.h
     llimagebmp.h
     llimagedxt.h
@@ -53,18 +54,16 @@ set_source_files_properties(${llimage_HEADER_FILES}
 list(APPEND llimage_SOURCE_FILES ${llimage_HEADER_FILES})
 
 add_library (llimage ${llimage_SOURCE_FILES})
-# Libraries on which this library depends, needed for Linux builds
-# Sort by high-level to low-level
-target_link_libraries(llimage
-    llcommon
-    llimagej2coj        # *HACK: In theory a noop for KDU builds?
+add_dependencies(llimage prepare)
+target_link_libraries(
+    llimage
     ${JPEG_LIBRARIES}
     ${PNG_LIBRARIES}
     ${ZLIB_LIBRARIES}
     )
 
 if (LL_TESTS)
-  include(LLAddBuildTest)
-  # Add tests
-  ADD_BUILD_TEST(llimageworker llimage)
+	# Add tests
+	ADD_BUILD_TEST(llimageworker llimage)
 endif (LL_TESTS)
+

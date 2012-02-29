@@ -34,6 +34,7 @@
 #include "apr_dso.h"
 
 #include "lldir.h"
+#include "../llxml/llcontrol.h"
 #include "llimagej2c.h"
 #include "llmemtype.h"
 
@@ -46,7 +47,7 @@ typedef const char* (*EngineInfoLLImageJ2CFunction)();
 CreateLLImageJ2CFunction j2cimpl_create_func;
 DestroyLLImageJ2CFunction j2cimpl_destroy_func;
 EngineInfoLLImageJ2CFunction j2cimpl_engineinfo_func;
-apr_pool_t *j2cimpl_dso_memory_pool;
+AIAPRPool j2cimpl_dso_memory_pool;
 apr_dso_handle_t *j2cimpl_dso_handle;
 
 //Declare the prototype for theses functions here, their functionality
@@ -61,9 +62,6 @@ const char* fallbackEngineInfoLLImageJ2CImpl();
 //Loads the required "create", "destroy" and "engineinfo" functions needed
 void LLImageJ2C::openDSO()
 {
-	// Do not attempt to load any j2cdecoder/j2cencoder library
-	// use openjpeg all the time.
-	return;
 	//attempt to load a DSO and get some functions from it
 	std::string dso_name;
 	std::string dso_path;
@@ -72,11 +70,11 @@ void LLImageJ2C::openDSO()
 	apr_status_t rv;
 
 #if LL_WINDOWS
-	dso_name = "llkdu.dll";
+	dso_name = "";
 #elif LL_DARWIN
-	dso_name = "libllkdu.dylib";
+	dso_name = "";
 #else
-	dso_name = "libllkdu.so";
+	dso_name = "";
 #endif
 
 	dso_path = gDirUtilp->findFile(dso_name,
@@ -84,13 +82,12 @@ void LLImageJ2C::openDSO()
 				       gDirUtilp->getExecutableDir());
 
 	j2cimpl_dso_handle      = NULL;
-	j2cimpl_dso_memory_pool = NULL;
+	j2cimpl_dso_memory_pool.create();
 
 	//attempt to load the shared library
-	apr_pool_create(&j2cimpl_dso_memory_pool, NULL);
 	rv = apr_dso_load(&j2cimpl_dso_handle,
 					  dso_path.c_str(),
-					  j2cimpl_dso_memory_pool);
+					  j2cimpl_dso_memory_pool());
 
 	//now, check for success
 	if ( rv == APR_SUCCESS )
@@ -145,6 +142,7 @@ void LLImageJ2C::openDSO()
 		fprintf(stderr, "error: %d, %s\n", rv, errbuf);
 		apr_dso_error(j2cimpl_dso_handle, errbuf, sizeof(errbuf));
 		fprintf(stderr, "dso-error: %d, %s\n", rv, errbuf);
+		fflush(stderr);
 #endif
 
 		if ( j2cimpl_dso_handle )
@@ -153,11 +151,7 @@ void LLImageJ2C::openDSO()
 			j2cimpl_dso_handle = NULL;
 		}
 
-		if ( j2cimpl_dso_memory_pool )
-		{
-			apr_pool_destroy(j2cimpl_dso_memory_pool);
-			j2cimpl_dso_memory_pool = NULL;
-		}
+		j2cimpl_dso_memory_pool.destroy();
 	}
 }
 
@@ -165,7 +159,7 @@ void LLImageJ2C::openDSO()
 void LLImageJ2C::closeDSO()
 {
 	if ( j2cimpl_dso_handle ) apr_dso_unload(j2cimpl_dso_handle);
-	if (j2cimpl_dso_memory_pool) apr_pool_destroy(j2cimpl_dso_memory_pool);
+	j2cimpl_dso_memory_pool.destroy();
 }
 
 //static
@@ -204,6 +198,7 @@ LLImageJ2C::LLImageJ2C() : 	LLImageFormatted(IMG_CODEC_J2C),
 	{	// Array size is MAX_DISCARD_LEVEL+1
 		mDataSizes[i] = 0;
 	}
+
 }
 
 // virtual
@@ -261,7 +256,9 @@ BOOL LLImageJ2C::updateData()
 	}
 	else 
 	{
-		res = mImpl->getMetadata(*this);
+		if (mImpl)
+			res = mImpl->getMetadata(*this);
+		else res = FALSE;
 	}
 
 	if (res)
@@ -377,11 +374,22 @@ S32 LLImageJ2C::calcHeaderSize()
 	return calcHeaderSizeJ2C();
 }
 
-
 // calcDataSize() returns how many bytes to read 
 // to load discard_level (including header and higher discard levels)
 S32 LLImageJ2C::calcDataSize(S32 discard_level)
 {
+	static const LLCachedControl<bool> legacy_size("SianaLegacyJ2CSize", false);
+	
+	if (legacy_size) {
+		static const LLCachedControl<F32> exponent("SianaJ2CSizeExponent", 1.0f);
+		static const LLCachedControl<S32> offset("SianaJ2CSizeOffset", 0);
+		
+		S32 size = calcDataSizeJ2C(getWidth(), getHeight(), getComponents(), discard_level, mRate);
+		S32 size_d0 = calcDataSizeJ2C(getWidth(), getHeight(), getComponents(), discard_level, mRate);
+		
+		return pow(size/size_d0, exponent)*size_d0 + offset;
+	}
+
 	discard_level = llclamp(discard_level, 0, MAX_DISCARD_LEVEL);
 
 	if ( mAreaUsedForDataSizeCalcs != (getHeight() * getWidth()) 
@@ -465,8 +473,8 @@ BOOL LLImageJ2C::loadAndValidate(const std::string &filename)
 	resetLastError();
 
 	S32 file_size = 0;
-	LLAPRFile infile;
-	(filename, LL_APR_RB, &file_size);
+	LLAPRFile infile ;
+	infile.open(filename, LL_APR_RB, LLAPRFile::global, &file_size);
 	apr_file_t* apr_file = infile.getFileHandle() ;
 	if (!apr_file)
 	{
@@ -518,14 +526,16 @@ BOOL LLImageJ2C::validate(U8 *data, U32 file_size)
 	if ( res )
 	{
 		// Check to make sure that this instance has been initialized with data
-		if (!getData() || (0 == getDataSize()))
+		if (!getData() || (getDataSize() < 16))
 		{
 			setLastError("LLImageJ2C uninitialized");
 			res = FALSE;
 		}
 		else
 		{
-			res = mImpl->getMetadata(*this);
+			if (mImpl)
+				res = mImpl->getMetadata(*this);
+			else res = FALSE;
 		}
 	}
 	

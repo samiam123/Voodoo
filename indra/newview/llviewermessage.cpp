@@ -4313,6 +4313,7 @@ void process_object_update(LLMessageSystem *mesgsys, void **user_data)
 
 	// Update the object...
 	gObjectList.processObjectUpdate(mesgsys, user_data, OUT_FULL);
+    	stop_glerror(); //added for test voodoo sam
 }
 
 void process_compressed_object_update(LLMessageSystem *mesgsys, void **user_data)
@@ -4330,6 +4331,7 @@ void process_compressed_object_update(LLMessageSystem *mesgsys, void **user_data
 
 	// Update the object...
 	gObjectList.processCompressedObjectUpdate(mesgsys, user_data, OUT_FULL_COMPRESSED);
+    stop_glerror(); //added this to like above for test voodoo sam
 }
 
 void process_cached_object_update(LLMessageSystem *mesgsys, void **user_data)
@@ -4347,6 +4349,7 @@ void process_cached_object_update(LLMessageSystem *mesgsys, void **user_data)
 
 	// Update the object...
 	gObjectList.processCachedObjectUpdate(mesgsys, user_data, OUT_FULL_CACHED);
+    stop_glerror(); //and one more fun voodoo sam
 }
 
 
@@ -4894,7 +4897,7 @@ void process_avatar_appearance(LLMessageSystem *mesgsys, void **user_data)
 	mesgsys->getUUIDFast(_PREHASH_Sender, _PREHASH_ID, uuid);
 
 	LLVOAvatar* avatarp = gObjectList.findAvatar(uuid);
-	if( avatarp )
+	if ( avatarp )
 	{
 		avatarp->processAvatarAppearance( mesgsys );
 	}
@@ -6449,9 +6452,9 @@ bool callback_script_dialog(const LLSD& notification, const LLSD& response)
 	if (button_idx != -1)
 	{
 		if (notification["payload"].has("textbox"))
-		{
+		//{ not in sg voodoo sams commented out 2 brackets below
 			button = response["message"].asString();
-		}
+		//}
 		LLMessageSystem* msg = gMessageSystem;
 		msg->newMessage("ScriptDialogReply");
 		msg->nextBlock("AgentData");

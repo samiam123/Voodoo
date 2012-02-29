@@ -267,7 +267,7 @@ void LLVOWater::setIsEdgePatch(const BOOL edge_patch)
 	mIsEdgePatch = edge_patch;
 }
 
-void LLVOWater::updateSpatialExtents(LLVector4a &newMin, LLVector4a& newMax)
+void LLVOWater::updateSpatialExtents(LLVector4a& newMin, LLVector4a& newMax)
 {
 	LLVector4a pos;
 	pos.load3(getPositionAgent().mV);

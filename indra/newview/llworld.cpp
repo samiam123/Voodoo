@@ -78,10 +78,14 @@ const S32 WORLD_PATCH_SIZE = 16;
 
 extern LLColor4U MAX_WATER_COLOR;
 
+
+
 U32 LLWorld::mWidth = 256;
 
 // meters/point, therefore mWidth * mScale = meters per edge
 const F32 LLWorld::mScale = 1.f;
+
+
 
 F32 LLWorld::mWidthInMeters = mWidth * mScale;
 
@@ -96,6 +100,7 @@ LLWorld::LLWorld() :
 	mLastPacketsOut(0),
 	mLastPacketsLost(0),
 	mSpaceTimeUSec(0)
+
 {
 	for (S32 i = 0; i < 8; i++)
 	{
@@ -131,17 +136,30 @@ void LLWorld::destroyClass()
 		removeRegion(region_to_delete->getHost());
 	}
 	if(LLVOCache::hasInstance())
+
+
+
+
 	{
 		LLVOCache::getInstance()->destroyClass() ;
+
 	}
 	LLViewerPartSim::getInstance()->destroyClass();
 }
+
+
+
+
+
+
+
 
 
 LLViewerRegion* LLWorld::addRegion(const U64 &region_handle, const LLHost &host, const U32 &region_size_x, const U32 &region_size_y)
 {
 	LLMemType mt(LLMemType::MTYPE_REGIONS);
 	llinfos << "Add region with handle: " << region_handle << " on host " << host << llendl;
+
 	LLViewerRegion *regionp = getRegionFromHandle(region_handle);
 	if (regionp)
 	{
@@ -171,11 +189,15 @@ LLViewerRegion* LLWorld::addRegion(const U64 &region_handle, const LLHost &host,
 
 	U32 iindex = 0;
 	U32 jindex = 0;
+
 	mWidth = region_size_x;
 	mWidthInMeters = mWidth * mScale; 
 	from_region_handle(region_handle, &iindex, &jindex);
 	S32 x = (S32)(iindex/256);
 	S32 y = (S32)(jindex/256);
+
+
+
 	llinfos << "Adding new region (" << x << ":" << y << ")" << llendl;
 	llinfos << "Host: " << host << llendl;
 
@@ -199,6 +221,7 @@ LLViewerRegion* LLWorld::addRegion(const U64 &region_handle, const LLHost &host,
 
 	mRegionList.push_back(regionp);
 	mActiveRegionList.push_back(regionp);
+
 	mCulledRegionList.push_back(regionp);
 
 
@@ -281,12 +304,14 @@ void LLWorld::removeRegion(const LLHost &host)
 
 	mRegionList.remove(regionp);
 	mActiveRegionList.remove(regionp);
+
 	mCulledRegionList.remove(regionp);
 	mVisibleRegionList.remove(regionp);
 	
 	delete regionp;
 
 	updateWaterObjects();
+
 
 	//double check all objects of this region are removed.
 	gObjectList.clearAllMapObjectsInRegion(regionp) ;
@@ -388,12 +413,21 @@ LLVector3d	LLWorld::clipToVisibleRegions(const LLVector3d &start_pos, const LLVe
 
 	// clamp to within region dimensions
 	LLVector3d final_region_pos = LLVector3d(region_coord) - (delta_pos * clip_factor);
+
+
+
+
+
+
+
+
 	final_region_pos.mdV[VX] = llclamp(final_region_pos.mdV[VX], 0.0,
 									   (F64)(region_width - F_ALMOST_ZERO));
 	final_region_pos.mdV[VY] = llclamp(final_region_pos.mdV[VY], 0.0,
 									   (F64)(region_width - F_ALMOST_ZERO));
 	final_region_pos.mdV[VZ] = llclamp(final_region_pos.mdV[VZ], 0.0,
 									   (F64)(LLWorld::getInstance()->getRegionMaxHeight() - F_ALMOST_ZERO));
+
 	return regionp->getPosGlobalFromRegion(LLVector3(final_region_pos));
 }
 
@@ -606,7 +640,7 @@ void LLWorld::updateVisibilities()
 		region_list_t::iterator curiter = iter++;
 		LLViewerRegion* regionp = *curiter;
 		F32 height = regionp->getLand().getMaxZ() - regionp->getLand().getMinZ();
-		F32 radius = 0.5f*(F32) sqrt(height * height + diagonal_squared);
+		F32 radius = 0.5f * (F32) sqrt(height * height + diagonal_squared);
 		if (!regionp->getLand().hasZData()
 			|| LLViewerCamera::getInstance()->sphereInFrustum(regionp->getCenterAgent(), radius))
 		{
@@ -627,7 +661,7 @@ void LLWorld::updateVisibilities()
 		}
 
 		F32 height = regionp->getLand().getMaxZ() - regionp->getLand().getMinZ();
-		F32 radius = 0.5f*(F32) sqrt(height * height + diagonal_squared);
+		F32 radius = 0.5f * (F32) sqrt(height * height + diagonal_squared);
 		if (LLViewerCamera::getInstance()->sphereInFrustum(regionp->getCenterAgent(), radius))
 		{
 			regionp->calculateCameraDistance();
@@ -657,13 +691,44 @@ void LLWorld::updateRegions(F32 max_update_time)
 	// Perform idle time updates for the regions (and associated surfaces)
 	for (region_list_t::iterator iter = mActiveRegionList.begin()/*mRegionList.begin()*/;
 		 iter != mActiveRegionList.end()/*mRegionList.end()*/; ++iter)
+
+
+
+
+
 	{
 		LLViewerRegion* regionp = *iter;
 		F32 max_time = max_update_time - update_timer.getElapsedTimeF32();
+
+
+
+
+
+
+
+
+
+
+
+
 		if (did_one && max_time <= 0.f)
 			break;
+
 		max_time = llmin(max_time, max_update_time*.1f);
 		did_one |= regionp->idleUpdate(max_update_time);
+
+
+
+
+
+
+
+
+
+
+
+
+
 	}
 }
 
@@ -678,10 +743,37 @@ void LLWorld::updateClouds(const F32 dt)
 	static const LLCachedControl<bool> sky_use_classic_clouds("SkyUseClassicClouds",false);
 	if (freeze_time ||
 		!sky_use_classic_clouds)
+
 	{
 		// don't move clouds in snapshot mode
 		return;
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	if (mActiveRegionList.size())
 	{
 		// Update all the cloud puff positions, and timer based stuff
@@ -825,6 +917,8 @@ F32 LLWorld::getLandFarClip() const
 
 void LLWorld::setLandFarClip(const F32 far_clip)
 {
+
+
 	static S32 const rwidth = (S32)getRegionWidthInMeters();
 	S32 const n1 = (llceil(mLandFarClip) - 1) / rwidth;
 	S32 const n2 = (llceil(far_clip) - 1) / rwidth;
@@ -1255,6 +1349,7 @@ void process_enable_simulator(LLMessageSystem *msg, void **user_data)
 	// which simulator should we modify?
 	LLHost sim(ip_u32, port);
 
+
 	U32 region_size_x = 256;
     msg->getU32Fast(_PREHASH_SimulatorInfo, _PREHASH_RegionSizeX, region_size_x);
 
@@ -1269,10 +1364,20 @@ void process_enable_simulator(LLMessageSystem *msg, void **user_data)
 
 	// Viewer trusts the simulator.
 	msg->enableCircuit(sim, TRUE);
+
+
 	LLWorld::getInstance()->addRegion(handle, sim, region_size_x, region_size_y);
 
 	// give the simulator a message it can use to get ip and port
+
+
+
+
+
+
+
 	llinfos << "simulator_enable() Enabling " << sim << " with code " << msg->getOurCircuitCode() << llendl;
+
 	msg->newMessageFast(_PREHASH_UseCircuitCode);
 	msg->nextBlockFast(_PREHASH_CircuitCode);
 	msg->addU32Fast(_PREHASH_Code, msg->getOurCircuitCode());
@@ -1415,11 +1520,24 @@ static LLVector3d unpackLocalToGlobalPosition(U32 compact_local, const LLVector3
     LLVector3d pos_global(region_origin);
     LLVector3d pos_local;
 
+
     pos_local.mdV[VZ] = (compact_local & 0xFFU) * 4;
     pos_local.mdV[VY] = (compact_local >> 8) & 0xFFU;
     pos_local.mdV[VX] = (compact_local >> 16) & 0xFFU;
 
+
+
+
+
+
+
+
     pos_global += pos_local;
+
+
+
+
+
     return pos_global;
 }
 
