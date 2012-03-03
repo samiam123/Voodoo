@@ -70,6 +70,7 @@ void LLEventTimer::updateClass()
 {
 	std::list<LLEventTimer*> completed_timers;
 
+	//for (instance_iter iter = beginInstances(); iter != endInstances(); )
 	/*{
 		for (std::list<LLEventTimer*>::iterator iter = sActiveList.begin(); iter != sActiveList.end(); ) 
 		{
@@ -85,16 +86,22 @@ void LLEventTimer::updateClass()
 		}
 	}*/
 	{
+		//LLEventTimer& timer = *iter++;
+		//F32 et = timer.mEventTimer.getElapsedTimeF32();
+		//if (timer.mEventTimer.getStarted() && et > timer.mPeriod)
 		LLInstanceTrackerScopedGuard guard;
 		for (instance_iter iter = guard.beginInstances(); iter != guard.endInstances(); ) 
 		{
 			LLEventTimer& timer = *iter++;
 			F32 et = timer.mEventTimer.getElapsedTimeF32();
 			if (timer.mEventTimer.getStarted() && et > timer.mPeriod) {
+		    timer.mEventTimer.reset();
+			if (timer.tick())
+			{
 				timer.mEventTimer.reset();
-				if ( timer.tick() )
-				{
-					completed_timers.push_back( &timer );
+				//if ( timer.tick() )
+				//{
+					completed_timers.push_back( &timer);
 				}
 			}
 		}
@@ -110,5 +117,4 @@ void LLEventTimer::updateClass()
 		}
 	}
 }
-
 

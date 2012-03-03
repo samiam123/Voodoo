@@ -1754,10 +1754,10 @@ bool idle_startup()
 		// XML-RPC successful login path here
 		if (successful_login)
 		{
-			{ 
-				std::string current_grid = gHippoGridManager->getConnectedGrid()->getGridName(); 
-				gSavedSettings.setString("LastConnectedGrid", current_grid); 
-			}
+			//{ 
+			//	std::string current_grid = gHippoGridManager->getConnectedGrid()->getGridName(); 
+			//	gSavedSettings.setString("LastConnectedGrid", current_grid); 
+			//}
 
 			std::string text;
 			text = LLUserAuth::getInstance()->getResponse("udp_blacklist");
