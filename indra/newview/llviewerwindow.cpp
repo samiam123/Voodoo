@@ -309,7 +309,9 @@ public:
 		U32 ypos = 64;
 		const U32 y_inc = 20;
 
-		if (gSavedSettings.getBOOL("DebugShowTime"))
+		//if (gSavedSettings.getBOOL("DebugShowTime"))
+			static LLCachedControl<bool> debugShowTime(gSavedSettings, "DebugShowTime");
+    		if (debugShowTime)
 		{
 			const U32 y_inc2 = 15;
 			for (std::map<S32,LLFrameTimer>::reverse_iterator iter = gDebugTimers.rbegin();
@@ -334,7 +336,10 @@ public:
 		}
 		
 #if LL_WINDOWS
-		if (gSavedSettings.getBOOL("DebugShowMemory"))
+		//if (gSavedSettings.getBOOL("DebugShowMemory"))
+			static LLCachedControl<bool> debugShowMemory(gSavedSettings, "DebugShowMemory");
+    		if (debugShowMemory)
+
 		{
 			addText(xpos, ypos, llformat("Memory: %d (KB)", LLMemory::getWorkingSetSize() / 1024)); 
 			ypos += y_inc;
@@ -424,7 +429,9 @@ public:
 			ypos += y_inc;
 		}*/
 		
-		if (gSavedSettings.getBOOL("DebugShowRenderInfo"))
+		//if (gSavedSettings.getBOOL("DebugShowRenderInfo"))
+       static LLCachedControl<bool> debugShowRenderInfo(gSavedSettings, "DebugShowRenderInfo");
+    		if (debugShowRenderInfo)
 		{
 			if (gPipeline.getUseVertexShaders() == 0)
 			{
@@ -539,7 +546,9 @@ public:
 				LLVertexBuffer::sSetCount = LLImageGL::sUniqueCount = 
 				gPipeline.mNumVisibleNodes = LLPipeline::sVisibleLightCount = 0;
 		}
-		if (gSavedSettings.getBOOL("DebugShowRenderMatrices"))
+		//if (gSavedSettings.getBOOL("DebugShowRenderMatrices"))
+         static LLCachedControl<bool> debugShowRenderMatrices(gSavedSettings, "DebugShowRenderMatrices");
+    		if (debugShowRenderMatrices)
 		{
 			addText(xpos, ypos, llformat("%.4f    .%4f    %.4f    %.4f", gGLProjection[12], gGLProjection[13], gGLProjection[14], gGLProjection[15]));
 			ypos += y_inc;
@@ -572,7 +581,9 @@ public:
 			addText(xpos, ypos, "View Matrix");
 			ypos += y_inc;
 		}
-		if (gSavedSettings.getBOOL("DebugShowColor"))
+		//if (gSavedSettings.getBOOL("DebugShowColor"))
+         static LLCachedControl<bool> debugShowColor(gSavedSettings, "DebugShowColor");
+    		if (debugShowColor)
 		{
 			U8 color[4];
 			LLCoordGL coord = gViewerWindow->getCurrentMouse();
