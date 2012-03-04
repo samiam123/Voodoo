@@ -53,7 +53,7 @@ const U16 RESOLUTION = 64;
 // Since the cubemap is small (64x64 per face) and doesn't have any fine detail, turning off mipmaps is a usable workaround.
 const BOOL use_cube_mipmaps = FALSE;
 #else
-const BOOL use_cube_mipmaps = FALSE;  //current build works best without cube mipmaps
+const BOOL use_cube_mipmaps = TRUE;  //current build works best without cube mipmaps
 #endif
 
 bool LLCubeMap::sUseCubeMaps = true;
@@ -265,7 +265,7 @@ void LLCubeMap::setMatrix(S32 stage)
 	
 	if (mMatrixStage < 0) return;
 	
-	if (stage > 0)
+	//if (stage > 0)
 	{
 		gGL.getTexUnit(stage)->activate();
 	}
@@ -284,17 +284,19 @@ void LLCubeMap::setMatrix(S32 stage)
 	glLoadMatrixf((F32 *)trans.mMatrix);
 	glMatrixMode(GL_MODELVIEW);
 	
-	if (stage > 0)
+	
+	/*if (stage > 0)
 	{
 		gGL.getTexUnit(0)->activate();
-	}
+		
+	}*/
 }
 
 void LLCubeMap::restoreMatrix()
 {
 	if (mMatrixStage < 0) return;
 
-	if (mMatrixStage > 0)
+	//if (mMatrixStage > 0)
 	{
 		gGL.getTexUnit(mMatrixStage)->activate();
 	}
@@ -302,10 +304,11 @@ void LLCubeMap::restoreMatrix()
 	glPopMatrix();
 	glMatrixMode(GL_MODELVIEW);
 	
-	if (mMatrixStage > 0)
+	/*if (mMatrixStage > 0)
 	{
 		gGL.getTexUnit(0)->activate();
-	}
+		
+	}*/
 }
 
 void LLCubeMap::setReflection (void)
@@ -477,6 +480,8 @@ void LLCubeMap::paintIn(LLVector3 dir[4], const LLColor4U& col)
 		U16 h_maxu = (U16) (ceil(h_max) + 0.5);
 
 		for (U16 v = v_minu; v < v_maxu; ++v)
+		
+        {
 			for (U16 h = h_minu; h < h_maxu; ++h)
 		//for (U16 v = 0; v < RESOLUTION; ++v)
 		//	for (U16 h = 0; h < RESOLUTION; ++h)
@@ -489,6 +494,8 @@ void LLCubeMap::paintIn(LLVector3 dir[4], const LLColor4U& col)
 						td[offset + cc] = U8((td[offset + cc] + col.mV[cc]) * 0.5);
 				}
 			}
+			
+        }
 		mImages[side]->setSubImage(mRawImages[side], 0, 0, 64, 64);
 	}
 }

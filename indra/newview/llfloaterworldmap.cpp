@@ -94,7 +94,9 @@ static const F32 ZOOM_MAX = 0.f;
 static const F32 ZOOM_INC = 0.2f;
 
 static const F32 SIM_COORD_MIN	 = 0.f;
-static const F32 SIM_COORD_MAX	 = 255.f;
+//static const F32 SIM_COORD_MAX	 = 255.f;
+// Was 256 below adj to aurora var max
+static const F32 SIM_COORD_MAX	 = 8192.f;
 static const F32 SIM_COORD_DEFAULT = 128.f;
 
 static const F64 MAX_FLY_DISTANCE = 363.f;  // Diagonal size of one sim.

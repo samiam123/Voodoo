@@ -691,44 +691,14 @@ void LLWorld::updateRegions(F32 max_update_time)
 	// Perform idle time updates for the regions (and associated surfaces)
 	for (region_list_t::iterator iter = mActiveRegionList.begin()/*mRegionList.begin()*/;
 		 iter != mActiveRegionList.end()/*mRegionList.end()*/; ++iter)
-
-
-
-
-
 	{
 		LLViewerRegion* regionp = *iter;
 		F32 max_time = max_update_time - update_timer.getElapsedTimeF32();
-
-
-
-
-
-
-
-
-
-
-
-
 		if (did_one && max_time <= 0.f)
 			break;
 
 		max_time = llmin(max_time, max_update_time*.1f);
 		did_one |= regionp->idleUpdate(max_update_time);
-
-
-
-
-
-
-
-
-
-
-
-
-
 	}
 }
 
@@ -748,32 +718,6 @@ void LLWorld::updateClouds(const F32 dt)
 		// don't move clouds in snapshot mode
 		return;
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	if (mActiveRegionList.size())
 	{
 		// Update all the cloud puff positions, and timer based stuff

@@ -87,6 +87,8 @@ LLVLComposition::LLVLComposition(LLSurface *surfacep, const U32 width, const F32
 	}
 	mTexScaleX = width/16.f;
 	mTexScaleY = width/16.f;
+	//mTexScaleX = width/256.f;
+	//mTexScaleY = width/256.f;
 	mTexturesLoaded = FALSE;
 }
 
@@ -161,9 +163,16 @@ BOOL LLVLComposition::generateHeights(const F32 x, const F32 y,
 	const S32 NUM_TEXTURES = 4;
 
 	const F32 xyScaleInv = (1.f / xyScale) * (mWidth / 256.f);
-	const F32 zScaleInv = (1.f / zScale);
-
+	//const F32 xyScaleInv = (1.f / xyScale) * (mWidth / 2048.f);
+	// Trys a few things here sams voodoo for terrain textuers
+	// comment out one line below added new
+	//const F32 zScaleInv = (1.f / zScale);
+	// Ok this dident do mutch of anything leaving it this way for now
+	const F32 zScaleInv = (1.f / zScale) * (mWidth / 256.f);
+    // altering one line below for effect
 	const F32 inv_width = 1.f/256.f;
+	// huh? dident care wtf nvm ok it does makes big lag
+	//const F32 inv_width = 1.f/2048.f;
 
 	// OK, for now, just have the composition value equal the height at the point.
 	for (S32 j = y_begin; j < y_end; j++)
@@ -217,6 +226,7 @@ BOOL LLVLComposition::generateHeights(const F32 x, const F32 y,
 }
 
 static const U32 BASE_SIZE = 128;
+//static const U32 BASE_SIZE = 1024;
 
 BOOL LLVLComposition::generateComposition()
 {

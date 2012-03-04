@@ -253,10 +253,8 @@ LLViewerRegion::LLViewerRegion(const U64 &handle,
 	if (!gNoRender)
 	{
 		// Create the composition layer for the surface
-		mImpl->mCompositionp =
-			new LLVLComposition(mImpl->mLandp,
-								grids_per_region_edge,
-								mWidth / grids_per_region_edge);
+		mImpl->mCompositionp = new LLVLComposition(mImpl->mLandp,grids_per_region_edge,
+			mWidth / grids_per_region_edge);
 		mImpl->mCompositionp->setSurface(mImpl->mLandp);
 
 		// Create the surfaces
@@ -727,11 +725,12 @@ LLVLComposition * LLViewerRegion::getComposition() const
 
 F32 LLViewerRegion::getCompositionXY(const S32 x, const S32 y) const
 {
-	if (x >= 256)
+	if (x > 256)
 	{
-		if (y >= 256)
+		if (y > 256)
 		{
 			LLVector3d center = getCenterGlobal() + LLVector3d(256.f, 256.f, 0.f);
+			//LLVector3d center = getCenterGlobal() + LLVector3d(2048.f, 2048.f, 0.f);
 			LLViewerRegion *regionp = LLWorld::getInstance()->getRegionFromPosGlobal(center);
 			if (regionp)
 			{
