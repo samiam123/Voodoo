@@ -950,10 +950,14 @@ void LLTextureCache::purgeCache(ELLPath location)
 		{
 			std::string file_name = gDirUtilp->getExpandedFilename(location, entries_filename);
 			if(LLAPRFile::isExist(file_name))
+             {
 				LLAPRFile::remove(file_name);
+             }
 			file_name = gDirUtilp->getExpandedFilename(location, cache_filename);
 			if(LLAPRFile::isExist(file_name))
-				LLAPRFile::remove(file_name);
+              {
+				LLAPRFile::remove(file_name); 
+			  }
 			purgeAllTextures(true);
 	}
 		mTexturesDirName = texture_dir;
@@ -1321,7 +1325,7 @@ U32 LLTextureCache::openAndReadEntries(std::vector<Entry>& entries)
 			mHeaderIDMap[entry.mID] = idx;
 				mTexturesSizeMap[entry.mID] = entry.mBodySize;
 				mTexturesSizeTotal += entry.mBodySize;				
-			}
+		}
 		else
 		{
 			mFreeList.insert(idx);
