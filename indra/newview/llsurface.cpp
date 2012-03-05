@@ -65,7 +65,8 @@ extern LLPipeline gPipeline;
 LLColor4U MAX_WATER_COLOR(0, 48, 96, 240);
 
 
-S32 LLSurface::sTextureSize = 256;
+S32 LLSurface::sTextureSize = 1024;// humm lets see what happens if this is not a fixed size sams voodoo
+                                    // Changing this to 1024 helped less lag and looked better  
 S32 LLSurface::sTexelsUpdated = 0;
 F32 LLSurface::sTextureUpdateTime = 0.f;
 LLStat LLSurface::sTexelsUpdatedPerSecStat;
@@ -105,7 +106,7 @@ LLSurface::LLSurface(U32 type, LLViewerRegion *regionp) :
 	mWaterObjp = NULL;
 
 	// In here temporarily.
-	mSurfacePatchUpdateCount = 0;
+	mSurfacePatchUpdateCount = 0; //was 0 dident do anything intresting sams voodoo
 
 	for (S32 i = 0; i < 8; i++)
 	{
@@ -176,7 +177,7 @@ void LLSurface::create(const S32 grids_per_edge,
 	mNumberOfPatches = mPatchesPerEdge * mPatchesPerEdge;
 	mMetersPerGrid = width / ((F32)(mGridsPerEdge - 1));
 	mMetersPerEdge = mMetersPerGrid * (mGridsPerEdge - 1);
-	sTextureSize = width;
+	sTextureSize = width; // huh we already said what this is above sams voodoo
 
 	mOriginGlobal.setVec(origin_global);
 
@@ -244,9 +245,10 @@ void LLSurface::createSTexture()
 		{
 			for (S32 j = 0; j < sTextureSize; j++)
 			{
-				*(default_texture + (i*sTextureSize + j)*3) = 128;
-				*(default_texture + (i*sTextureSize + j)*3 + 1) = 128;
+				//*(default_texture + (i*sTextureSize + j)*3 + 3) = 128;// ?? try 256
 				*(default_texture + (i*sTextureSize + j)*3 + 2) = 128;
+				*(default_texture + (i*sTextureSize + j)*3 + 1) = 128;
+				*(default_texture + (i*sTextureSize + j)*3 + 0) = 128;
 			}
 		}
 
@@ -1219,7 +1221,7 @@ BOOL LLSurface::generateWaterTexture(const F32 x, const F32 y,
 	S32 tex_stride = tex_width * tex_comps;
 	LLPointer<LLImageRaw> raw = new LLImageRaw(tex_width, tex_height, tex_comps);
 	U8 *rawp = raw->getData();
-
+    // Trys another number here for effect was 256 sams voodoo
 	F32 scale = 256.f * getMetersPerGrid() / (F32)tex_width;
 	F32 scale_inv = 1.f / scale;
 

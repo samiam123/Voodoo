@@ -45,6 +45,8 @@ class LLTextureCacheWorker;
 
 class LLTextureCache : public LLWorkerThread
 {
+    //Added one line below was in org sg sams voodoo
+    LOG_CLASS(LLTextureCache);
 	friend class LLTextureCacheWorker;
 	friend class LLTextureCacheRemoteWorker;
 	friend class LLTextureCacheLocalFileWorker;
@@ -59,11 +61,17 @@ private:
 	};
 	struct Entry
 	{
-        Entry() : mBodySize(0), mImageSize(0), mTime(0)	{ }
+        Entry() : 
+		mBodySize(0), 
+		mImageSize(0), 
+		mTime(0)	
+		{
+		
+		}
 		Entry(const LLUUID& id, S32 imagesize, S32 bodysize, U32 time) :
 			mID(id), mImageSize(imagesize), mBodySize(bodysize), mTime(time) {}
 		void init(const LLUUID& id, U32 time) { mID = id, mImageSize = 0; mBodySize = 0; mTime = time; }
-		Entry& operator=(const Entry& entry) { mID = entry.mID, mImageSize = entry.mImageSize; mBodySize = entry.mBodySize; mTime = entry.mTime; return *this; }
+		Entry& operator=(const Entry& entry) { mID = entry.mID, mImageSize = entry.mImageSize; mBodySize = entry.mBodySize; mTime = entry.mTime; return *this;}
 		LLUUID mID; // 16 bytes
 		S32 mImageSize; // total size of image if known
 		S32 mBodySize; // size of body file in body cache
@@ -106,7 +114,8 @@ public:
 	
 	void purgeCache(ELLPath location);
 	void setReadOnly(BOOL read_only) ;
-	S64 initCache(ELLPath location, S64 maxsize, BOOL texture_cache_mismatch);
+	// Note belowline was maxsize not max_size sams voodoo
+	S64 initCache(ELLPath location, S64 max_size, BOOL texture_cache_mismatch);
 
 	handle_t readFromCache(const std::string& local_filename, const LLUUID& id, U32 priority, S32 offset, S32 size,
 						   ReadResponder* responder);

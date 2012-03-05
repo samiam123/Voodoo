@@ -53,7 +53,9 @@
 
 //note: there is no good to define 1024 for TEXTURE_CACHE_ENTRY_SIZE while FIRST_PACKET_SIZE is 600 on sim side.
 const S32 TEXTURE_CACHE_ENTRY_SIZE = FIRST_PACKET_SIZE;//1024;
-const F32 TEXTURE_CACHE_PURGE_AMOUNT = .20f; // % amount to reduce the cache by when it exceeds its limit
+// commented out one line below added one right after sams voodoo
+//const F32 TEXTURE_CACHE_PURGE_AMOUNT = .20f; // % amount to reduce the cache by when it exceeds its limit
+const S64 TEXTURE_PURGED_CACHE_SIZE = 80; // % amount of cache left after a purge.
 const F32 TEXTURE_CACHE_LRU_SIZE = .10f; // % amount for LRU list (low overhead to regenerate)
 
 class LLTextureCacheWorker : public LLWorkerClass
@@ -250,9 +252,12 @@ bool LLTextureCacheLocalFileWorker::doRead()
 		}
 	}
 #else
-	if (!mDataSize || mDataSize > local_size/* - mOffset*/)
+	// Patch by Max Fox
+	// if (!mDataSize || mDataSize > local_size/* - mOffset*/)
+	if (!mDataSize || mDataSize > (local_size-mOffset))
 	{
-		mDataSize = local_size/* - mOffset*/;
+		//mDataSize = local_size/* - mOffset*/;
+		mDataSize = local_size-mOffset;
 	}
 	mReadData = new U8[mDataSize];
 	
@@ -372,9 +377,12 @@ bool LLTextureCacheRemoteWorker::doRead()
 	if (!done && (mState == LOCAL))
 	{
 		llassert(local_size != 0);	// we're assuming there is a non empty local file here...
-		if (!mDataSize || mDataSize > local_size/* - mOffset*/)
+		// Take offset into account. Thanks to Max Fox and Henri Beauchamp
+		//if (!mDataSize || mDataSize > local_size/* - mOffset*/)
+		if (!mDataSize || mDataSize > (local_size - mOffset))
 		{
-			mDataSize = local_size/* - mOffset*/;
+			//mDataSize = local_size/* - mOffset*/;
+			mDataSize = local_size - mOffset;
 		}
 		// Allocate read buffer
 		mReadData = new U8[mDataSize];
@@ -495,8 +503,8 @@ bool LLTextureCacheRemoteWorker::doRead()
 			mReadData = data;
 
 			// Read the data at last
-			S32 bytes_read = LLAPRFile::readEx(filename, mReadData + data_offset,
-											 file_offset, file_size);
+			S32 bytes_read = LLAPRFile::readEx(filename, mReadData + data_offset, file_offset, file_size);
+			
 			if (bytes_read != file_size)
 			{
 				LL_DEBUGS("TextureCache") << "LLTextureCacheWorker: "  << mID
@@ -510,6 +518,9 @@ bool LLTextureCacheRemoteWorker::doRead()
 		}
 		else
 		{
+			// No body, we're done.
+			//mDataSize = llmax(TEXTURE_CACHE_ENTRY_SIZE - mOffset, 0);
+			//lldebugs << "No body file for: " << filename << llendl;
 			if (mImageSize > TEXTURE_CACHE_ENTRY_SIZE)
 			{
 				LL_DEBUGS("TextureCache") << "LLTextureCacheWorker: no body for texture: " << mID << LL_ENDL;
@@ -756,6 +767,8 @@ LLTextureCache::LLTextureCache(bool threaded)
 LLTextureCache::~LLTextureCache()
 {
  	purgeTextureFilesTimeSliced(TRUE); // VWR-3878 - NB - force-flush all pending file deletes
+	clearDeleteList() ;
+	writeUpdatedEntries() ;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -818,6 +831,8 @@ std::string LLTextureCache::getLocalFileName(const LLUUID& id)
 	std::string idstr = id.asString();
 	// TODO: should we be storing cached textures in skin directory?
 	std::string filename = gDirUtilp->getExpandedFilename(LL_PATH_LOCAL_ASSETS, idstr);
+	// Or here sams voodoo line above orginal one below newer
+	//std::string filename = gDirUtilp->getExpandedFilename(LL_PATH_SKINS, "default", "textures", idstr);
 	return filename;
 }
 
@@ -1515,12 +1530,14 @@ void LLTextureCache::purgeAllTextures(bool purge_directories)
 	{
 		const char* subdirs = "0123456789abcdef";
 		std::string delem = gDirUtilp->getDirDelimiter();
-		std::string mask = "*";
+		//comment out one line below added one after sams voodo
+		//std::string mask = "*";
+		std::string mask = delem + "*";
 		for (S32 i=0; i<16; i++)
 		{
 			std::string dirname = mTexturesDirName + delem + subdirs[i];
 			llinfos << "Deleting files in directory: " << dirname << llendl;
-			gDirUtilp->deleteFilesInDir(dirname, mask);
+			gDirUtilp->deleteFilesInDir(dirname,mask);
 			if (purge_directories)
 			{
 				LLFile::rmdir(dirname);
@@ -1616,7 +1633,9 @@ void LLTextureCache::purgeTextures(bool validate)
 	}
 
 	S64 cache_size = mTexturesSizeTotal;
-	S64 purged_cache_size = (sCacheMaxTexturesSize * (S64)((1.f-TEXTURE_CACHE_PURGE_AMOUNT)*100)) / 100;
+	//comment out one line below added new one after sams voodoo
+	//S64 purged_cache_size = (sCacheMaxTexturesSize * (S64)((1.f-TEXTURE_CACHE_PURGE_AMOUNT)*100)) / 100;
+		S64 purged_cache_size = (TEXTURE_PURGED_CACHE_SIZE * sCacheMaxTexturesSize) / (S64)100;
 	S32 purge_count = 0;
 	for (time_idx_set_t::iterator iter = time_idx_set.begin();
 		 iter != time_idx_set.end(); ++iter)
@@ -1659,8 +1678,8 @@ void LLTextureCache::purgeTextures(bool validate)
 	}
 
 	LL_DEBUGS("TextureCache") << "TEXTURE CACHE: Writing Entries: " << num_entries << LL_ENDL;
-
-	writeEntriesAndClose(entries);
+    //comment out one line below sams voodoo
+	//writeEntriesAndClose(entries);
 	
 	if (purge_count > 0)
 	{
@@ -1712,7 +1731,8 @@ void LLTextureCache::purgeTextureFilesTimeSliced(bool force)
 			if (mHeaderIDMap.find(curiter->first) == mHeaderIDMap.end())
 			{
 				filename = curiter->second;
-				if(LLAPRFile::isExist(filename))
+				//comment out one line below sams voodoo
+				//if(LLAPRFile::isExist(filename))
 					LLAPRFile::remove(filename);
 			}
 			else
