@@ -843,9 +843,10 @@ std::string LLTextureCache::getLocalFileName(const LLUUID& id)
 	// Does not include extension
 	std::string idstr = id.asString();
 	// TODO: should we be storing cached textures in skin directory?
-	//std::string filename = gDirUtilp->getExpandedFilename(LL_PATH_LOCAL_ASSETS, idstr);
+	std::string filename = gDirUtilp->getExpandedFilename(LL_PATH_LOCAL_ASSETS, idstr);
 	// Or here sams voodoo line above orginal one below newer
-	std::string filename = gDirUtilp->getExpandedFilename(LL_PATH_SKINS, "default", "textures", idstr);
+	// putting this back to orginal as there still is a problem with sq stars sams voodoo
+	//std::string filename = gDirUtilp->getExpandedFilename(LL_PATH_SKINS, "default", "textures", idstr);
 	return filename;
 }
 
@@ -986,15 +987,17 @@ S64 LLTextureCache::initCache(ELLPath location, S64 max_size, BOOL texture_cache
 		sCacheMaxTexturesSize = llmin(sCacheMaxTexturesSize, max_size);
 	else
 		sCacheMaxTexturesSize = max_size;
-	max_size -= sCacheMaxTexturesSize;	
-	//if(disable_texture_cache) //the texture cache is disabled
-	//{
-	//	llinfos << "The texture cache is disabled!" << llendl ;
-	//	setReadOnly(TRUE) ;
-	//	purgeAllTextures(true); 
-	//	return max_size ;
-	//}
-
+	max_size -= sCacheMaxTexturesSize;
+	// Temp for testing sams voodoo
+	//----------------------------------------------------------------
+	/* if(disable_texture_cache) //the texture cache is disabled
+	{
+		llinfos << "The texture cache is disabled!" << llendl ;
+		setReadOnly(TRUE) ;
+		purgeAllTextures(true); 
+		return max_size ;
+	}
+    //----------------------------------------------------------------*/
 	LL_INFOS("TextureCache") << "Headers: " << sCacheMaxEntries
 			<< " Textures size: " << sCacheMaxTexturesSize / (1024 * 1024) << " MB" << LL_ENDL;
 	setDirNames(location);	

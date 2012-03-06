@@ -38,10 +38,10 @@ void LLCommonUtils::computeDifference(
 
 	std::sort(vnew_copy.begin(), vnew_copy.end());
 	std::sort(vcur_copy.begin(), vcur_copy.end());
-
-	size_t maxsize = llmax(vnew_copy.size(), vcur_copy.size());
-	vadded.resize(maxsize);
-	vremoved.resize(maxsize);
+    // changed maxsize to max_size to match other changes sams voodoo
+	size_t max_size = llmax(vnew_copy.size(), vcur_copy.size());
+	vadded.resize(max_size);
+	vremoved.resize(max_size);
 
 	uuid_vec_t::iterator it;
 	// what was removed

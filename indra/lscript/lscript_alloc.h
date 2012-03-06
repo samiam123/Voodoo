@@ -144,8 +144,8 @@ void lsa_print_heap(U8 *buffer);
 //			go to start of algorithm
 
 S32 lsa_heap_add_data(U8 *buffer, LLScriptLibData *data, S32 heapsize, BOOL b_delete);
-
-S32 lsa_heap_top(U8 *heap_start, S32 maxsize);
+// changed maxsize to max_size like the rest sams voodoo
+S32 lsa_heap_top(U8 *heap_start, S32 max_size);
 
 // split block
 //	set offset to point to new block
