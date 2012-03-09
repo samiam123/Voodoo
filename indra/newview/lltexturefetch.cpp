@@ -2738,7 +2738,7 @@ bool LLTextureFetch::receiveImageHeader(const LLHost& host, const LLUUID& id, U8
 		worker->mFileSize = (S32)totalbytes;	
 		llassert_always(totalbytes > 0);
 		// this shows up as an error if were using aurora 1024 packets sams
-		llassert_always(data_size == FIRST_PACKET_SIZE || data_size == worker->mFileSize);
+		//llassert_always(data_size == FIRST_PACKET_SIZE || data_size == worker->mFileSize);
 		//llassert_always(data_size == 600 || data_size == worker->mFileSize);
 		res = worker->insertPacket(0, data, data_size);
 		worker->setPriority(LLWorkerThread::PRIORITY_HIGH | worker->mWorkPriority);
