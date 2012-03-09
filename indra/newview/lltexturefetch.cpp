@@ -1153,18 +1153,18 @@ bool LLTextureFetchWorker::doWork(S32 param)
 				}
 				else
 				{
-					mCanUseHTTP = false ;
+					mCanUseHTTP = true;
 				}
 			}
 			else
 			{
 				// This will happen if not logged in or if a region deoes not have HTTP Texture enabled
 				//llwarns << "Region not found for host: " << mHost << llendl;
-				mCanUseHTTP = false;
+				mCanUseHTTP = true;
 			}
 		}
 		if (!mUrl.empty() && SGHostBlackList::isBlacklisted(mUrl)){
-			mCanUseHTTP = false;
+			mCanUseHTTP = true;
 		}
 		if (mCanUseHTTP && !mUrl.empty())
 		{
@@ -1381,7 +1381,7 @@ bool LLTextureFetchWorker::doWork(S32 param)
 						// singu attempt at preventing borked texturedata on fetch fallback added one line below sams voodoo
 						resetFormattedData();
 						mState = INIT ;
-						mCanUseHTTP = false ;
+						mCanUseHTTP = true ;
 						setPriority(LLWorkerThread::PRIORITY_HIGH | mWorkPriority);
 						return false ;
 					}
