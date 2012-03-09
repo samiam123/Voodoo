@@ -77,7 +77,9 @@
 //////////////////////////////////////////////////////////////////////////////
 
 static const U32 EASY_HANDLE_POOL_SIZE		= 5;
-static const S32 MULTI_PERFORM_CALL_REPEAT	= 5;
+//static const S32 MULTI_PERFORM_CALL_REPEAT	= 5;
+//possable textuer corruption problem changing to 1 sams voodoo
+static const S32 MULTI_PERFORM_CALL_REPEAT	= 1;
 static const S32 CURL_REQUEST_TIMEOUT = 30; // seconds
 static const S32 MAX_ACTIVE_REQUEST_COUNT = 100;
 
@@ -91,7 +93,7 @@ S32 gCurlMultiCount = 0;
 std::vector<LLMutex*> LLCurl::sSSLMutex;
 std::string LLCurl::sCAPath;
 std::string LLCurl::sCAFile;
-
+// evil sam set multi-threaded to true
 bool LLCurl::sMultiThreaded = false;
 static U32 sMainThreadID = 0;
 
@@ -924,7 +926,7 @@ LLCurlRequest::~LLCurlRequest()
 			{
 				multi->mSignal->signal();
 				multi->mSignal->unlock();
-				apr_sleep(1000);
+				apr_sleep(1024);// was 1000 checking something sams voodoo
 				multi->mSignal->lock();
 			}
 		}

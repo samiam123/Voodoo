@@ -514,6 +514,7 @@ BOOL LLSpatialGroup::updateInGroup(LLDrawable *drawablep, BOOL immediate)
 	{
 		unbound();
 		setState(OBJECT_DIRTY);
+		//was commented out trying it sams. shrugs vars
 		//setState(GEOM_DIRTY);
 		return TRUE;
 	}
@@ -797,7 +798,7 @@ void LLSpatialGroup::shift(const LLVector4a &offset)
 	mObjectBounds[0].add(offset);
 	mObjectExtents[0].add(offset);
 	mObjectExtents[1].add(offset);
-
+    //Why not check it anyway uncomment lets see ..shrugs sams
 	//if (!mSpatialPartition->mRenderByGroup)
 	{
 		setState(GEOM_DIRTY);
@@ -1508,8 +1509,9 @@ void LLSpatialGroup::doOcclusion(LLCamera* camera)
 			if (!isOcclusionState(QUERY_PENDING) || isOcclusionState(DISCARD_QUERY))
 			{
 				{ //no query pending, or previous query to be discarded
-					//LLFastTimer t(FTM_RENDER_OCCLUSION);
-
+					// ok we have this timer now lets try it out sams voodoo
+					// LLFastTimer t(FTM_RENDER_OCCLUSION);
+                    // LLFastTimer t(LLFastTimer::FTM_RENDER_OCCLUSION);
 					if (!mOcclusionQuery[LLViewerCamera::sCurCameraID])
 					{
 						mOcclusionQuery[LLViewerCamera::sCurCameraID] = sQueryPool.allocate();

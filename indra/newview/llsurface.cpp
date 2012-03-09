@@ -1223,6 +1223,7 @@ BOOL LLSurface::generateWaterTexture(const F32 x, const F32 y,
 	U8 *rawp = raw->getData();
     // Trys another number here for effect was 256 sams voodoo
 	F32 scale = 256.f * getMetersPerGrid() / (F32)tex_width;
+	// Trys 2.f for fun was 1.f lol it messes with min-map sams voodoo
 	F32 scale_inv = 1.f / scale;
 
 	S32 x_begin, y_begin, x_end, y_end;
@@ -1254,10 +1255,11 @@ BOOL LLSurface::generateWaterTexture(const F32 x, const F32 y,
 	{
 		for (i = x_begin; i < x_end; i++)
 		{
+			// uncomment for noise? humm dident seem to give a frack sams voodoo
 			//F32 nv[2];
 			//nv[0] = i/256.f;
 			//nv[1] = j/256.f;
-			// const S32 modulation = noise2(nv)*40;
+			//const S32 modulation = noise2(nv)*40;
 			offset = j*tex_stride + i*tex_comps;
 			location.mV[VX] = i*scale;
 			location.mV[VY] = j*scale;

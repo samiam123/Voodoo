@@ -85,18 +85,19 @@ public:
 	S32 getFetchState(const LLUUID& id, F32& decode_progress_p, F32& requested_priority_p,
 					  U32& fetch_priority_p, F32& fetch_dtime_p, F32& request_dtime_p, bool& can_use_http);
 	void dump();
-	S32 getNumRequests() ;
-	S32 getNumHTTPRequests() ;
-	U32 getTotalNumHTTPRequests() ;
-	
+	S32 getNumRequests();
+	S32 getNumHTTPRequests();
+	U32 getTotalNumHTTPRequests();	
 	// Public for access by callbacks
     S32 getPending();
-	void lockQueue() { mQueueMutex.lock(); }
-	void unlockQueue() { mQueueMutex.unlock(); }
+	void lockQueue() { mQueueMutex.lock();
+	}
+	void unlockQueue() { mQueueMutex.unlock();
+	}
 	LLTextureFetchWorker* getWorker(const LLUUID& id);
 	LLTextureFetchWorker* getWorkerAfterLock(const LLUUID& id);
-
-	LLTextureInfo* getTextureInfo() { return &mTextureInfo; }
+	LLTextureInfo* getTextureInfo() { return &mTextureInfo;
+	}
 
 #if HTTP_METRICS
 	// Commands available to other threads to control metrics gathering operations.

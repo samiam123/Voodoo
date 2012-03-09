@@ -38,6 +38,8 @@
 #include "llmemory.h"
 #include "llthread.h"
 #include "aithreadsafe.h"
+// llmemtype not used yet adding now sams
+#include "llmemtype.h"
 
 const S32 MIN_IMAGE_MIP =  2; // 4x4, only used for expand/contract power of 2
 const S32 MAX_IMAGE_MIP = 11; // 2048x2048
@@ -48,12 +50,14 @@ const S32 MAX_IMAGE_SIZE = (1<<MAX_IMAGE_MIP); // 2048
 const S32 MIN_IMAGE_AREA = MIN_IMAGE_SIZE * MIN_IMAGE_SIZE;
 const S32 MAX_IMAGE_AREA = MAX_IMAGE_SIZE * MAX_IMAGE_SIZE;
 const S32 MAX_IMAGE_COMPONENTS = 8;
-const S32 MAX_IMAGE_DATA_SIZE = MAX_IMAGE_AREA * MAX_IMAGE_COMPONENTS;
+const S32 MAX_IMAGE_DATA_SIZE = MAX_IMAGE_AREA * MAX_IMAGE_COMPONENTS; //2048 * 2048 * 8 = 16 MB
 
 // Note!  These CANNOT be changed without modifying simulator code
 // *TODO: change both to 1024 when SIM texture fetching is deprecated
-const S32 FIRST_PACKET_SIZE = 600;
-const S32 MAX_IMG_PACKET_SIZE = 1000;
+// 1st was 600 2and was 1000 auora sends these now but getting error
+// setting this back for now till i can figuer out the error sams voodoo
+const S32 FIRST_PACKET_SIZE = 1024;
+const S32 MAX_IMG_PACKET_SIZE = 1024;
 
 // Base classes for images.
 // There are two major parts for the image:
@@ -73,8 +77,15 @@ typedef enum e_image_codec
 	IMG_CODEC_JPEG = 5,
 	IMG_CODEC_DXT  = 6,
 	IMG_CODEC_PNG  = 7,
+#ifdef LL_DARWIN
+	IMG_CODEC_PSD  = 8,
+	IMG_CODEC_TIFF = 9,
+	IMG_CODEC_EOF  = 10
+#else
 	IMG_CODEC_EOF  = 8
-} EImageCodec;
+#endif
+} 
+    EImageCodec;
 
 //============================================================================
 // library initialization class
@@ -128,12 +139,19 @@ public:
 
 	void setSize(S32 width, S32 height, S32 ncomponents);
 	U8* allocateDataSize(S32 width, S32 height, S32 ncomponents, S32 size = -1); // setSize() + allocateData()
-	void enableOverSize() {mAllowOverSize = true ;}
-	void disableOverSize() {mAllowOverSize = false; }
+	void enableOverSize() 
+	{
+		mAllowOverSize = true ;
+	}
+	void disableOverSize() 
+	{
+		mAllowOverSize = false;
+	}
 
 protected:
 	// special accessor to allow direct setting of mData and mDataSize by LLImageFormatted
-	void setDataAndSize(U8 *data, S32 size) { mData = data; mDataSize = size; }
+	void setDataAndSize(U8 *data, S32 size) { mData = data; mDataSize = size;
+	}
 	
 public:
 	static void generateMip(const U8 *indata, U8* mipdata, int width, int height, S32 nchannels);
@@ -141,7 +159,11 @@ public:
 	// Function for calculating the download priority for textures
 	// <= 0 priority means that there's no need for more data.
 	static F32 calc_download_priority(F32 virtual_size, F32 visible_area, S32 bytes_sent);
-
+    // umm shouldent theres be true not enabled ? sams
+	//static void setSizeOverride(BOOL enable)
+	//{ 
+	//	sSizeOverride = enable;
+	//}
 	static EImageCodec getCodecFromExtension(const std::string& exten);
 	
 private:
@@ -156,6 +178,7 @@ private:
 	bool mBadBufferAllocation ;
 	bool mAllowOverSize ;
 public:
+	static BOOL sSizeOverride;
 	S16 mMemType; // debug
 };
 
@@ -229,7 +252,9 @@ public:
 
 	// Src and dst are same size.  Src has 4 components.  Dst has 3 components.
 	void compositeUnscaled4onto3( LLImageRaw* src );
+	//added one line below for comment j2c decode sams voodoo
 
+	//std::map<std::string,std::string> decodedComment;
 protected:
 	// Create an image from a local file (generally used in tools)
 	bool createFromFile(const std::string& filename, bool j2c_lowest_mip_only = false);
@@ -243,6 +268,7 @@ protected:
 
 public:
 	static AIThreadSafeSimple<S32> sGlobalRawMemory;
+	//static S32 sGlobalRawMemory; //use this later sams
 	static S32 sRawImageCount;
 
 	static S32 sRawImageCachedCount;

@@ -71,6 +71,9 @@ private:
 	
 	calc_map_t	mConstants;
 	calc_map_t	mVariables;
+	//used in new math stuff not yet sams
+	//calc_map_t*	mConstants;
+	//calc_map_t*	mVariables;
 	
 	// *TODO: Add support for storing user defined variables, and stored functions.
 	//	Will need UI work, and a means to save them between sessions.

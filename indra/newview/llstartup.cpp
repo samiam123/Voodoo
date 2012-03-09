@@ -3647,7 +3647,7 @@ bool update_dialog_callback(const LLSD& notification, const LLSD& response)
 
 	// *TODO constantize this guy
 	// *NOTE: This URL is also used in win_setup/lldownloader.cpp
-	LLURI update_url = LLURI::buildHTTP("secondlife.com", 80, "update.php", query_map);
+	//LLURI update_url = LLURI::buildHTTP("secondlife.com", 80, "update.php", query_map);
 
 	
 	if(LLAppViewer::sUpdaterInfo)
@@ -3698,7 +3698,7 @@ bool update_dialog_callback(const LLSD& notification, const LLSD& response)
 		gSavedSettings.setString( "NextLoginLocation", LLURLSimString::sInstance.mSimString ); 
 	};
 
-	LLAppViewer::sUpdaterInfo->mParams << "-url \"" << update_url.asString() << "\"";
+	//LLAppViewer::sUpdaterInfo->mParams << "-url \"" << update_url.asString() << "\"";
 
 	LL_DEBUGS("AppInit") << "Calling updater: " << LLAppViewer::sUpdaterInfo->mUpdateExePath << " " << LLAppViewer::sUpdaterInfo->mParams.str() << LL_ENDL;
 

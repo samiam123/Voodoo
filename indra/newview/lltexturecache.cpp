@@ -772,9 +772,9 @@ LLTextureCache::LLTextureCache(bool threaded)
 	  mDoPurge(FALSE)
 {
     // commented out 3 lines nothing goes here right now sams voodoo
-	//purgeTextureFilesTimeSliced(true);
-	//clearDeleteList();
-	//writeUpdatedEntries();
+	purgeTextureFilesTimeSliced(true);
+	clearDeleteList();
+	writeUpdatedEntries();
 }
 
 LLTextureCache::~LLTextureCache()
@@ -1693,7 +1693,7 @@ void LLTextureCache::purgeTextures(bool validate)
 	}
 	LL_DEBUGS("TextureCache") << "TEXTURE CACHE: Writing Entries: " << num_entries << LL_ENDL;
     //comment out one line below sams voodoo
-	//writeEntriesAndClose(entries);
+	writeEntriesAndClose(entries);
 	if (purge_count > 0)
 	{
 		writeEntriesAndClose(entries);

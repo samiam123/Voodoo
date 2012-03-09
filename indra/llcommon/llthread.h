@@ -39,7 +39,7 @@
 
 #include "apr_thread_cond.h"
 #include "aiaprpool.h"
-
+//#include "llaprpool.h"
 #ifdef SHOW_ASSERT
 extern LL_COMMON_API bool is_main_thread(void);
 #endif
@@ -118,7 +118,7 @@ public:
 	U32 getID() const { return mID; }
 
 private:
-	BOOL				mPaused;
+	bool				mPaused;
 	
 	// static function passed to APR thread creation routine
 	static void *APR_THREAD_FUNC staticRun(apr_thread_t *apr_threadp, void *datap);
@@ -129,6 +129,7 @@ protected:
 
 	apr_thread_t		*mAPRThreadp;
 	volatile EThreadStatus		mStatus;
+	//EThreadStatus		mStatus;
 	U32					mID;
 
 	friend void AIThreadLocalData::create(LLThread* threadp);
@@ -160,6 +161,15 @@ protected:
 
 //============================================================================
 
+#define MUTEX_DEBUG (LL_DEBUG || LL_RELEASE_WITH_DEBUG_INFO)
+
+#ifdef MUTEX_DEBUG
+// We really shouldn't be using recursive locks. Make sure of that in debug mode.
+#define MUTEX_FLAG APR_THREAD_MUTEX_UNNESTED
+#else
+// Use the fastest platform-optimal lock behavior (can be recursive or non-recursive).
+#define MUTEX_FLAG APR_THREAD_MUTEX_DEFAULT
+#endif
 class LL_COMMON_API LLMutexBase
 {
 public:
@@ -170,6 +180,7 @@ public:
 
 	LLMutexBase() : mLockingThread(NO_THREAD), mCount(0) {}
 	
+	//LLMutexBase() ;
 	void lock();		//blocks
 	void unlock();
 	// Returns true if lock was obtained successfully.
@@ -177,6 +188,7 @@ public:
 
 	bool isLocked(); 	// non-blocking, but does do a lock/unlock so not free
 	U32 lockingThread() const; //get ID of locking thread
+	//bool isLocked() { bool is_not_locked = trylock(); if (is_not_locked) unlock(); return !is_not_locked; }
 
 protected:
 	// mAPRMutexp is initialized and uninitialized in the derived class.
@@ -194,7 +206,8 @@ public:
 	}
 	~LLMutex()
 	{
-		llassert(!isLocked()); // better not be locked!
+		//this assertion erroneously triggers whenever an LLCondition is destroyed
+		//llassert(!isLocked()); // better not be locked!
 		apr_thread_mutex_destroy(mAPRMutexp);
 		mAPRMutexp = NULL;
 	}

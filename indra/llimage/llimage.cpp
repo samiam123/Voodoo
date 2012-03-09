@@ -94,7 +94,7 @@ LLImageBase::LLImageBase()
 	  mHeight(0),
 	  mComponents(0),
 	  mBadBufferAllocation(false),
-	  mAllowOverSize(false),
+	  mAllowOverSize(true),
 	  mMemType(LLMemType::MTYPE_IMAGEBASE)
 {
 }
@@ -276,8 +276,7 @@ LLImageRaw::LLImageRaw(U8 *data, U16 width, U16 height, S8 components)
 	++sRawImageCount;
 }
 
-LLImageRaw::LLImageRaw(const std::string& filename, bool j2c_lowest_mip_only)
-	: LLImageBase(), mCacheEntries(0)
+LLImageRaw::LLImageRaw(const std::string& filename, bool j2c_lowest_mip_only): LLImageBase(), mCacheEntries(0)
 {
 	createFromFile(filename, j2c_lowest_mip_only);
 }
