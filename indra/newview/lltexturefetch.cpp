@@ -35,10 +35,8 @@
 #include <iostream>
 
 #include "llstl.h"
-#include "message.h"
-
+//#include "message.h"
 #include "lltexturefetch.h"
-
 #include "llcurl.h"
 #include "lldir.h"
 #include "llhttpclient.h"
@@ -47,8 +45,6 @@
 #include "llimagej2c.h"
 #include "llimageworker.h"
 #include "llworkerthread.h"
-#include "message.h"
-
 #include "llagent.h"
 #include "lltexturecache.h"
 #include "llviewercontrol.h"
@@ -877,8 +873,7 @@ void LLTextureFetchWorker::setupPacketData()
 
 U32 LLTextureFetchWorker::calcWorkPriority()
 {
-// uncommented to see what this does below 1 ln sams voodoo	NOT USED
-//	llassert_always(mImagePriority >= 0 && mImagePriority <= LLViewerTexture::maxDecodePriority());
+// 	llassert_always(mImagePriority >= 0 && mImagePriority <= LLViewerTexture::maxDecodePriority());
 	static const F32 PRIORITY_SCALE = (F32)LLWorkerThread::PRIORITY_LOWBITS / LLViewerFetchedTexture::maxDecodePriority();
 	mWorkPriority = llmin((U32)LLWorkerThread::PRIORITY_LOWBITS, (U32)(mImagePriority * PRIORITY_SCALE));
 	return mWorkPriority;
@@ -1153,18 +1148,18 @@ bool LLTextureFetchWorker::doWork(S32 param)
 				}
 				else
 				{
-					mCanUseHTTP = true;
+					mCanUseHTTP = false ;
 				}
 			}
 			else
 			{
 				// This will happen if not logged in or if a region deoes not have HTTP Texture enabled
 				//llwarns << "Region not found for host: " << mHost << llendl;
-				mCanUseHTTP = true;
+				mCanUseHTTP = false;
 			}
 		}
 		if (!mUrl.empty() && SGHostBlackList::isBlacklisted(mUrl)){
-			mCanUseHTTP = true;
+			mCanUseHTTP = false;
 		}
 		if (mCanUseHTTP && !mUrl.empty())
 		{
@@ -1378,10 +1373,8 @@ bool LLTextureFetchWorker::doWork(S32 param)
 					//roll back to try UDP
 					if(mCanUseNET)
 					{
-						// singu attempt at preventing borked texturedata on fetch fallback added one line below sams voodoo
-						resetFormattedData();
 						mState = INIT ;
-						mCanUseHTTP = true ;
+						mCanUseHTTP = false ;
 						setPriority(LLWorkerThread::PRIORITY_HIGH | mWorkPriority);
 						return false ;
 					}
@@ -1929,7 +1922,7 @@ void LLTextureFetchWorker::callbackDecoded(bool success, LLImageRaw* raw, LLImag
 			LL_WARNS("Texture") << "DECODE FAILED: id = " << mID << ", mFormattedImage is Null!" << LL_ENDL;
 		}
 		removeFromCache();
-		//mDecodedDiscard = -1; // Redundant, here for clarity and paranoia
+		mDecodedDiscard = -1; // Redundant, here for clarity and paranoia
 	}
 	mDecoded = TRUE;
 // 	llinfos << mID << " : DECODE COMPLETE " << llendl;
@@ -2365,7 +2358,6 @@ S32 LLTextureFetch::update(U32 max_time_ms)
 {
 	{
 		mNetworkQueueMutex.lock() ;
-		// humm whats this then? was 2000 lets try a fatter pipe sams voodoo
 		static const LLCachedControl<F32> max_bandwidth("ThrottleBandwidthKBPS", 2000);
 		mMaxBandwidth = max_bandwidth;
 	
@@ -2468,7 +2460,7 @@ void LLTextureFetch::sendRequestListToSimulators()
 	const S32 IMAGES_PER_REQUEST = 50;
 	const F32 SIM_LAZY_FLUSH_TIMEOUT = 10.0f; // temp
 	const F32 MIN_REQUEST_TIME = 1.0f;
-	const F32 MIN_DELTA_PRIORITY = 1000.f; //match packets mabey nahh sams
+	const F32 MIN_DELTA_PRIORITY = 1000.f;
 
 	// Periodically, gather the list of textures that need data from the network
 	// And send the requests out to the simulators
@@ -2513,7 +2505,7 @@ void LLTextureFetch::sendRequestListToSimulators()
 			req->mLastPacket >= req->mTotalPackets-1)
 		{
 			// We have all the packets... make sure this is high priority
- 			req->setPriority(LLWorkerThread::PRIORITY_HIGH | req->mWorkPriority);
+// 			req->setPriority(LLWorkerThread::PRIORITY_HIGH | req->mWorkPriority);
 			continue;
 		}
 		F32 elapsed = req->mRequestedTimer.getElapsedTimeF32();
@@ -2698,28 +2690,26 @@ bool LLTextureFetch::receiveImageHeader(const LLHost& host, const LLUUID& id, U8
 	
 	if (!worker)
 	{
- 		llwarns << "Received header for non active worker: " << id << llendl;
+// 		llwarns << "Received header for non active worker: " << id << llendl;
 		res = false;
 	}
 	else if (worker->mState != LLTextureFetchWorker::LOAD_FROM_NETWORK ||
 			 worker->mSentRequest != LLTextureFetchWorker::SENT_SIM)
-    //else if (worker->mState != LLTextureFetchWorker::LOAD_FROM_SIMULATOR ||
-	//		 worker->mSentRequest != LLTextureFetchWorker::SENT_SIM)
 	{
- 		llwarns << "receiveImageHeader for worker: " << id
- 				<< " in state: " << LLTextureFetchWorker::sStateDescs[worker->mState]
- 				<< " sent: " << worker->mSentRequest << llendl;
+// 		llwarns << "receiveImageHeader for worker: " << id
+// 				<< " in state: " << LLTextureFetchWorker::sStateDescs[worker->mState]
+// 				<< " sent: " << worker->mSentRequest << llendl;
 		res = false;
 	}
 	else if (worker->mLastPacket != -1)
 	{
 		// check to see if we've gotten this packet before
- 		llwarns << "Received duplicate header for: " << id << llendl;
+// 		llwarns << "Received duplicate header for: " << id << llendl;
 		res = false;
 	}
 	else if (!data_size)
 	{
- 		llwarns << "Img: " << id << ":" << " Empty Image Header" << llendl;
+// 		llwarns << "Img: " << id << ":" << " Empty Image Header" << llendl;
 		res = false;
 	}
 	if (!res)
@@ -2737,13 +2727,10 @@ bool LLTextureFetch::receiveImageHeader(const LLHost& host, const LLUUID& id, U8
 		worker->mTotalPackets = packets;
 		worker->mFileSize = (S32)totalbytes;	
 		llassert_always(totalbytes > 0);
-		// this shows up as an error if were using aurora 1024 packets sams
-		//llassert_always(data_size == FIRST_PACKET_SIZE || data_size == worker->mFileSize);
-		//llassert_always(data_size == 600 || data_size == worker->mFileSize);
+		llassert_always(data_size == FIRST_PACKET_SIZE || data_size == worker->mFileSize);
 		res = worker->insertPacket(0, data, data_size);
 		worker->setPriority(LLWorkerThread::PRIORITY_HIGH | worker->mWorkPriority);
 		worker->mState = LLTextureFetchWorker::LOAD_FROM_SIMULATOR;
-		//worker->mState = LLTextureFetchWorker::LOAD_FROM_NETWORK;
 		worker->unlockWorkMutex();
 		return res;
 }
@@ -2791,8 +2778,8 @@ bool LLTextureFetch::receiveImagePacket(const LLHost& host, const LLUUID& id, U1
 	}
 	else
 	{
- 		//llwarns << "receiveImagePacket " << packet_num << "/" << worker->mLastPacket << " for worker: " << id
- 		//		<< " in state: " << LLTextureFetchWorker::sStateDescs[worker->mState] << llendl;
+// 		llwarns << "receiveImagePacket " << packet_num << "/" << worker->mLastPacket << " for worker: " << id
+// 				<< " in state: " << LLTextureFetchWorker::sStateDescs[worker->mState] << llendl;
 		removeFromNetworkQueue(worker, true); // failsafe
 	}
 
@@ -3113,6 +3100,7 @@ TFReqSendMetrics::doWork(LLTextureFetch * fetcher)
                                                          report_sequence,
                                                          LLTextureFetch::svMetricsDataBreak,
 														 reporting_started));
+	}
 	else
 	{
 		LLTextureFetch::svMetricsDataBreak = true;

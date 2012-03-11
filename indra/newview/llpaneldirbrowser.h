@@ -115,6 +115,7 @@ public:
 	static void processDirGroupsReply(LLMessageSystem* msg, void**);
 	static void processDirClassifiedReply(LLMessageSystem* msg, void**);
 	static void processDirLandReply(LLMessageSystem *msg, void**);
+	//static void processDirPopularReply(LLMessageSystem *msg, void**);
 
 	std::string filterShortWords( const std::string source_string, int shortest_word_length, bool& was_filtered );
 	

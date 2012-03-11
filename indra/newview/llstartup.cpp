@@ -3905,10 +3905,10 @@ void register_viewer_callbacks(LLMessageSystem* msg)
 						LLGroupMgr::processGroupPropertiesReply);
 
 	// ratings deprecated
-	// msg->setHandlerFuncFast(_PREHASH_ReputationIndividualReply,
+	//msg->setHandlerFuncFast(_PREHASH_ReputationIndividualReply,
 
 
-	//					LLFloaterRate::processReputationIndividualReply);
+	//				LLFloaterRate::processReputationIndividualReply);
 
 
 	msg->setHandlerFuncFast(_PREHASH_AgentWearablesUpdate,
@@ -4239,7 +4239,7 @@ void LLStartUp::multimediaInit()
 	set_startup_status(0.42f, msg.c_str(), gAgent.mMOTD.c_str());
 	display_startup();
 
-	// LLViewerMedia::initClass();
+	//LLViewerMedia::initClass();
 	LLViewerParcelMedia::initClass();
 }
 
