@@ -30,21 +30,19 @@
  */
 
 #include "linden_common.h"
-
 #include "llaudiodecodemgr.h"
-
-#include "llvorbisdecode.h"
+#include "llassetstorage.h"
 #include "llaudioengine.h"
-#include "lllfsthread.h"
-#include "llvfile.h"
-#include "llstring.h"
 #include "lldir.h"
 #include "llendianswizzle.h"
-#include "llassetstorage.h"
-
+#include "lllfsthread.h"
+#include "llrefcount.h"
+#include "llstring.h"
+#include "llvfile.h"
+#include "llvorbisencode.h"
+#include "llvorbisdecode.h"
 #include "vorbis/codec.h"
 #include "vorbis/vorbisfile.h"
-#include "llvorbisencode.h"
 #include <iterator> //VS2010
 
 extern LLAudioEngine *gAudiop;
