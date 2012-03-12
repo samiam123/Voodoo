@@ -20,6 +20,7 @@ set(llcommon_SOURCE_FILES
 	indra_constants.cpp
     llapp.cpp
     llapr.cpp
+    #llaprpool.cpp
     llassettype.cpp
 	llavatarname.cpp
     llbase32.cpp
@@ -101,6 +102,7 @@ set(llcommon_HEADER_FILES
     llavatarname.h
     llapp.h
     llapr.h
+    #llaprpool.h
     llassettype.h
     llassoclist.h
     llavatarconstants.h

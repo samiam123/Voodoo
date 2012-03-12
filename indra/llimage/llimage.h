@@ -39,7 +39,7 @@
 #include "llthread.h"
 #include "aithreadsafe.h"
 // llmemtype not used yet adding now sams
-#include "llmemtype.h"
+//#include "llmemtype.h"
 
 const S32 MIN_IMAGE_MIP =  2; // 4x4, only used for expand/contract power of 2
 const S32 MAX_IMAGE_MIP = 11; // 2048x2048
@@ -56,8 +56,8 @@ const S32 MAX_IMAGE_DATA_SIZE = MAX_IMAGE_AREA * MAX_IMAGE_COMPONENTS; //2048 * 
 // *TODO: change both to 1024 when SIM texture fetching is deprecated
 // 1st was 600 2and was 1000 auora sends these now but getting error
 // setting this back for now till i can figuer out the error sams voodoo
-const S32 FIRST_PACKET_SIZE = 1024;
-const S32 MAX_IMG_PACKET_SIZE = 1024;
+const S32 FIRST_PACKET_SIZE = 600;
+const S32 MAX_IMG_PACKET_SIZE = 1000;
 
 // Base classes for images.
 // There are two major parts for the image:
@@ -77,12 +77,12 @@ typedef enum e_image_codec
 	IMG_CODEC_JPEG = 5,
 	IMG_CODEC_DXT  = 6,
 	IMG_CODEC_PNG  = 7,
+	IMG_CODEC_EOF  = 8
 #ifdef LL_DARWIN
 	IMG_CODEC_PSD  = 8,
 	IMG_CODEC_TIFF = 9,
 	IMG_CODEC_EOF  = 10
-#else
-	IMG_CODEC_EOF  = 8
+//#else
 #endif
 } 
     EImageCodec;
@@ -178,7 +178,7 @@ private:
 	bool mBadBufferAllocation ;
 	bool mAllowOverSize ;
 public:
-	static BOOL sSizeOverride;
+	//static BOOL sSizeOverride;
 	S16 mMemType; // debug
 };
 
