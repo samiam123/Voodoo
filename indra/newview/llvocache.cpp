@@ -52,28 +52,44 @@ BOOL check_write(LLAPRFile* apr_file, void* src, S32 n_bytes)
 //---------------------------------------------------------------------------
 
 LLVOCacheEntry::LLVOCacheEntry(U32 local_id, U32 crc, LLDataPackerBinaryBuffer &dp)
-	:
-	mLocalID(local_id),
+//	:
+{
+/*	mLocalID(local_id),
 	mCRC(crc),
 	mHitCount(0),
 	mDupeCount(0),
 	mCRCChangeCount(0)
-{
+//{ ummm sams voodoo
+*/
+	mLocalID = local_id;
+	mCRC = crc;
+	mHitCount = 0;
+	mDupeCount = 0;
+	mCRCChangeCount = 0;
 	mBuffer = new U8[dp.getBufferSize()];
 	mDP.assignBuffer(mBuffer, dp.getBufferSize());
 	mDP = dp; //memcpy
 }
 
 LLVOCacheEntry::LLVOCacheEntry()
-	:
-	mLocalID(0),
+	//:
+	{
+/*	mLocalID(0),
 	mCRC(0),
 	mHitCount(0),
 	mDupeCount(0),
 	mCRCChangeCount(0),
 	mBuffer(NULL)
-{
+	*/
+	mLocalID = 0;
+	mCRC = 0;
+	mHitCount = 0;
+	mDupeCount = 0;
+	mCRCChangeCount = 0;
+	mBuffer = NULL;
 	mDP.assignBuffer(mBuffer, 0);
+//{
+
 }
 
 LLVOCacheEntry::LLVOCacheEntry(LLAPRFile* apr_file)
