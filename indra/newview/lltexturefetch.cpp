@@ -35,7 +35,7 @@
 #include <iostream>
 
 #include "llstl.h"
-//#include "message.h"
+#include "message.h"
 #include "lltexturefetch.h"
 #include "llcurl.h"
 #include "lldir.h"
@@ -164,7 +164,7 @@ public:
 	}
 
 	void setCanUseHTTP(bool can_use_http) { mCanUseHTTP = can_use_http; }
-	bool getCanUseHTTP() const { return mCanUseHTTP; }
+	bool getCanUseHTTP() const { return mCanUseHTTP;}
 
 	LLTextureFetch & getFetcher() { return *mFetcher; }
 	
@@ -1128,6 +1128,7 @@ bool LLTextureFetchWorker::doWork(S32 param)
 	if (mState == LOAD_FROM_NETWORK)
 	{
 		static const LLCachedControl<bool> use_http("ImagePipelineUseHTTP", false);
+		//static LLCachedControl<bool> use_http(gSavedSettings, "ImagePipelineUseHTTPFetch3");
 
 // 		if (mHost != LLHost::invalid) use_http = false;
 		if (use_http && mCanUseHTTP && mUrl.empty())	// get http url.
@@ -1140,15 +1141,17 @@ bool LLTextureFetchWorker::doWork(S32 param)
 
 			if (region)
 			{
-				std::string http_url = region->getHttpUrl() ;
+				//std::string http_url = region->getHttpUrl() ;
+				std::string http_url = region->getCapability("GetTexture");
 				if (!http_url.empty())
 				{
 					mUrl = http_url + "/?texture_id=" + mID.asString().c_str();
-					mWriteToCacheState = CAN_WRITE ; //because this texture has a fixed texture id.
+					mWriteToCacheState = CAN_WRITE; //because this texture has a fixed texture id.
+
 				}
 				else
 				{
-					mCanUseHTTP = false ;
+					mCanUseHTTP = false;
 				}
 			}
 			else

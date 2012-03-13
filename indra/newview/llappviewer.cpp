@@ -3090,7 +3090,7 @@ bool LLAppViewer::initCache()
 	mPurgeCache = false;
 	BOOL read_only = mSecondInstance ? TRUE : FALSE;
 	LLAppViewer::getTextureCache()->setReadOnly(read_only) ;
-	LLVOCache::getInstance()->setReadOnly(read_only);
+	//LLVOCache::getInstance()->setReadOnly(read_only);
 
 	bool texture_cache_mismatch = false;
 	if (gSavedSettings.getS32("LocalCacheVersion") != LLAppViewer::getTextureCacheVersion())
@@ -3170,7 +3170,7 @@ bool LLAppViewer::initCache()
 	S64 extra = LLAppViewer::getTextureCache()->initCache(LL_PATH_CACHE, texture_cache_size, texture_cache_mismatch);
 	texture_cache_size -= extra;
 
-	LLVOCache::getInstance()->initCache(LL_PATH_CACHE, gSavedSettings.getU32("CacheNumberOfRegionsForObjects"), getObjectCacheVersion()) ;
+	//LLVOCache::getInstance()->initCache(LL_PATH_CACHE, gSavedSettings.getU32("CacheNumberOfRegionsForObjects"), getObjectCacheVersion()) ;
 
 	LLSplashScreen::update("Initializing VFS...");
 	
@@ -3330,7 +3330,7 @@ void LLAppViewer::purgeCache()
 {
 	LL_INFOS("AppCache") << "Purging Cache and Texture Cache..." << llendl;
 	LLAppViewer::getTextureCache()->purgeCache(LL_PATH_CACHE);
-	LLVOCache::getInstance()->removeCache(LL_PATH_CACHE);
+	//LLVOCache::getInstance()->removeCache(LL_PATH_CACHE);
 	std::string mask = "*.*";
 	gDirUtilp->deleteFilesInDir(gDirUtilp->getExpandedFilename(LL_PATH_CACHE, ""), mask);
 }

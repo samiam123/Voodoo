@@ -244,19 +244,20 @@ U32 LLVOVolume::processUpdateMessage(LLMessageSystem *mesgsys,
 			{
 				markForUpdate(TRUE);
 			}
+			//*
 			S32 res2 = unpackTEMessage(*dp);
 			if (TEM_INVALID == res2)
 			{
 				// Well, crap, there's something bogus in the data that we're unpacking.
 				dp->dumpBufferToLog();
 				llwarns << "Flushing cache files" << llendl;
-
-				if(LLVOCache::hasInstance() && getRegion())
-				{
-					LLVOCache::getInstance()->removeEntry(getRegion()->getHandle()) ;
-				}
+              //-------------------------------------------------------------------
+				//if(LLVOCache::hasInstance() && getRegion())
+				//{
+				//	LLVOCache::getInstance()->removeEntry(getRegion()->getHandle()) ;
+				//}
 				
-				llwarns << "Bogus TE data in " << getID() << llendl;
+				//llwarns << "Bogus TE data in " << getID() << llendl;
 			}
 			else if (res2 & (TEM_CHANGE_TEXTURE|TEM_CHANGE_COLOR))
 			{
