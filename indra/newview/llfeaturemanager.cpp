@@ -651,6 +651,7 @@ void LLFeatureManager::applyBaseMasks()
 	maskFeatures(gpustr);
 
 	// now mask cpu type ones
+	// Note to sam .. look at this again after going thru this better voodoo
 	if (gSysMemory.getPhysicalMemoryClamped() <= 256*1024*1024)
 	{
 		maskFeatures("RAM256MB");

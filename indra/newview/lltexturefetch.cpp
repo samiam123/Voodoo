@@ -1128,7 +1128,7 @@ bool LLTextureFetchWorker::doWork(S32 param)
 	if (mState == LOAD_FROM_NETWORK)
 	{
 		static const LLCachedControl<bool> use_http("ImagePipelineUseHTTP", false);
-		//static LLCachedControl<bool> use_http(gSavedSettings, "ImagePipelineUseHTTPFetch3");
+		//static LLCachedControl<bool> use_http(gSavedSettings, "ImagePipelineUseHTTPFetch3");//we use this later on sams
 
 // 		if (mHost != LLHost::invalid) use_http = false;
 		if (use_http && mCanUseHTTP && mUrl.empty())	// get http url.

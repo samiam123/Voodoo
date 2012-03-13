@@ -3330,7 +3330,7 @@ void LLAppViewer::purgeCache()
 {
 	LL_INFOS("AppCache") << "Purging Cache and Texture Cache..." << llendl;
 	LLAppViewer::getTextureCache()->purgeCache(LL_PATH_CACHE);
-	//LLVOCache::getInstance()->removeCache(LL_PATH_CACHE);
+	//LLVOCache::getInstance()->removeCache(LL_PATH_CACHE);// check this with the new files sams
 	std::string mask = "*.*";
 	gDirUtilp->deleteFilesInDir(gDirUtilp->getExpandedFilename(LL_PATH_CACHE, ""), mask);
 }
