@@ -104,7 +104,7 @@ bool get_shell32_dll_version(DWORD& major, DWORD& minor, DWORD& build_number)
 
 		// Shell32.dll contains the DLLGetVersion function. 
 		// according to msdn its not part of the API
-		// so you have to go in and get it.
+		// so you have to go in and get it.new
 		// http://msdn.microsoft.com/en-us/library/bb776404(VS.85).aspx
 		shell32_path += TEXT("\\shell32.dll");
 
@@ -322,13 +322,18 @@ LLOSInfo::LLOSInfo() :
 	std::string compatibility_mode;
 	if(got_shell32_version)
 	{
-		if(osvi.dwMajorVersion != shell32_major || osvi.dwMinorVersion != shell32_minor)
+	
+	if(shell32_build > 4000)
+	{
+		//if(osvi.dwMajorVersion != shell32_major || osvi.dwMinorVersion != shell32_minor)
+		if(osvi.dwMajorVersion != shell32_major || osvi.dwMinorVersion != shell32_minor )
 		{
 			compatibility_mode = llformat(" compatibility mode. real ver: %d.%d (Build %d)", 
 											shell32_major,
 											shell32_minor,
 											shell32_build);
 		}
+	}
 	}
 	mOSString += compatibility_mode;
 

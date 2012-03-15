@@ -570,7 +570,7 @@ bool LLAppViewer::init()
 	LLVector4a::initClass();
 	// Need to do this initialization before we do anything else, since anything
 	// that touches files should really go through the lldir API
-	gDirUtilp->initAppDirs("AstraViewer");
+	gDirUtilp->initAppDirs("Voodoo");
 	// set skin search path to default, will be overridden later
 	// this allows simple skinned file lookups to work
 	gDirUtilp->setSkinFolder("default");
@@ -3430,7 +3430,7 @@ void LLAppViewer::badNetworkHandler()
 		"the issue. \n"
 		" \n"
 		"If the problem continues, please report the issue at: \n"
-		"http://www.Astraviewer.org" << grid_support_msg;
+		"http://www.Voodoo.org" << grid_support_msg;
 	forceDisconnect(message.str());
 }
 

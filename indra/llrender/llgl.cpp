@@ -103,7 +103,6 @@ void ll_close_fail_log()
 }
 LLMatrix4 gGLObliqueProjectionInverse;
 std::list<LLGLUpdate*> LLGLUpdate::sGLQ;
-
 #define LL_GL_NAME_POOLING 0
 
 
@@ -159,6 +158,7 @@ PFNGLPOINTPARAMETERFARBPROC glPointParameterfARB = NULL;
 PFNGLPOINTPARAMETERFVARBPROC glPointParameterfvARB = NULL;
 
 // GL_EXT_framebuffer_object
+///*
 PFNGLISRENDERBUFFEREXTPROC glIsRenderbufferEXT = NULL;
 PFNGLBINDRENDERBUFFEREXTPROC glBindRenderbufferEXT = NULL;
 PFNGLDELETERENDERBUFFERSEXTPROC glDeleteRenderbuffersEXT = NULL;
@@ -179,6 +179,7 @@ PFNGLGENERATEMIPMAPEXTPROC glGenerateMipmapEXT = NULL;
 PFNGLBLITFRAMEBUFFEREXTPROC glBlitFramebufferEXT = NULL;
 PFNGLRENDERBUFFERSTORAGEMULTISAMPLEEXTPROC glRenderbufferStorageMultisampleEXT = NULL;
 PFNGLFRAMEBUFFERTEXTURELAYEREXTPROC glFramebufferTextureLayerEXT = NULL;
+//*/
 //-------------------------------------------------------------------
 // GL_ARB_framebuffer_object
 /*
@@ -924,6 +925,7 @@ void LLGLManager::initExtensions()
 	if (mHasFramebufferObject)
 	{
 		llinfos << "initExtensions() FramebufferObject-related procs..." << llendl;
+		///*
 		glIsRenderbufferEXT = (PFNGLISRENDERBUFFEREXTPROC) GLH_EXT_GET_PROC_ADDRESS("glIsRenderbufferEXT");
 		glBindRenderbufferEXT = (PFNGLBINDRENDERBUFFEREXTPROC) GLH_EXT_GET_PROC_ADDRESS("glBindRenderbufferEXT");
 		glDeleteRenderbuffersEXT = (PFNGLDELETERENDERBUFFERSEXTPROC) GLH_EXT_GET_PROC_ADDRESS("glDeleteRenderbuffersEXT");
@@ -944,6 +946,7 @@ void LLGLManager::initExtensions()
 		glBlitFramebufferEXT = (PFNGLBLITFRAMEBUFFEREXTPROC) GLH_EXT_GET_PROC_ADDRESS("glBlitFramebufferEXT");
 		glRenderbufferStorageMultisampleEXT = (PFNGLRENDERBUFFERSTORAGEMULTISAMPLEEXTPROC) GLH_EXT_GET_PROC_ADDRESS("glRenderbufferStorageMultisampleEXT");
 		glFramebufferTextureLayerEXT = (PFNGLFRAMEBUFFERTEXTURELAYEREXTPROC) GLH_EXT_GET_PROC_ADDRESS("glFramebufferTextureLayerEXT");	
+		//*/
 //--------------------------------------------------------------
 // this block will replace the upper block later added for now sams voodoo
 /*
