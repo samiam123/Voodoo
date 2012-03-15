@@ -102,10 +102,12 @@ void ll_close_fail_log()
 	gFailLog.close();
 }
 LLMatrix4 gGLObliqueProjectionInverse;
+std::list<LLGLUpdate*> LLGLUpdate::sGLQ;
 
 #define LL_GL_NAME_POOLING 0
 
-std::list<LLGLUpdate*> LLGLUpdate::sGLQ;
+
+LLGLNamePool::pool_list_t LLGLNamePool::sInstances;
 
 #if (LL_WINDOWS || LL_LINUX || LL_SOLARIS)  && !LL_MESA_HEADLESS
 // ATI prototypes
@@ -177,7 +179,30 @@ PFNGLGENERATEMIPMAPEXTPROC glGenerateMipmapEXT = NULL;
 PFNGLBLITFRAMEBUFFEREXTPROC glBlitFramebufferEXT = NULL;
 PFNGLRENDERBUFFERSTORAGEMULTISAMPLEEXTPROC glRenderbufferStorageMultisampleEXT = NULL;
 PFNGLFRAMEBUFFERTEXTURELAYEREXTPROC glFramebufferTextureLayerEXT = NULL;
-
+//-------------------------------------------------------------------
+// GL_ARB_framebuffer_object
+/*
+PFNGLISRENDERBUFFERPROC glIsRenderbuffer = NULL;
+PFNGLBINDRENDERBUFFERPROC glBindRenderbuffer = NULL;
+PFNGLDELETERENDERBUFFERSPROC glDeleteRenderbuffers = NULL;
+PFNGLGENRENDERBUFFERSPROC glGenRenderbuffers = NULL;
+PFNGLRENDERBUFFERSTORAGEPROC glRenderbufferStorage = NULL;
+PFNGLGETRENDERBUFFERPARAMETERIVPROC glGetRenderbufferParameteriv = NULL;
+PFNGLISFRAMEBUFFERPROC glIsFramebuffer = NULL;
+PFNGLBINDFRAMEBUFFERPROC glBindFramebuffer = NULL;
+PFNGLDELETEFRAMEBUFFERSPROC glDeleteFramebuffers = NULL;
+PFNGLGENFRAMEBUFFERSPROC glGenFramebuffers = NULL;
+PFNGLCHECKFRAMEBUFFERSTATUSPROC glCheckFramebufferStatus = NULL;
+PFNGLFRAMEBUFFERTEXTURE1DPROC glFramebufferTexture1D = NULL;
+PFNGLFRAMEBUFFERTEXTURE2DPROC glFramebufferTexture2D = NULL;
+PFNGLFRAMEBUFFERTEXTURE3DPROC glFramebufferTexture3D = NULL;
+PFNGLFRAMEBUFFERRENDERBUFFERPROC glFramebufferRenderbuffer = NULL;
+PFNGLGETFRAMEBUFFERATTACHMENTPARAMETERIVPROC glGetFramebufferAttachmentParameteriv = NULL;
+PFNGLGENERATEMIPMAPPROC glGenerateMipmap = NULL;
+PFNGLBLITFRAMEBUFFERPROC glBlitFramebuffer = NULL;
+PFNGLRENDERBUFFERSTORAGEMULTISAMPLEPROC glRenderbufferStorageMultisample = NULL;
+PFNGLFRAMEBUFFERTEXTURELAYERPROC glFramebufferTextureLayer = NULL;
+*/
 // GL_EXT_blend_func_separate
 PFNGLBLENDFUNCSEPARATEEXTPROC glBlendFuncSeparateEXT = NULL;
 
@@ -297,7 +322,7 @@ PFNGLGETACTIVEATTRIBARBPROC glGetActiveAttribARB = NULL;
 PFNGLGETATTRIBLOCATIONARBPROC glGetAttribLocationARB = NULL;
 
 #if LL_WINDOWS
-PFNWGLSWAPINTERVALEXTPROC		wglSwapIntervalEXT = NULL;
+PFNWGLSWAPINTERVALEXTPROC			wglSwapIntervalEXT = NULL;
 #endif
 
 #if LL_LINUX_NV_GL_HEADERS
@@ -321,6 +346,7 @@ LLGLManager::LLGLManager() :
 	mHasMipMapGeneration(FALSE),
 	mHasCompressedTextures(FALSE),
 	mHasFramebufferObject(FALSE),
+	// line below i think is a featuer but may not be used later sams voodoo
 	mHasFramebufferMultisample(FALSE),
 	mHasBlendFuncSeparate(FALSE),
 
@@ -329,6 +355,7 @@ LLGLManager::LLGLManager() :
 	mHasShaderObjects(FALSE),
 	mHasVertexShader(FALSE),
 	mHasFragmentShader(FALSE),
+	//Line below i think is an added featuer but may be removed later sams voodoo
 	mNumTextureImageUnits(0),
 	mHasOcclusionQuery(FALSE),
 	mHasOcclusionQuery2(FALSE),
@@ -506,13 +533,13 @@ bool LLGLManager::initGL()
 		S32 meminfo[4];
 		glGetIntegerv(GL_TEXTURE_FREE_MEMORY_ATI, meminfo);
 
-		mVRAM = meminfo[0]/1024;
+		mVRAM = meminfo[0] / 1024;
 	}
 	else if (mHasNVXMemInfo)
 	{
 		S32 dedicated_memory;
 		glGetIntegerv(GL_GPU_MEMORY_INFO_DEDICATED_VIDMEM_NVX, &dedicated_memory);
-		mVRAM = dedicated_memory/1024;
+		mVRAM = dedicated_memory / 1024;
 	}
 
 	if (mHasMultitexture)
@@ -565,13 +592,17 @@ void LLGLManager::getGLInfo(LLSD& info)
 std::string LLGLManager::getGLInfoString()
 {
 	std::string info_str;
+	//added one line below sams voodoo
+	std::string all_exts, line;
 
 	info_str += std::string("GL_VENDOR      ") + ll_safe_string((const char *)glGetString(GL_VENDOR)) + std::string("\n");
 	info_str += std::string("GL_RENDERER    ") + ll_safe_string((const char *)glGetString(GL_RENDERER)) + std::string("\n");
 	info_str += std::string("GL_VERSION     ") + ll_safe_string((const char *)glGetString(GL_VERSION)) + std::string("\n");
 
-#if !LL_MESA_HEADLESS 
-	std::string all_exts= ll_safe_string(((const char *)gGLHExts.mSysExts));
+#if !LL_MESA_HEADLESS
+//added one line below commented out one right after sams voodoo
+	all_exts = (const char *)gGLHExts.mSysExts; 
+	//std::string all_exts= ll_safe_string(((const char *)gGLHExts.mSysExts));
 	LLStringUtil::replaceChar(all_exts, ' ', '\n');
 	info_str += std::string("GL_EXTENSIONS:\n") + all_exts + std::string("\n");
 #endif
@@ -582,13 +613,17 @@ std::string LLGLManager::getGLInfoString()
 void LLGLManager::printGLInfoString()
 {
 	std::string info_str;
+	//added one line below sams voodoo
+	std::string all_exts, line;
 	
 	LL_INFOS("RenderInit") << "GL_VENDOR:     " << ((const char *)glGetString(GL_VENDOR)) << LL_ENDL;
 	LL_INFOS("RenderInit") << "GL_RENDERER:   " << ((const char *)glGetString(GL_RENDERER)) << LL_ENDL;
 	LL_INFOS("RenderInit") << "GL_VERSION:    " << ((const char *)glGetString(GL_VERSION)) << LL_ENDL;
 
 #if !LL_MESA_HEADLESS
-	std::string all_exts= ll_safe_string(((const char *)gGLHExts.mSysExts));
+//added one line below commented out the one just after sams voodoo
+    all_exts = std::string(gGLHExts.mSysExts);
+	//std::string all_exts= ll_safe_string(((const char *)gGLHExts.mSysExts));
 	LLStringUtil::replaceChar(all_exts, ' ', '\n');
 	LL_DEBUGS("RenderInit") << "GL_EXTENSIONS:\n" << all_exts << LL_ENDL;
 #endif
@@ -613,7 +648,8 @@ void LLGLManager::shutdownGL()
 
 // these are used to turn software blending on. They appear in the Debug/Avatar menu
 // presence of vertex skinning/blending or vertex programs will set these to FALSE by default.
-
+// added one line below not used yet sams voodoo 
+//extern LLCPUInfo gSysCPU;
 void LLGLManager::initExtensions()
 {
 #if LL_MESA_HEADLESS
@@ -687,7 +723,7 @@ void LLGLManager::initExtensions()
 	mHasOcclusionQuery2 = ExtensionExists("GL_ARB_occlusion_query2", gGLHExts.mSysExts);
 	mHasVertexBufferObject = ExtensionExists("GL_ARB_vertex_buffer_object", gGLHExts.mSysExts);
 	mHasDepthClamp = ExtensionExists("GL_ARB_depth_clamp", gGLHExts.mSysExts) || ExtensionExists("GL_NV_depth_clamp", gGLHExts.mSysExts);
-		// mask out FBO support when packed_depth_stencil isn't there 'cause we need it for LLRenderTarget -Brad
+	// mask out FBO support when packed_depth_stencil isn't there 'cause we need it for LLRenderTarget -Brad
 #ifdef GL_ARB_framebuffer_object
 	mHasFramebufferObject = ExtensionExists("GL_ARB_framebuffer_object", gGLHExts.mSysExts);
 #else
@@ -700,7 +736,9 @@ void LLGLManager::initExtensions()
 	mHasDrawBuffers = ExtensionExists("GL_ARB_draw_buffers", gGLHExts.mSysExts);
 	mHasBlendFuncSeparate = ExtensionExists("GL_EXT_blend_func_separate", gGLHExts.mSysExts);
 	mHasTextureRectangle = ExtensionExists("GL_ARB_texture_rectangle", gGLHExts.mSysExts);
+#if !LL_DARWIN
 	mHasPointParameters = !mIsATI && ExtensionExists("GL_ARB_point_parameters", gGLHExts.mSysExts);
+#endif
 	mHasShaderObjects = ExtensionExists("GL_ARB_shader_objects", gGLHExts.mSysExts) && ExtensionExists("GL_ARB_shading_language_100", gGLHExts.mSysExts);
 	mHasVertexShader = ExtensionExists("GL_ARB_vertex_program", gGLHExts.mSysExts) && ExtensionExists("GL_ARB_vertex_shader", gGLHExts.mSysExts)
 						&& ExtensionExists("GL_ARB_shading_language_100", gGLHExts.mSysExts);
@@ -773,10 +811,14 @@ void LLGLManager::initExtensions()
 		if (strchr(blacklist,'p')) mHasPointParameters = FALSE;//S
 		if (strchr(blacklist,'q')) mHasFramebufferObject = FALSE;//S
 		if (strchr(blacklist,'r')) mHasDrawBuffers = FALSE;//S
-		if (strchr(blacklist,'s')) mHasFramebufferMultisample = FALSE;
-		if (strchr(blacklist,'t')) mHasTextureRectangle = FALSE;
-		if (strchr(blacklist,'u')) mHasBlendFuncSeparate = FALSE;//S
-		if (strchr(blacklist,'v')) mHasDepthClamp = FALSE;
+		//if (strchr(blacklist,'s')) mHasFramebufferMultisample = FALSE;
+		//if (strchr(blacklist,'t')) mHasTextureRectangle = FALSE;
+		//if (strchr(blacklist,'u')) mHasBlendFuncSeparate = FALSE;//S
+		//if (strchr(blacklist,'v')) mHasDepthClamp = FALSE;
+		//replace the 4 lines above with the 3 below note letter codes sams voodoo
+		if (strchr(blacklist,'s')) mHasTextureRectangle = FALSE;
+		if (strchr(blacklist,'t')) mHasBlendFuncSeparate = FALSE;//S
+		if (strchr(blacklist,'u')) mHasDepthClamp = FALSE;	
 
 	}
 #endif // LL_LINUX || LL_SOLARIS
@@ -902,6 +944,31 @@ void LLGLManager::initExtensions()
 		glBlitFramebufferEXT = (PFNGLBLITFRAMEBUFFEREXTPROC) GLH_EXT_GET_PROC_ADDRESS("glBlitFramebufferEXT");
 		glRenderbufferStorageMultisampleEXT = (PFNGLRENDERBUFFERSTORAGEMULTISAMPLEEXTPROC) GLH_EXT_GET_PROC_ADDRESS("glRenderbufferStorageMultisampleEXT");
 		glFramebufferTextureLayerEXT = (PFNGLFRAMEBUFFERTEXTURELAYEREXTPROC) GLH_EXT_GET_PROC_ADDRESS("glFramebufferTextureLayerEXT");	
+//--------------------------------------------------------------
+// this block will replace the upper block later added for now sams voodoo
+/*
+		glIsRenderbuffer = (PFNGLISRENDERBUFFERPROC) GLH_EXT_GET_PROC_ADDRESS("glIsRenderbuffer");
+		glBindRenderbuffer = (PFNGLBINDRENDERBUFFERPROC) GLH_EXT_GET_PROC_ADDRESS("glBindRenderbuffer");
+		glDeleteRenderbuffers = (PFNGLDELETERENDERBUFFERSPROC) GLH_EXT_GET_PROC_ADDRESS("glDeleteRenderbuffers");
+		glGenRenderbuffers = (PFNGLGENRENDERBUFFERSPROC) GLH_EXT_GET_PROC_ADDRESS("glGenRenderbuffers");
+		glRenderbufferStorage = (PFNGLRENDERBUFFERSTORAGEPROC) GLH_EXT_GET_PROC_ADDRESS("glRenderbufferStorage");
+		glGetRenderbufferParameteriv = (PFNGLGETRENDERBUFFERPARAMETERIVPROC) GLH_EXT_GET_PROC_ADDRESS("glGetRenderbufferParameteriv");
+		glIsFramebuffer = (PFNGLISFRAMEBUFFERPROC) GLH_EXT_GET_PROC_ADDRESS("glIsFramebuffer");
+		glBindFramebuffer = (PFNGLBINDFRAMEBUFFERPROC) GLH_EXT_GET_PROC_ADDRESS("glBindFramebuffer");
+		glDeleteFramebuffers = (PFNGLDELETEFRAMEBUFFERSPROC) GLH_EXT_GET_PROC_ADDRESS("glDeleteFramebuffers");
+		glGenFramebuffers = (PFNGLGENFRAMEBUFFERSPROC) GLH_EXT_GET_PROC_ADDRESS("glGenFramebuffers");
+		glCheckFramebufferStatus = (PFNGLCHECKFRAMEBUFFERSTATUSPROC) GLH_EXT_GET_PROC_ADDRESS("glCheckFramebufferStatus");
+		glFramebufferTexture1D = (PFNGLFRAMEBUFFERTEXTURE1DPROC) GLH_EXT_GET_PROC_ADDRESS("glFramebufferTexture1D");
+		glFramebufferTexture2D = (PFNGLFRAMEBUFFERTEXTURE2DPROC) GLH_EXT_GET_PROC_ADDRESS("glFramebufferTexture2D");
+		glFramebufferTexture3D = (PFNGLFRAMEBUFFERTEXTURE3DPROC) GLH_EXT_GET_PROC_ADDRESS("glFramebufferTexture3D");
+		glFramebufferRenderbuffer = (PFNGLFRAMEBUFFERRENDERBUFFERPROC) GLH_EXT_GET_PROC_ADDRESS("glFramebufferRenderbuffer");
+		glGetFramebufferAttachmentParameteriv = (PFNGLGETFRAMEBUFFERATTACHMENTPARAMETERIVPROC) GLH_EXT_GET_PROC_ADDRESS("glGetFramebufferAttachmentParameteriv");
+		glGenerateMipmap = (PFNGLGENERATEMIPMAPPROC) GLH_EXT_GET_PROC_ADDRESS("glGenerateMipmap");
+		glBlitFramebuffer = (PFNGLBLITFRAMEBUFFERPROC) GLH_EXT_GET_PROC_ADDRESS("glBlitFramebuffer");
+		glRenderbufferStorageMultisample = (PFNGLRENDERBUFFERSTORAGEMULTISAMPLEPROC) GLH_EXT_GET_PROC_ADDRESS("glRenderbufferStorageMultisample");
+		glFramebufferTextureLayer = (PFNGLFRAMEBUFFERTEXTURELAYERPROC) GLH_EXT_GET_PROC_ADDRESS("glFramebufferTextureLayer");
+*/		
+//----------------------------------------------------------------
 	}
 	if (mHasDrawBuffers)
 	{
@@ -1329,7 +1396,10 @@ void LLGLState::checkTextureChannels(const std::string& msg)
 			}
 		}
 	}
-
+// added 3 lines below sams voodoo
+	GLint maxTextureUnits = 0;
+	glGetIntegerv(GL_MAX_TEXTURE_UNITS_ARB, &maxTextureUnits);
+	stop_glerror();
 	static const char* label[] =
 	{
 		"GL_TEXTURE_2D",
@@ -1361,8 +1431,9 @@ void LLGLState::checkTextureChannels(const std::string& msg)
 	glh::matrix4f mat;
 	glh::matrix4f identity;
 	identity.identity();
-
-	for (GLint i = 1; i < gGLManager.mNumTextureUnits; i++)
+    // commented out one line below added one after sams voodoo
+	//for (GLint i = 1; i < gGLManager.mNumTextureUnits; i++)
+		for (GLint i = 1; i < maxTextureUnits; i++)
 	{
 		gGL.getTexUnit(i)->activate();
 		glClientActiveTextureARB(GL_TEXTURE0_ARB+i);
@@ -1928,9 +1999,27 @@ LLGLUserClipPlane::~LLGLUserClipPlane()
 LLGLNamePool::LLGLNamePool()
 {
 }
-
+//-------------------------------------------------
+// added block below sams voodoo
+void LLGLNamePool::registerPool(LLGLNamePool* pool)
+{
+	pool_list_t::iterator iter = std::find(sInstances.begin(), sInstances.end(), pool);
+	if (iter == sInstances.end())
+	{
+		sInstances.push_back(pool);
+	}
+}
+//--------------------------------------------------
 LLGLNamePool::~LLGLNamePool()
 {
+//---------------------------------------------------------
+// added block below sams voodoo
+	pool_list_t::iterator iter = std::find(sInstances.begin(), sInstances.end(), this);
+	if (iter != sInstances.end())
+	{
+		sInstances.erase(iter);
+	}
+//---------------------------------------------------------	
 }
 
 void LLGLNamePool::upkeep()
@@ -1998,22 +2087,30 @@ void LLGLNamePool::release(GLuint name)
 //static
 void LLGLNamePool::upkeepPools()
 {
-	tracker_t::LLInstanceTrackerScopedGuard guard;
-	for (tracker_t::instance_iter iter = guard.beginInstances(); iter != guard.endInstances(); ++iter)
+	//tracker_t::LLInstanceTrackerScopedGuard guard;
+	//comment out one line below added one after sams voodoo not used yet
+	//for (tracker_t::instance_iter iter = guard.beginInstances(); iter != guard.endInstances(); ++iter)
+	for (pool_list_t::iterator iter = sInstances.begin(); iter != sInstances.end(); ++iter)
 	{
-		LLGLNamePool & pool = *iter;
-		pool.upkeep();
+		//LLGLNamePool & pool = *iter;
+		//pool.upkeep();
+		LLGLNamePool* pool = *iter;
+		pool->upkeep();
 	}
 }
 
 //static
 void LLGLNamePool::cleanupPools()
 {
-	tracker_t::LLInstanceTrackerScopedGuard guard;
-	for (tracker_t::instance_iter iter = guard.beginInstances(); iter != guard.endInstances(); ++iter)
+	//tracker_t::LLInstanceTrackerScopedGuard guard;
+	//comment out one line below added one after sams voodoo not used yet
+	//for (tracker_t::instance_iter iter = guard.beginInstances(); iter != guard.endInstances(); ++iter)
+	for (pool_list_t::iterator iter = sInstances.begin(); iter != sInstances.end(); ++iter)
 	{
-		LLGLNamePool & pool = *iter;
-		pool.cleanup();
+		//LLGLNamePool & pool = *iter;
+		//pool.cleanup();
+		LLGLNamePool* pool = *iter;
+		pool->cleanup();
 	}
 }
 

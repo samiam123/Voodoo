@@ -68,6 +68,7 @@ class LLSD;
 // Manage GL extensions...
 class LLGLManager
 {
+	LOG_CLASS(LLGLManager);
 public:
 	LLGLManager();
 
@@ -368,11 +369,13 @@ public:
 	GLuint allocate();
 	void release(GLuint name);
 	
+	static void registerPool(LLGLNamePool* pool);
 	static void upkeepPools();
 	static void cleanupPools();
 
 protected:
 	typedef std::vector<LLGLNamePool*> pool_list_t;
+	static pool_list_t sInstances;
 	
 	virtual GLuint allocateName() = 0;
 	virtual void releaseName(GLuint name) = 0;
@@ -421,7 +424,7 @@ void disable_cloth_weights(const S32 index);
 void set_vertex_weights(const S32 index, const U32 stride, const F32 *weights);
 void set_vertex_clothing_weights(const S32 index, const U32 stride, const LLVector4 *weights);
 void set_binormals(const S32 index, const U32 stride, const LLVector3 *binormals);
-void parse_gl_version( S32* major, S32* minor, S32* release, std::string* vendor_specific );
+void parse_gl_version( S32* major, S32* minor, S32* release, std::string* vendor_specific);
 
 extern BOOL gClothRipple;
 extern BOOL gNoRender;

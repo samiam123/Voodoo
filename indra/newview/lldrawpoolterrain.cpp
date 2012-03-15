@@ -286,9 +286,11 @@ void LLDrawPoolTerrain::renderShadow(S32 pass)
 		return;
 	}
 	//LLGLEnable offset(GL_POLYGON_OFFSET);
-	//glCullFace(GL_FRONT);
+	// Chnaged one line enabled 3 more .. testing sams voodoo
+	LLGLEnable offset(GL_POLYGON_OFFSET_FILL);
+	glCullFace(GL_FRONT);
 	drawLoop();
-	//glCullFace(GL_BACK);
+	glCullFace(GL_BACK);
 }
 
 void LLDrawPoolTerrain::renderFullShader()

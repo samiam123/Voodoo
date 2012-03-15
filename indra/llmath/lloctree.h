@@ -681,6 +681,7 @@ public:
 		}
 		
 		LLVector4a MAX_MAG;
+		// was 1024F each  changeing them to 8192 made no diff still gen a warning in the log sams voodoo
 		MAX_MAG.splat(1024.f*1024.f);
 
 		const LLVector4a& v = data->getPositionGroup();

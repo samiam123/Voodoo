@@ -185,6 +185,8 @@ public:
 		llassert(object == AIThreadSafeBits<T>::ptr());
 #endif
 	}
+	//added one line for a a test sams voodoo nahh
+	//~AIThreadSafe() { llassert(!mRWLock.isLocked()); }
 };
 
 /**
@@ -411,6 +413,8 @@ protected:
 public:
 	// Only for use by AITHREADSAFESIMPLE, see below.
 	AIThreadSafeSimple(T* object) { llassert(object == AIThreadSafeBits<T>::ptr()); }
+	//added one line below for testing sams voodoo nahh lol
+	//~AIThreadSafeSimple() { llassert(!mMutex.isLocked()); }
 };
 
 /**

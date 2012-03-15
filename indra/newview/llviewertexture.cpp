@@ -2980,7 +2980,7 @@ BOOL LLViewerFetchedTexture::insertToAtlas()
 		//insert to atlas
 		if(!slot_infop->getAtlas()->insertSubTexture(mGLTexturep, mRawDiscardLevel, mRawImage, slot_infop->getSlotCol(), slot_infop->getSlotRow()))
 		{
-			//the texture does not qualify to add to atlas, do not bother to try for other faces.
+			//the texture does not qualify to add to atlas, do not bother to try for other faces;.
 			ret = FALSE ;
 			//invalidateAtlas();
 			break ; 

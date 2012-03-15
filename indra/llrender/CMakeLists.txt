@@ -36,6 +36,7 @@ set(llrender_SOURCE_FILES
     llrendersphere.cpp
     llshadermgr.cpp
     lltexture.cpp
+    #lltextureatlas.cpp
     llvertexbuffer.cpp
     )
     
@@ -60,6 +61,7 @@ set(llrender_HEADER_FILES
     llrendertarget.h
     llshadermgr.h
     lltexture.h
+    #lltextureatlas.h
     llvertexbuffer.h
     )
 
