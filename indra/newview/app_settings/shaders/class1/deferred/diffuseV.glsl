@@ -1,7 +1,7 @@
 /** 
  * @file diffuseV.glsl
  *
- * Copyright (c) 2007-$CurrentYear$, Linden Research, Inc.
+ * $LicenseInfo:firstyear=2007&license=viewerlgpl$
  * $/LicenseInfo$
  */
  

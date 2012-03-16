@@ -1,8 +1,8 @@
 /** 
  * @file alphaF.glsl
  *
- * Copyright (c) 2007-$CurrentYear$, Linden Research, Inc.
- * $License$
+ * $LicenseInfo:firstyear=2007&license=viewerlgpl$
+ * $/LicenseInfo$
  */
  
 #version 120
@@ -48,7 +48,7 @@ void main()
 	vec4 pos = vec4(vary_position, 1.0);
 	
 	vec4 diff= texture2D(diffuseMap, gl_TexCoord[0].xy);
-	
+
 	vec4 col = vec4(vary_ambient + vary_directional.rgb, gl_Color.a);
 	vec4 color = diff * col;
 	
@@ -58,7 +58,6 @@ void main()
 
 	color.rgb += diff.rgb * vary_pointlight_col.rgb;
 
-	//gl_FragColor = gl_Color;
 	gl_FragColor = color;
 	//gl_FragColor = vec4(1,0,1,1);
 	//gl_FragColor = vec4(1,0,1,1)*shadow;

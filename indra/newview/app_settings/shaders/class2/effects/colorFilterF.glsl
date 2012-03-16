@@ -1,12 +1,11 @@
 /**
  * @file colorFilterF.glsl
  *
- * Copyright (c) 2007-$CurrentYear$, Linden Research, Inc.
- * $License$
+ * $LicenseInfo:firstyear=2007&license=viewerlgpl$
+ * $/LicenseInfo$
  */
-
+ 
 #version 120
-#extension GL_ARB_texture_rectangle : enable
 
 uniform sampler2DRect RenderTexture;
 uniform float brightness;
@@ -15,15 +14,12 @@ uniform vec3  contrastBase;
 uniform float saturation;
 uniform vec3  lumWeights;
 
-uniform float gamma;
+const float gamma = 2.0;
 
 void main(void) 
 {
 	vec3 color = vec3(texture2DRect(RenderTexture, gl_TexCoord[0].st));
 
-	/// Apply gamma
-	color = pow(color, vec3(1.0/gamma));
-	
 	/// Modulate brightness
 	color *= brightness;
 

@@ -44,6 +44,8 @@ typedef enum e_chat_source_type
 	CHAT_SOURCE_AGENT = 1,
 	CHAT_SOURCE_OBJECT = 2,
 	CHAT_SOURCE_OBJECT_IM = 3
+	//CHAT_SOURCE_UNKNOWN = 3,
+	//CHAT_SOURCE_OBJECT_IM = 4
 } EChatSourceType;
 
 typedef enum e_chat_type
@@ -80,6 +82,7 @@ public:
 		mRlvNamesFiltered(FALSE),
 // [/RLVa:KB]
 		mSourceType(CHAT_SOURCE_AGENT),
+		//mSourceType(CHAT_SOURCE_UNKNOWN),
 		mChatType(CHAT_TYPE_NORMAL),
 		mAudible(CHAT_AUDIBLE_FULLY),
 		mMuted(FALSE),

@@ -15,6 +15,8 @@ uniform sampler2DRect depthMap;
 uniform sampler2DRect normalMap;
 uniform sampler2D noiseMap;
 
+uniform sampler2D		lightFunc;
+
 
 // Inputs
 uniform mat4 shadow_matrix[6];

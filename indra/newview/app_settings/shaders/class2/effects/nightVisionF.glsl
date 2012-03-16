@@ -1,12 +1,11 @@
 /**
  * @file nightVisionF.glsl
  *
- * Copyright (c) 2007-$CurrentYear$, Linden Research, Inc.
- * $License$
+ * $LicenseInfo:firstyear=2007&license=viewerlgpl$
+ * $/LicenseInfo$
  */
  
 #version 120
-#extension GL_ARB_texture_rectangle : enable
 
 uniform sampler2DRect RenderTexture;
 uniform sampler2D NoiseTexture;

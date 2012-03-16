@@ -32,12 +32,25 @@
  */
 
 #ifndef LLBASE64_H
-#define LLBASE64_h
+#define LLBASE64_H
 
 class LL_COMMON_API LLBase64
 {
 public:
+	/**
+	 * Encodes a binary array into a string.
+	 * @param[in] input The buffer to encode.
+	 * @param[in] input_size The length of data to encode.
+	 * @return A base64 string representing the encoded data.
+	 */
 	static std::string encode(const U8* input, size_t input_size);
+	
+	/**
+	 * Decodes a string into a binary vector.
+	 * @param[in] input The base64 string to decode.
+	 * @return A vector containing the decoded binary data.
+	 */
+	static std::vector<U8> decode(std::string input);
 };
 
 #endif

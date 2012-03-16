@@ -54,7 +54,7 @@
 //#   define  GLH_EXT_GET_PROC_ADDRESS(p) glXGetProcAddressARB((const GLubyte*)(p))
 #   define  GLH_EXT_GET_PROC_ADDRESS(p) glXGetProcAddress((const GLubyte*)(p))
 //  the X headers define 'Status'.  Undefine to avoid confusion.
-#undef Status
+//#undef Status
 
 // The __APPLE__ kludge is to make glh_extensions.h not symbol-clash horribly
 // This header is distributed with SL.  You'll find it in linden/libraries/include/GL/
@@ -281,7 +281,7 @@ extern PFNGLGENERATEMIPMAPEXTPROC glGenerateMipmapEXT;
 // is considered 'legacy' but works on more machines.
 # define GLH_EXT_GET_PROC_ADDRESS(p) glXGetProcAddressARB((const GLubyte*)(p))
 // Whee, the X headers define 'Status'.  Undefine to avoid confusion.
-#undef Status
+//#undef Status
 #endif // LL_LINUX && !LL_MESA_HEADLESS
 
 #if LL_LINUX && defined(WINGDIAPI)
@@ -456,6 +456,7 @@ extern PFNGLGETCOMPRESSEDTEXIMAGEARBPROC glGetCompressedTexImageARB;
 extern PFNGLBLENDFUNCSEPARATEEXTPROC glBlendFuncSeparateEXT;
 
 //GL_EXT_framebuffer_object
+/*
 extern PFNGLISRENDERBUFFEREXTPROC glIsRenderbufferEXT;
 extern PFNGLBINDRENDERBUFFEREXTPROC glBindRenderbufferEXT;
 extern PFNGLDELETERENDERBUFFERSEXTPROC glDeleteRenderbuffersEXT;
@@ -476,6 +477,29 @@ extern PFNGLGENERATEMIPMAPEXTPROC glGenerateMipmapEXT;
 extern PFNGLBLITFRAMEBUFFEREXTPROC glBlitFramebufferEXT;
 extern PFNGLRENDERBUFFERSTORAGEMULTISAMPLEEXTPROC glRenderbufferStorageMultisampleEXT;
 extern PFNGLFRAMEBUFFERTEXTURELAYEREXTPROC glFramebufferTextureLayerEXT;
+
+*/
+// Added next block that replaces the upper one sams voodoo
+extern PFNGLISRENDERBUFFERPROC glIsRenderbuffer;
+extern PFNGLBINDRENDERBUFFERPROC glBindRenderbuffer;
+extern PFNGLDELETERENDERBUFFERSPROC glDeleteRenderbuffers;
+extern PFNGLGENRENDERBUFFERSPROC glGenRenderbuffers;
+extern PFNGLRENDERBUFFERSTORAGEPROC glRenderbufferStorage;
+extern PFNGLGETRENDERBUFFERPARAMETERIVPROC glGetRenderbufferParameteriv;
+extern PFNGLISFRAMEBUFFERPROC glIsFramebuffer;
+extern PFNGLBINDFRAMEBUFFERPROC glBindFramebuffer;
+extern PFNGLDELETEFRAMEBUFFERSPROC glDeleteFramebuffers;
+extern PFNGLGENFRAMEBUFFERSPROC glGenFramebuffers;
+extern PFNGLCHECKFRAMEBUFFERSTATUSPROC glCheckFramebufferStatus;
+extern PFNGLFRAMEBUFFERTEXTURE1DPROC glFramebufferTexture1D;
+extern PFNGLFRAMEBUFFERTEXTURE2DPROC glFramebufferTexture2D;
+extern PFNGLFRAMEBUFFERTEXTURE3DPROC glFramebufferTexture3D;
+extern PFNGLFRAMEBUFFERRENDERBUFFERPROC glFramebufferRenderbuffer;
+extern PFNGLGETFRAMEBUFFERATTACHMENTPARAMETERIVPROC glGetFramebufferAttachmentParameteriv;
+extern PFNGLGENERATEMIPMAPPROC glGenerateMipmap;
+extern PFNGLBLITFRAMEBUFFERPROC glBlitFramebuffer;
+extern PFNGLRENDERBUFFERSTORAGEMULTISAMPLEPROC glRenderbufferStorageMultisample;
+extern PFNGLFRAMEBUFFERTEXTURELAYERPROC glFramebufferTextureLayer;
 
 //GL_ARB_draw_buffers
 extern PFNGLDRAWBUFFERSARBPROC glDrawBuffersARB;
@@ -655,6 +679,7 @@ extern PFNGLGETATTRIBLOCATIONARBPROC glGetAttribLocationARB;
 extern PFNGLBLENDFUNCSEPARATEEXTPROC glBlendFuncSeparateEXT;
 
 //GL_EXT_framebuffer_object
+///*
 extern PFNGLISRENDERBUFFEREXTPROC glIsRenderbufferEXT;
 extern PFNGLBINDRENDERBUFFEREXTPROC glBindRenderbufferEXT;
 extern PFNGLDELETERENDERBUFFERSEXTPROC glDeleteRenderbuffersEXT;
@@ -675,7 +700,32 @@ extern PFNGLGENERATEMIPMAPEXTPROC glGenerateMipmapEXT;
 extern PFNGLBLITFRAMEBUFFEREXTPROC glBlitFramebufferEXT;
 extern PFNGLRENDERBUFFERSTORAGEMULTISAMPLEEXTPROC glRenderbufferStorageMultisampleEXT;
 extern PFNGLFRAMEBUFFERTEXTURELAYEREXTPROC glFramebufferTextureLayerEXT;
-
+//*/
+//----------------------------------------------------------
+//Added one block below this replaces the upper one sams voodoo
+/*
+extern PFNGLISRENDERBUFFERPROC glIsRenderbuffer;
+extern PFNGLBINDRENDERBUFFERPROC glBindRenderbuffer;
+extern PFNGLDELETERENDERBUFFERSPROC glDeleteRenderbuffers;
+extern PFNGLGENRENDERBUFFERSPROC glGenRenderbuffers;
+extern PFNGLRENDERBUFFERSTORAGEPROC glRenderbufferStorage;
+extern PFNGLGETRENDERBUFFERPARAMETERIVPROC glGetRenderbufferParameteriv;
+extern PFNGLISFRAMEBUFFERPROC glIsFramebuffer;
+extern PFNGLBINDFRAMEBUFFERPROC glBindFramebuffer;
+extern PFNGLDELETEFRAMEBUFFERSPROC glDeleteFramebuffers;
+extern PFNGLGENFRAMEBUFFERSPROC glGenFramebuffers;
+extern PFNGLCHECKFRAMEBUFFERSTATUSPROC glCheckFramebufferStatus;
+extern PFNGLFRAMEBUFFERTEXTURE1DPROC glFramebufferTexture1D;
+extern PFNGLFRAMEBUFFERTEXTURE2DPROC glFramebufferTexture2D;
+extern PFNGLFRAMEBUFFERTEXTURE3DPROC glFramebufferTexture3D;
+extern PFNGLFRAMEBUFFERRENDERBUFFERPROC glFramebufferRenderbuffer;
+extern PFNGLGETFRAMEBUFFERATTACHMENTPARAMETERIVPROC glGetFramebufferAttachmentParameteriv;
+extern PFNGLGENERATEMIPMAPPROC glGenerateMipmap;
+extern PFNGLBLITFRAMEBUFFERPROC glBlitFramebuffer;
+extern PFNGLRENDERBUFFERSTORAGEMULTISAMPLEPROC glRenderbufferStorageMultisample;
+extern PFNGLFRAMEBUFFERTEXTURELAYERPROC glFramebufferTextureLayer;
+//-----------------------------------------------------------
+*/
 //GL_ARB_draw_buffers
 extern PFNGLDRAWBUFFERSARBPROC glDrawBuffersARB;
 
@@ -696,8 +746,8 @@ extern PFNGLDRAWBUFFERSARBPROC glDrawBuffersARB;
 #include <AvailabilityMacros.h>
 
 //GL_EXT_blend_func_separate
-extern void glBlendFuncSeparateEXT(GLenum srcRGB, GLenum dstRGB, GLenum srcAlpha, GLenum dstAlpha) AVAILABLE_MAC_OS_X_VERSION_10_4_AND_LATER;
-
+//extern void glBlendFuncSeparateEXT(GLenum srcRGB, GLenum dstRGB, GLenum srcAlpha, GLenum dstAlpha) AVAILABLE_MAC_OS_X_VERSION_10_4_AND_LATER;
+extern void glBlendFuncSeparateEXT(GLenum srcRGB, GLenum dstRGB, GLenum srcAlpha, GLenum dstAlpha) ;
 // GL_EXT_framebuffer_object
 extern GLboolean glIsRenderbufferEXT(GLuint renderbuffer) AVAILABLE_MAC_OS_X_VERSION_10_4_AND_LATER;
 extern void glBindRenderbufferEXT(GLenum target, GLuint renderbuffer) AVAILABLE_MAC_OS_X_VERSION_10_4_AND_LATER;

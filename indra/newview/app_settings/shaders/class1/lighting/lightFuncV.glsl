@@ -1,8 +1,8 @@
 /** 
  * @file lightFuncV.glsl
  *
- * Copyright (c) 2007-$CurrentYear$, Linden Research, Inc.
- * $License$
+ * $LicenseInfo:firstyear=2007&license=viewerlgpl$
+ * $/LicenseInfo$
  */
  
 #version 120
@@ -35,7 +35,7 @@ float calcPointLightOrSpotLight(vec3 v, vec3 n, vec4 lp, vec3 ln, float la, floa
 
 	//angular attenuation
 	da *= calcDirectionalLight(n, lv);
-	
+
 	return da;	
 }
 

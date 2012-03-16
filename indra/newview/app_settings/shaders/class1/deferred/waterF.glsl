@@ -1,8 +1,8 @@
 /** 
  * @file waterF.glsl
  *
- * Copyright (c) 2007-$CurrentYear$, Linden Research, Inc.
- * $License$
+ * $LicenseInfo:firstyear=2007&license=viewerlgpl$
+ * $/LicenseInfo$
  */
  
 #version 120
@@ -93,7 +93,7 @@ void main()
 	refcol *= df1 * 0.333;
 	
 	vec3 wavef = (wave1 + wave2 * 0.4 + wave3 * 0.6) * 0.5;
-//	wavef.z *= max(-viewVec.z, 0.1);
+	//wavef.z *= max(-viewVec.z, 0.1);
 	wavef = normalize(wavef);
 	
 	float df2 = dot(viewVec, wavef) * fresnelScale+fresnelOffset;
@@ -106,10 +106,10 @@ void main()
 	refcol = mix(baseCol*df2, refcol, dweight);
 
 	//get specular component
-//	float spec = clamp(dot(lightDir, (reflect(viewVec,wavef))),0.0,1.0);
+	//float spec = clamp(dot(lightDir, (reflect(viewVec,wavef))),0.0,1.0);
 		
 	//harden specular
-//	spec = pow(spec, 128.0);
+	//spec = pow(spec, 128.0);
 
 	//figure out distortion vector (ripply)   
 	vec2 distort2 = distort+wavef.xy*refScale/max(dmod*df1, 1.0);

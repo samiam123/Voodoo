@@ -39,7 +39,7 @@
 #include "aiaprpool.h"
 #include "llthread.h"
 
-// Create a subpool from parent.
+// Create a subpool from parent.for now
 void AIAPRPool::create(AIAPRPool& parent)
 {
 	llassert(!mPool);			// Must be non-initialized.

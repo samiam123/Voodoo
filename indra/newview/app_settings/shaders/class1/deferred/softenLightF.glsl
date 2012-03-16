@@ -1,8 +1,8 @@
 /** 
  * @file softenLightF.glsl
  *
- * Copyright (c) 2007-$CurrentYear$, Linden Research, Inc.
- * $License$
+ * $LicenseInfo:firstyear=2007&license=viewerlgpl$
+ * $/LicenseInfo$
  */
  
 #version 120
@@ -11,9 +11,12 @@
 
 uniform sampler2DRect diffuseRect;
 uniform sampler2DRect specularRect;
+uniform sampler2DRect positionMap;
 uniform sampler2DRect normalMap;
 uniform sampler2DRect lightMap;
 uniform sampler2DRect depthMap;
+uniform sampler2D	  noiseMap;
+uniform samplerCube environmentMap;
 uniform sampler2D	  lightFunc;
 
 uniform float blur_size;
@@ -267,14 +270,11 @@ void main()
 	vec4 diffuse = texture2DRect(diffuseRect, tc);
 	vec4 spec = texture2DRect(specularRect, vary_fragcoord.xy);
 	
-	vec2 scol_ambocc = texture2DRect(lightMap, vary_fragcoord.xy).rg;
-	float scol = max(scol_ambocc.r, diffuse.a); 
-	float ambocc = scol_ambocc.g;
-	
-	calcAtmospherics(pos.xyz, ambocc);
+	calcAtmospherics(pos.xyz, 1.0);
 	
 	vec3 col = atmosAmbient(vec3(0));
-	col += atmosAffectDirectionalLight(max(min(da, scol), diffuse.a));
+	col += atmosAffectDirectionalLight(max(min(da, 1.0), diffuse.a));
+	
 	col *= diffuse.rgb;
 	
 	if (spec.a > 0.0) // specular reflection
@@ -283,7 +283,8 @@ void main()
 		//
 		vec3 refnormpersp = normalize(reflect(pos.xyz, norm.xyz));
 		float sa = dot(refnormpersp, vary_light.xyz);
-		vec3 dumbshiny = vary_SunlitColor*scol_ambocc.r*texture2D(lightFunc, vec2(sa, spec.a)).a;
+		vec3 dumbshiny = vary_SunlitColor*texture2D(lightFunc, vec2(sa, spec.a)).a;
+
 		/*
 		// screen-space cheap fakey reflection map
 		//
