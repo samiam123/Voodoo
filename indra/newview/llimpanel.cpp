@@ -1712,7 +1712,8 @@ void LLFloaterIMPanel::addHistoryLine(const std::string &utf8msg, LLColor4 incol
 	}
 
 	//Kadah - Bold group mods chat. Doesnt work on the first msg of the session, dont have speakers list yet?
-	if (gSavedSettings.getBOOL("AstraBoldGroupModerator") && isModerator(source))
+	// The bool is set in ascent for the line below. sams voodoo
+	if (gSavedSettings.getBOOL("VoodooBoldGroupModerator") && isModerator(source))
 	{
 		mHistoryEditor->appendColoredText(utf8msg.substr(0,1), false, prepend_newline, color);
 		LLStyleSP style(new LLStyle);

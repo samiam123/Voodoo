@@ -14661,7 +14661,7 @@
 	<key>DefaultListText</key>
 	<map>
 	  <key>Comment</key>
-	  <string>IRC List Color</string>
+	  <string>Color</string>
 	  <key>Persist</key>
 	  <integer>1</integer>
 	  <key>Type</key>

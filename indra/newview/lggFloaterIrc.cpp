@@ -256,8 +256,8 @@ void init_irc_list(LLScrollListCtrl* ctrl)
 		
 		std::string style = "NORMAL";
 		LLSD element;
-		
-		element["columns"][0]["color"] = gColors.getColor("DefaultListText").getValue();
+		// comment out one line for now gives an error sams voodoo
+		//element["columns"][0]["Color"] = gColors.getColor("DefaultListText").getValue();
 		
 		element["id"] = id;
 		element["columns"][0]["column"] = "IRC_name";
