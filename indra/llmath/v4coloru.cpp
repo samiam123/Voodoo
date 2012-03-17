@@ -29,14 +29,10 @@
  * COMPLETENESS OR PERFORMANCE.
  * $/LicenseInfo$
  */
-
+//new sams
 #include "linden_common.h"
 
-//#include "v3coloru.h"
 #include "v4coloru.h"
-#include "v4color.h"
-//#include "vmath.h"
-#include "llmath.h"
 
 // LLColor4U
 LLColor4U LLColor4U::white(255, 255, 255, 255);
@@ -123,4 +119,51 @@ BOOL LLColor4U::parseColor4U(const std::string& buf, LLColor4U* value)
 
 	value->set( U8(v[0]), U8(v[1]), U8(v[2]), U8(v[3]) );
 	return TRUE;
+}
+
+
+#if LL_MSVC && _M_X64
+# define LL_X86_64 1
+#elif LL_GNUC && (defined(__amd64__) || defined(__x86_64__))
+# define LL_X86_64 1
+#else
+# define LL_X86_64 0
+#endif
+
+U32 LLColor4U::asRGBA() const
+{
+#if LL_X86_64
+	U32 rgba(0);
+
+	// Little endian: values are swapped in memory. The original code access
+	// the array like a U32, so we need to swap here
+	rgba |= mV[3];
+	rgba <<= 8;
+	rgba |= mV[2];
+	rgba <<= 8;
+	rgba |= mV[1];
+	rgba <<= 8;
+	rgba |= mV[0];
+
+	return rgba;
+#else
+	return mAll;
+#endif
+}
+
+void LLColor4U::fromRGBA(U32 rgba)
+{
+#if LL_X86_64
+	// Little endian: values are swapped in memory. The original code access
+	// the array like a U32, so we need to swap here
+	mV[0] = rgba & 0xFF;
+	rgba >>= 8;
+	mV[1] = rgba & 0xFF;
+	rgba >>= 8;
+	mV[2] = rgba & 0xFF;
+	rgba >>= 8;
+	mV[3] = rgba & 0xFF;
+#else
+	mAll = rgba;
+#endif
 }

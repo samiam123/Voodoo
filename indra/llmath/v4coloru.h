@@ -34,39 +34,30 @@
 #define LL_V4COLORU_H
 
 #include "llerror.h"
-//#include "vmath.h"
 #include "llmath.h"
-//#include "v4color.h"
-
 #include "v3color.h"
 #include "v4color.h"
 
-//class LLColor3U;
 class LLColor4;
 
-//  LLColor4U = | red green blue alpha |
-
 static const U32 LENGTHOFCOLOR4U = 4;
-
 
 class LLColor4U
 {
 public:
 
-	union
-	{
-		U8         mV[LENGTHOFCOLOR4U];
-		U32        mAll;
-		LLColor4*  mSources;
-		LLColor4U* mSourcesU;
-	};
+		union
+		{
+			U8	mV[LENGTHOFCOLOR4U];
+			U32	mAll;
+		};
 
 
 	LLColor4U();						// Initializes LLColor4U to (0, 0, 0, 1)
 	LLColor4U(U8 r, U8 g, U8 b);		// Initializes LLColor4U to (r, g, b, 1)
-	LLColor4U(U8 r, U8 g, U8 b, U8 a);		// Initializes LLColor4U to (r. g, b, a)
+	LLColor4U(U8 r, U8 g, U8 b, U8 a);	// Initializes LLColor4U to (r. g, b, a)
 	LLColor4U(const U8 *vec);			// Initializes LLColor4U to (vec[0]. vec[1], vec[2], 1)
-	/*explicit */LLColor4U(const LLSD& sd)
+	explicit LLColor4U(const LLSD& sd)
 	{
 		setValue(sd);
 	}
@@ -88,6 +79,9 @@ public:
 		ret[3] = mV[3];
 		return ret;
 	}
+
+	U32 asRGBA() const;
+	void fromRGBA( U32 aVal );
 
 	const LLColor4U&	setToBlack();						// zero LLColor4U to (0, 0, 0, 1)
 	const LLColor4U&	setToWhite();						// zero LLColor4U to (0, 0, 0, 1)

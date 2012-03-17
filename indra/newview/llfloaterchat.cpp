@@ -493,7 +493,7 @@ void LLFloaterChat::addChat(const LLChat& chat,
 		addChatHistory(chat);
 }
 
-// Moved from lltextparser.cpp to break llui/llaudio library dependency.
+// Moved from lltextparser.cpp to break llui/llaudio library dependency..
 //static
 void LLFloaterChat::triggerAlerts(const std::string& text)
 {
@@ -621,7 +621,7 @@ LLColor4 get_text_color(const LLChat& chat)
 //static
 void LLFloaterChat::loadHistory()
 {
-	LLLogChat::loadHistory(std::string("chat"), &chatFromLogFile, (void *)LLFloaterChat::getInstance(LLSD())); 
+	LLLogChat::loadHistory(std::string("chat.txt"), &chatFromLogFile, (void *)LLFloaterChat::getInstance(LLSD())); 
 }
 
 //static
