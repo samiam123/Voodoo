@@ -125,7 +125,13 @@ LLVector3 LLPanelObject::mClipboardPos;
 LLVector3 LLPanelObject::mClipboardSize;
 LLVector3 LLPanelObject::mClipboardRot;
 LLVolumeParams LLPanelObject::mClipboardVolumeParams;
+//BOOL LLPanelObject::hasPosClipboard = FALSE;
+//BOOL LLPanelObject::hasSizeClipboard = FALSE;
+//BOOL LLPanelObject::hasRotClipboard = FALSE;
 BOOL LLPanelObject::hasParamClipboard = FALSE;
+//BOOL LLPanelObject::hasFlexiParam = FALSE;
+//BOOL LLPanelObject::hasSculptParam = FALSE;
+
 
 BOOL	LLPanelObject::postBuild()
 {
@@ -630,7 +636,7 @@ void LLPanelObject::getState( )
 	mCheckPhantom->set( mIsPhantom );
 	mCheckPhantom->setEnabled( roots_selected>0 && editable && !is_flexible );
 
-#if 0 // 1.9.2
+#if 0 // 1.9.2 seems to lockup the client when selecting object sams voodoo
 	mCastShadows = root_objectp->flagCastShadows();
 	mCheckCastShadows->set( mCastShadows );
 	mCheckCastShadows->setEnabled( roots_selected==1 && editable );
@@ -1141,13 +1147,6 @@ void LLPanelObject::getState( )
 	default:
 		if (editable)
 		{
-
-
-
-
-
-
-
 			mSpinScaleX->set( 1.f - scale_x );
 			mSpinScaleY->set( 1.f - scale_y );
 			mSpinScaleX->setMinValue(-1.f);
@@ -2272,7 +2271,7 @@ void LLPanelObject::clearCtrls()
 	mCheckTemporary	->setEnabled( FALSE );
 	mCheckPhantom	->set(FALSE);
 	mCheckPhantom	->setEnabled( FALSE );
-#if 0 // 1.9.2
+#if 0 // 1.9.2 // this may cause client to crash if enabled
 	mCheckCastShadows->set(FALSE);
 	mCheckCastShadows->setEnabled( FALSE );
 #endif
