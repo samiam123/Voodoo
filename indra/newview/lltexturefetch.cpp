@@ -1813,21 +1813,11 @@ S32 LLTextureFetchWorker::callbackHttpGet(const LLChannelDescriptors& channels,
 		if (data_size > 0)
 		{
 			// *TODO: set the formatted image data here directly to avoid the copy
-			//mBuffer = new U8[data_size];
-             mBuffer = new U8[data_size+2];
+			mBuffer = new U8[data_size];
 			buffer->readAfter(channels.in(), NULL, mBuffer, data_size);
 			mBufferSize += data_size;
-			//if (data_size < mRequestedSize && mRequestedDiscard == 0)
-            if (data_size < mRequestedSize) // && mRequestedDiscard == 0)
+			if (data_size < mRequestedSize && mRequestedDiscard == 0)
 			{
-      if(data_size == 1 || !(mBuffer[data_size-2] == 0xff && mBuffer[data_size-1] == 0xD9)) 
-	  {
-             mBuffer[data_size] = 0xff;
-             mBuffer[data_size+1] = 0xD9;
-             data_size+=2;
-             mBufferSize+=2;
-             mRequestedDiscard = 0;
-            }
 				mHaveAllData = TRUE;
 			}
 			else if (data_size > mRequestedSize)
