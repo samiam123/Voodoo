@@ -21,15 +21,17 @@ class LLSD;
 class HippoGridInfo
 {
 public:
-	enum Platform {
-		//PLATFORM_AURORA=0,
-		PLATFORM_OTHER=0,
-		PLATFORM_AURORA,
+	enum Platform
+	{
+		PLATFORM_AURORA=0,
+		//PLATFORM_AURORA,
 		PLATFORM_OPENSIM,
-		PLATFORM_SECONDLIFE,		
+		PLATFORM_SECONDLIFE,
+		PLATFORM_OTHER,
 		PLATFORM_LAST
 	};
-	enum SearchType {
+	enum SearchType
+	{
 		SEARCH_ALL_EMPTY,
 		SEARCH_ALL_QUERY,
 		SEARCH_ALL_TEMPLATE
