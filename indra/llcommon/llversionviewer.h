@@ -29,13 +29,13 @@
  * COMPLETENESS OR PERFORMANCE.
  * $/LicenseInfo$
  */
- // Master find version number sams voodoo
+ // Master-Version
 #ifndef LL_LLVERSIONVIEWER_H
 #define LL_LLVERSIONVIEWER_H
 
 const S32 LL_VERSION_MAJOR = 1;
-const S32 LL_VERSION_MINOR = 0;
-const S32 LL_VERSION_PATCH = 9;
+const S32 LL_VERSION_MINOR = 1;
+const S32 LL_VERSION_PATCH = 0;
 const S32 LL_VERSION_BUILD = 0;
 
 const char * const LL_CHANNEL = "Voodoo";

@@ -29,7 +29,7 @@
  * COMPLETENESS OR PERFORMANCE.
  * $/LicenseInfo$
  */
-
+//newer
 #include "llviewerprecompiledheaders.h"
 
 #include "llpanelmsgs.h"
@@ -59,11 +59,14 @@ BOOL LLPanelMsgs::postBuild()
 	childSetAction("enable_popup", onClickEnablePopup, this);
 	childSetAction("reset_dialogs_btn", onClickResetDialogs, this);
 	childSetAction("skip_dialogs_btn", onClickSkipDialogs, this);
+    childSetAction("skip_frst_btn", onClickSkipFirstTime, this);
 	buildLists();
 
 	childSetValue("accept_new_inventory", gSavedSettings.getBOOL("AutoAcceptNewInventory"));
+	childSetValue("accept_new_objects", gSavedSettings.getBOOL("AutoAcceptNewObjects"));
 	childSetValue("show_new_inventory", gSavedSettings.getBOOL("ShowNewInventory"));
 	childSetValue("show_in_inventory", gSavedSettings.getBOOL("ShowInInventory"));
+	childSetValue("show_tp_offers",gSavedSettings.getBOOL("ShowTpOffers"));
 
 	return TRUE;
 }
@@ -152,8 +155,10 @@ void LLPanelMsgs::draw()
 void LLPanelMsgs::apply()
 {
 	gSavedSettings.setBOOL("AutoAcceptNewInventory", childGetValue("accept_new_inventory"));
+	gSavedSettings.setBOOL("AutoAcceptNewObjects", childGetValue("accept_new_objects"));
 	gSavedSettings.setBOOL("ShowNewInventory", childGetValue("show_new_inventory"));
 	gSavedSettings.setBOOL("ShowInInventory", childGetValue("show_in_inventory"));
+	gSavedSettings.setBOOL("ShowTpOffers",childGetValue("show_tp_offers"));
 }
 
 void LLPanelMsgs::cancel()
@@ -244,4 +249,33 @@ bool callback_skip_dialogs(const LLSD& notification, const LLSD& response, LLPan
 void LLPanelMsgs::onClickSkipDialogs(void* user_data)
 {
 	LLNotifications::instance().add("SkipShowNextTimeDialogs", LLSD(), LLSD(), boost::bind(&callback_skip_dialogs, _1, _2, (LLPanelMsgs*)user_data));
+}
+
+// static
+void LLPanelMsgs::onClickSkipFirstTime(void* user_data)
+{
+	gSavedSettings.setBOOL("WarnFirstRLVDetach", FALSE);
+	gSavedSettings.setBOOL("WarnFirstRLVEnableWear", FALSE);
+	gSavedSettings.setBOOL("WarnFirstRLVFartouch", FALSE);
+	gSavedSettings.setBOOL("WarnFirstRLVGiveToRLV", FALSE);
+	gSavedSettings.setBOOL("WarnFirstAppearance", FALSE);
+	gSavedSettings.setBOOL("WarnFirstAttach", FALSE);
+	gSavedSettings.setBOOL("WarnFirstBalanceDecrease", FALSE);
+	gSavedSettings.setBOOL("WarnFirstBalanceIncrease", FALSE);
+	gSavedSettings.setBOOL("WarnFirstBuild", FALSE);
+	gSavedSettings.setBOOL("WarnFirstDebugMenus", FALSE);
+	gSavedSettings.setBOOL("WarnFirstFlexible", FALSE);
+	gSavedSettings.setBOOL("WarnFirstGoTo", FALSE);
+	gSavedSettings.setBOOL("WarnFirstInventory", FALSE);
+	gSavedSettings.setBOOL("WarnFirstLeftClickNoHit", FALSE);
+	gSavedSettings.setBOOL("WarnFirstMap", FALSE);
+	gSavedSettings.setBOOL("WarnFirstMedia", FALSE);
+	gSavedSettings.setBOOL("WarnFirstOverrideKeys", FALSE);
+	gSavedSettings.setBOOL("WarnFirstSandbox", FALSE);
+	gSavedSettings.setBOOL("WarnFirstSculptedPrim", FALSE);
+	gSavedSettings.setBOOL("WarnFirstSit", FALSE);
+	gSavedSettings.setBOOL("WarnFirstStreamingMusic", FALSE);
+	gSavedSettings.setBOOL("WarnFirstStreamingVideo", FALSE);
+	gSavedSettings.setBOOL("WarnFirstTeleport", FALSE);
+	gSavedSettings.setBOOL("WarnFirstVoice", FALSE);
 }

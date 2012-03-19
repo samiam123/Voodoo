@@ -1105,7 +1105,7 @@ BOOL LLProfile::generate(const LLProfileParams& params, BOOL path_open,F32 detai
 		addCap(LL_FACE_PATH_END); // bottom
 	}
 	
-	if ( mOpen) // interior edge caps
+	if (mOpen) // interior edge caps
 	{
 		addFace(mTotal-1, 2,0.5,LL_FACE_PROFILE_BEGIN, TRUE); 
 
@@ -2048,12 +2048,12 @@ void LLPathParams::copyParams(const LLPathParams &params)
 	setCurveType(params.getCurveType());
 	setBegin(params.getBegin());
 	setEnd(params.getEnd());
-	setScale(params.getScaleX(), params.getScaleY() );
-	setShear(params.getShearX(), params.getShearY() );
+	setScale(params.getScaleX(), params.getScaleY());
+	setShear(params.getShearX(), params.getShearY());
 	setTwist(params.getTwist());
 	setTwistBegin(params.getTwistBegin());
 	setRadiusOffset(params.getRadiusOffset());
-	setTaper( params.getTaperX(), params.getTaperY() );
+	setTaper( params.getTaperX(), params.getTaperY());
 	setRevolutions(params.getRevolutions());
 	setSkew(params.getSkew());
 }
@@ -6008,7 +6008,8 @@ public:
 	LLVCacheFIFO()
 	{
 		mMisses = 0;
-		for (U32 i = 0; i < MaxSizeVertexCache; ++i)
+		for (U32 i = 0; i < (U32)MaxSizeVertexCache; ++i)
+			
 		{
 			mCache[i] = NULL;
 		}
@@ -6053,7 +6054,7 @@ public:
 
 	LLVCacheLRU()
 	{
-		for (U32 i = 0; i < MaxSizeVertexCache+3; ++i)
+		for (U32 i = 0; i < (U32)MaxSizeVertexCache+3; ++i)
 		{
 			mCache[i] = NULL;
 		}
@@ -6109,7 +6110,7 @@ public:
 			}
 		}
 
-		for (U32 i = 0; i < MaxSizeVertexCache; ++i)
+		for (U32 i = 0; i < (U32)MaxSizeVertexCache; ++i)
 		{ //update scores of vertices in cache
 			if (mCache[i])
 			{
@@ -6120,7 +6121,7 @@ public:
 
 		mBestTriangle = NULL;
 		//update triangle scores
-		for (U32 i = 0; i < MaxSizeVertexCache+3; ++i)
+		for (U32 i = 0; i < (U32)MaxSizeVertexCache+3; ++i)
 		{
 			if (mCache[i])
 			{
@@ -6176,6 +6177,7 @@ void LLVolumeFace::cacheOptimize()
 	vertex_data.resize(mNumVertices);
 
 	for (U32 i = 0; i < (U32)mNumIndices; i++)
+	//for (U32 i = 0; i < mNumIndices; i++)
 	{ //populate vertex data and triangle data arrays
 		U16 idx = mIndices[i];
 		U32 tri_idx = i/3;
@@ -6203,6 +6205,7 @@ void LLVolumeFace::cacheOptimize()
 	}*/
 
 	for (U32 i = 0; i < (U32)mNumVertices; i++)
+	//for (U32 i = 0; i < mNumVertices; i++)
 	{ //initialize score values (no cache -- might try a fifo cache here)
 		vertex_data[i].mScore = find_vertex_score(vertex_data[i]);
 		vertex_data[i].mActiveTriangles = vertex_data[i].mTriangles.size();
@@ -6230,6 +6233,7 @@ void LLVolumeFace::cacheOptimize()
 
 	U32 breaks = 0;
 	for (U32 i = 1; i < (U32)mNumIndices/3; ++i)
+	//for (U32 i = 1; i < mNumIndices/3; ++i)
 	{
 		cache.updateScores();
 		tri = cache.mBestTriangle;
@@ -6254,6 +6258,7 @@ void LLVolumeFace::cacheOptimize()
 	}
 
 	for (U32 i = 0; i < (U32)mNumIndices; ++i)
+	//for (U32 i = 0; i < mNumIndices; ++i)	
 	{
 		mIndices[i] = new_indices[i];
 	}
@@ -6304,6 +6309,7 @@ void LLVolumeFace::cacheOptimize()
 
 	S32 cur_idx = 0;
 	for (U32 i = 0; i < (U32)mNumIndices; ++i)
+	//for (U32 i = 0; i < mNumIndices; ++i)	
 	{
 		U16 idx = mIndices[i];
 		if (new_idx[idx] == -1)
@@ -6330,6 +6336,7 @@ void LLVolumeFace::cacheOptimize()
 	}
 
 	for (U32 i = 0; i < (U32)mNumIndices; ++i)
+	//for (U32 i = 0; i < mNumIndices; ++i)	
 	{
 		mIndices[i] = new_idx[mIndices[i]];
 	}
@@ -6366,6 +6373,7 @@ void LLVolumeFace::createOctree(F32 scaler, const LLVector4a& center, const LLVe
 	new LLVolumeOctreeListener(mOctree);
 
 	for (U32 i = 0; i < (U32)mNumIndices; i+= 3)
+	//for (U32 i = 0; i < mNumIndices; i+= 3)
 	{ //for each triangle
 		LLPointer<LLVolumeTriangle> tri = new LLVolumeTriangle();
 				

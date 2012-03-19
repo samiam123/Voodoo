@@ -16,6 +16,7 @@
 *.rej
 *.bak
 *~
+*.DS_Store
 /LICENSES/
 /edited-files.txt
 qtcreator-build/

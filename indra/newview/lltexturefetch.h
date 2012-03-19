@@ -47,9 +47,7 @@ class HTTPGetResponder;
 class LLTextureCache;
 class LLImageDecodeThread;
 class LLHost;
-#if HTTP_METRICS
-class LLViewerAssetStats;
-#endif
+
 
 // Interface class
 class LLTextureFetch : public LLWorkerThread
@@ -99,24 +97,6 @@ public:
 	LLTextureInfo* getTextureInfo() { return &mTextureInfo;
 	}
 
-#if HTTP_METRICS
-	// Commands available to other threads to control metrics gathering operations.
-	void commandSetRegion(U64 region_handle);
-	void commandSendMetrics(const std::string & caps_url,
-							const LLUUID & session_id,
-							const LLUUID & agent_id,
-							LLViewerAssetStats * main_stats);
-	void commandDataBreak();
-
-	LLCurlRequest & getCurlRequest()	{ return *mCurlGetRequest; }
-
-	bool isQAMode() const				{ return mQAMode; }
-
-	// Curl POST counter maintenance
-	inline void incrCurlPOSTCount()		{ mCurlPOSTRequestCount++; }
-	inline void decrCurlPOSTCount()		{ mCurlPOSTRequestCount--; }
-#endif
-
 protected:
 	void addToNetworkQueue(LLTextureFetchWorker* worker);
 	void removeFromNetworkQueue(LLTextureFetchWorker* worker, bool cancel);
@@ -134,38 +114,7 @@ private:
 	/*virtual*/ void threadedUpdate(void);
 	void commonUpdate();
 
-#if HTTP_METRICS
-	// Metrics command helpers
-	/**
-	 * Enqueues a command request at the end of the command queue
-	 * and wakes up the thread as needed.
-	 *
-	 * Takes ownership of the TFRequest object.
-	 *
-	 * Method locks the command queue.
-	 */
-	void cmdEnqueue(TFRequest *);
 
-	/**
-	 * Returns the first TFRequest object in the command queue or
-	 * NULL if none is present.
-	 *
-	 * Caller acquires ownership of the object and must dispose of it.
-	 *
-	 * Method locks the command queue.
-	 */
-	TFRequest * cmdDequeue();
-
-	/**
-	 * Processes the first command in the queue disposing of the
-	 * request on completion.  Successive calls are needed to perform
-	 * additional commands.
-	 *
-	 * Method locks the command queue.
-	 */
-	void cmdDoWork();
-#endif
-	
 public:
 	LLUUID mDebugID;
 	S32 mDebugCount;
@@ -199,31 +148,6 @@ private:
 
 	//debug use
 	U32 mTotalHTTPRequests ;
-
-#if HTTP_METRICS
-	// Out-of-band cross-thread command queue.  This command queue
-	// is logically tied to LLQueuedThread's list of
-	// QueuedRequest instances and so must be covered by the
-	// same locks.
-	typedef std::vector<TFRequest *> command_queue_t;
-	command_queue_t mCommands;
-
-	// If true, modifies some behaviors that help with QA tasks.
-	const bool mQAMode;
-
-	// Count of POST requests outstanding.  We maintain the count
-	// indirectly in the CURL request responder's ctor and dtor and
-	// use it when determining whether or not to sleep the thread.  Can't
-	// use the LLCurl module's request counter as it isn't thread compatible.
-	// *NOTE:  Don't mix Atomic and static, apr_initialize must be called first.
-	LLAtomic32<S32> mCurlPOSTRequestCount;
-
-public:
-	// A probabilistically-correct indicator that the current
-	// attempt to log metrics follows a break in the metrics stream
-	// reporting due to either startup or a problem POSTing data.
-	static volatile bool svMetricsDataBreak;
-#endif
 };
 
 #endif // LL_LLTEXTUREFETCH_H

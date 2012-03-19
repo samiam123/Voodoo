@@ -2968,6 +2968,9 @@ bool idle_startup()
 
 		gRenderStartTime.reset();
 		gForegroundTime.reset();
+		// added 2 lines below singu backport changes
+        gForegroundTime.pause();
+        gForegroundTime.unpause();
 
 		if (gSavedSettings.getBOOL("FetchInventoryOnLogin")
 			)

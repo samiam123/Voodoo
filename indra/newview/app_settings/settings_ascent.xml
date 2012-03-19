@@ -56,7 +56,7 @@
 			<key>Type</key>
 			<string>Boolean</string>
 			<key>Value</key>
-			<integer>1</integer>
+			<integer>0</integer>
 		</map>
 		<key>AscentUpdateTagsOnLoad</key>
 		<map>
@@ -95,7 +95,7 @@
 		<key>AscentAutoCloseOOC</key>
 		<map>
 			<key>Comment</key>
-			<string>Auto-close OOC chat (i.e. add \"))\" if not found and \"((\" was used)</string>
+			<string>Auto-close OOC chat (i.e. add "))" if not found and "((" was used)</string>
 			<key>Persist</key>
 			<integer>1</integer>
 			<key>Type</key>
@@ -161,7 +161,7 @@
 		<key>AscentShowSelfTagColor</key>
 		<map>
 			<key>Comment</key>
-			<string>Show your own tag</string>
+			<string>Show your own tagcolor to yourself(instead of default linden viewer color).</string>
 			<key>Persist</key>
 			<integer>1</integer>
 			<key>Type</key>
@@ -304,7 +304,7 @@
 		<key>AscentShowIdleTime</key>
 		<map>
 			<key>Comment</key>
-			<string>Show client tags for others.</string>
+			<string>Show idle time of others in tags.</string>
 			<key>Persist</key>
 			<integer>1</integer>
 			<key>Type</key>
@@ -343,7 +343,7 @@
 			<key>Type</key>
 			<string>Boolean</string>
 			<key>Value</key>
-			<integer>0</integer>
+			<integer>1</integer>
 		</map>
 		<key>AscentDisableMinZoomDist</key>
 		<map>
@@ -409,12 +409,12 @@
 			<key>Type</key>
 			<string>Boolean</string>
 			<key>Value</key>
-			<integer>0</integer>
+			<integer>1</integer>
 		</map>
 		<key>AscentBuildPrefs_PivotIsPercent</key>
 		<map>
 			<key>Comment</key>
-			<string>Would you like the chatbar to be able to be used for command line functions?</string>
+			<string>Pivot points are based on percentages</string>
 			<key>Persist</key>
 			<integer>1</integer>
 			<key>Type</key>
@@ -425,7 +425,7 @@
 		<key>AscentBuildPrefs_PivotX</key>
 		<map>
 			<key>Comment</key>
-			<string>idfk</string>
+			<string>Pivot point on X-axis for new objects</string>
 			<key>Persist</key>
 			<integer>1</integer>
 			<key>Type</key>
@@ -436,7 +436,7 @@
 		<key>AscentBuildPrefs_PivotY</key>
 		<map>
 			<key>Comment</key>
-			<string>idfk</string>
+			<string>Pivot point on Y-axis for new objects</string>
 			<key>Persist</key>
 			<integer>1</integer>
 			<key>Type</key>
@@ -447,7 +447,7 @@
 		<key>AscentBuildPrefs_PivotZ</key>
 		<map>
 			<key>Comment</key>
-			<string>idfk</string>
+			<string>Pivot point on Z-axis for new objects</string>
 			<key>Persist</key>
 			<integer>1</integer>
 			<key>Type</key>

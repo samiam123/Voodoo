@@ -66,7 +66,7 @@
 <ScrollBgWriteableColor value="33, 33, 33, 80" />
 <ScrollBGStripeColor value="100, 100, 100, 25" />
 <ScrollDisabledColor value="33, 33, 33, 204" />
-<ScrollSelectedBGColor value="33, 33, 33, 204" />
+<ScrollSelectedBGColor value="222, 222, 222, 150" />
 <ScrollSelectedFGColor value="255, 255, 255, 255" />	            <!-- Text color -->
 <ScrollUnselectedColor value="222, 222, 222, 150" />	            <!-- Text color -->
 <ScrollHighlightedColor value="222, 222, 222, 80" />	    <!-- Hover color -->
@@ -98,7 +98,7 @@
 <!-- NOTIFICATION POP-UPS -->
 <NotifyBoxColor value="66, 66, 66, 255" />
 <NotifyTextColor value="255, 255, 255, 128" />
-<NotifyCautionBoxColor value="254, 209, 118, 255" /> 	<!-- the background color of caution permissions prompts -->
+<NotifyCautionBoxColor value="0, 0, 0, 255" /> 	<!-- the background color of caution permissions prompts -->
 <NotifyCautionWarnColor value="0, 0, 0, 255" /> 	<!-- the foreground color of the special title text in caution permissions prompts -->
 <GroupNotifyBoxColor value="66, 66, 66, 255" />
 <GroupNotifyTextColor value="255, 255, 255, 128" />
@@ -195,7 +195,7 @@
 <!-- Alert box colors -->
 <AlertBoxColor value="33, 33, 33, 255" />               <!-- Warnings floaters, like when returning objects -->
 <AlertTextColor value="128, 128, 128, 255" />
-<AlertCautionBoxColor value="254, 209, 118, 255" />	<!-- Background color of caution alerts -->
+<AlertCautionBoxColor value="0, 0, 0, 255" />	<!-- Background color of caution alerts -->
 <AlertCautionTextColor value="0, 0, 0, 255" />		<!-- Foreground color of the special title text in caution alerts -->
 
 <!--  Multi sliders, as in the sky animation setting -->

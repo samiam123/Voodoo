@@ -297,7 +297,7 @@ void LLAgentCamera::resetView(BOOL reset_camera, BOOL change_camera)
 		LLSelectMgr::getInstance()->unhighlightAll();
 
 		// By popular request, keep land selection while walking around. JC
-		// LLViewerParcelMgr::getInstance()->deselectLand();
+		//LLViewerParcelMgr::getInstance()->deselectLand();
 
 		// force deselect when walking and attachment is selected
 		// this is so people don't wig out when their avatar moves without animating
@@ -330,13 +330,15 @@ void LLAgentCamera::resetView(BOOL reset_camera, BOOL change_camera)
 		}
 
 		//Camera Tool is needed for Free Camera Control Mode
-		/*if (!LLFloaterCamera::inFreeCameraMode())
+		/*
+		if (!LLFloaterCamera::inFreeCameraMode())
 		{
 			LLFloaterReg::hideInstance("build");
 
 			// Switch back to basic toolset
 			LLToolMgr::getInstance()->setCurrentToolset(gBasicToolset);
-		}*/
+		}
+		*/
 		gFloaterTools->close();
 		
 		gViewerWindow->showCursor();
@@ -1995,7 +1997,7 @@ LLVector3d LLAgentCamera::calcCameraPositionTargetGlobal(BOOL *hit_limit)
 
 // JC - Could constrain camera based on parcel stuff here.
 //			LLViewerRegion *regionp = LLWorld::getInstance()->getRegionFromPosGlobal(camera_position_global);
-//			
+			
 //			if (regionp && !regionp->mParcelOverlay->isBuildCameraAllowed(regionp->getPosRegionFromGlobal(camera_position_global)))
 //			{
 //				camera_position_global = last_position_global;
