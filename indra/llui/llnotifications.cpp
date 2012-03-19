@@ -607,15 +607,19 @@ void LLNotification::init(const std::string& template_name, const LLSD& form_ele
 
 	// add default substitutions
 	// TODO: change this to read from the translatable strings file!
-	if (gHippoGridManager->getConnectedGrid()->isSecondLife()) {
+	if (gHippoGridManager->getConnectedGrid()->isSecondLife())
+	{
 		mSubstitutions["[Voodoo]"] = "Second Life";
+		//mSubstitutions["[VIEWER_NAME]"] = "Voodoo";
 	}
-	else {
+	else
+	{
 		mSubstitutions["[Voodoo]"] = gHippoGridManager->getConnectedGrid()->getGridName();
 	} 
-	mSubstitutions["[VIEWER_NAME]"] = LLNotifications::instance().getGlobalString("VIEWER_NAME");
-	mSubstitutions["[VIEWER_SITE]"] = LLNotifications::instance().getGlobalString("VIEWER_SITE");
-	
+	//mSubstitutions["[VIEWER_NAME]"] = LLNotifications::instance().getGlobalString("VIEWER_NAME");
+	//mSubstitutions["[VIEWER_SITE]"] = LLNotifications::instance().getGlobalString("VIEWER_SITE");
+	mSubstitutions["[VIEWER_NAME]"] = LLNotifications::instance().getGlobalString("Voodoo");
+	mSubstitutions["[VIEWER_SITE]"] = LLNotifications::instance().getGlobalString("Http://grid.kicks-ass.net");
 	mSubstitutions["[GRID_NAME]"] = gHippoGridManager->getConnectedGrid()->getGridName();
 	mSubstitutions["[GRID_SITE]"] = gHippoGridManager->getConnectedGrid()->getWebSite();
 	mSubstitutions["[CURRENCY]"] = gHippoGridManager->getConnectedGrid()->getCurrencySymbol();

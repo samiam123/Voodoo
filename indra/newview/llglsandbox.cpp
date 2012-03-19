@@ -54,6 +54,7 @@
 #include "lltoolmgr.h"
 #include "llselectmgr.h"
 #include "llhudmanager.h"
+#include "llhudtext.h"
 #include "llrendersphere.h"
 #include "llviewerobjectlist.h"
 #include "lltoolselectrect.h"
@@ -182,7 +183,12 @@ void LLToolSelectRect::handleRectangleSelection(S32 x, S32 y, MASK mask)
 			virtual bool apply(LLViewerObject* vobjp)
 			{
 				LLDrawable* drawable = vobjp->mDrawable;
-				if (!drawable || vobjp->getPCode() != LL_PCODE_VOLUME || vobjp->isAttachment())
+				//if (!drawable || vobjp->getPCode() != LL_PCODE_VOLUME || vobjp->isAttachment())
+				if (!drawable ||
+					((vobjp->getPCode() != LL_PCODE_VOLUME) &&
+					 (vobjp->getPCode() != LL_PCODE_LEGACY_TREE) &&
+					 (vobjp->getPCode() != LL_PCODE_LEGACY_GRASS) )||
+					vobjp->isAttachment())
 				{
 					return true;
 				}
@@ -231,9 +237,10 @@ void LLToolSelectRect::handleRectangleSelection(S32 x, S32 y, MASK mask)
 		{
 			LLDrawable* drawable = *iter;
 			LLViewerObject* vobjp = drawable->getVObj();
-
 			if (!drawable || !vobjp ||
-				vobjp->getPCode() != LL_PCODE_VOLUME || 
+				((vobjp->getPCode() != LL_PCODE_VOLUME) &&
+				 (vobjp->getPCode() != LL_PCODE_LEGACY_TREE) &&
+				 (vobjp->getPCode() != LL_PCODE_LEGACY_GRASS) )||
 				vobjp->isAttachment() ||
 				(deselect && !vobjp->isSelected()))
 			{
@@ -244,6 +251,13 @@ void LLToolSelectRect::handleRectangleSelection(S32 x, S32 y, MASK mask)
 			{
 				continue;
 			}
+
+// [RLVa:KB] - Checked: 2010-11-29 (RLVa-1.3.0c) | Added: RLVa-1.3.0c
+//			if ( (rlv_handler_t::isEnabled()) && (!gRlvHandler.canEdit(vobjp)) )
+//			{
+//				continue;
+//			}
+// [/RLVa:KB]
 
 			S32 result = LLViewerCamera::getInstance()->sphereInFrustum(drawable->getPositionAgent(), drawable->getRadius());
 			if (result)
@@ -943,7 +957,7 @@ void LLViewerObjectList::renderObjectBeacons()
 		gGL.getTexUnit(0)->unbind(LLTexUnit::TT_TEXTURE);
 
 		S32 last_line_width = -1;
-		// gGL.begin(LLRender::LINES); // Always happens in (line_width != last_line_width)
+		//gGL.begin(LLRender::LINES); // Always happens in (line_width != last_line_width)
 		
 		BOOL flush = FALSE;
 		for (std::vector<LLDebugBeacon>::iterator iter = mDebugBeacons.begin(); iter != mDebugBeacons.end(); ++iter)

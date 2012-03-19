@@ -436,7 +436,7 @@
   	<key>Type</key>
   	<string>String</string>
   	<key>Value</key>
-  	<string>Aurora</string>
+  	<string>Talon</string>
   </map>
 
   <key>VivoxLicenseAccepted</key>
@@ -13348,7 +13348,7 @@
       <key>Type</key>
       <string>U32</string>
       <key>Value</key>
-      <integer>2</integer>
+      <integer>0</integer>
     </map>
     <key>VectorizeSkin</key>
     <map>

@@ -59,14 +59,14 @@ BOOL LLPanelMsgs::postBuild()
 	childSetAction("enable_popup", onClickEnablePopup, this);
 	childSetAction("reset_dialogs_btn", onClickResetDialogs, this);
 	childSetAction("skip_dialogs_btn", onClickSkipDialogs, this);
-    childSetAction("skip_frst_btn", onClickSkipFirstTime, this);
+    //childSetAction("skip_frst_btn", onClickSkipFirstTime, this);
 	buildLists();
 
 	childSetValue("accept_new_inventory", gSavedSettings.getBOOL("AutoAcceptNewInventory"));
-	childSetValue("accept_new_objects", gSavedSettings.getBOOL("AutoAcceptNewObjects"));
+	//childSetValue("accept_new_objects", gSavedSettings.getBOOL("AutoAcceptNewObjects"));
 	childSetValue("show_new_inventory", gSavedSettings.getBOOL("ShowNewInventory"));
 	childSetValue("show_in_inventory", gSavedSettings.getBOOL("ShowInInventory"));
-	childSetValue("show_tp_offers",gSavedSettings.getBOOL("ShowTpOffers"));
+	//childSetValue("show_tp_offers",gSavedSettings.getBOOL("ShowTpOffers"));
 
 	return TRUE;
 }
@@ -155,10 +155,10 @@ void LLPanelMsgs::draw()
 void LLPanelMsgs::apply()
 {
 	gSavedSettings.setBOOL("AutoAcceptNewInventory", childGetValue("accept_new_inventory"));
-	gSavedSettings.setBOOL("AutoAcceptNewObjects", childGetValue("accept_new_objects"));
+	//gSavedSettings.setBOOL("AutoAcceptNewObjects", childGetValue("accept_new_objects"));
 	gSavedSettings.setBOOL("ShowNewInventory", childGetValue("show_new_inventory"));
 	gSavedSettings.setBOOL("ShowInInventory", childGetValue("show_in_inventory"));
-	gSavedSettings.setBOOL("ShowTpOffers",childGetValue("show_tp_offers"));
+	//gSavedSettings.setBOOL("ShowTpOffers",childGetValue("show_tp_offers"));
 }
 
 void LLPanelMsgs::cancel()

@@ -213,7 +213,7 @@ public:
 	bool hasElement(const std::string& element_name);
 	void addElement(const std::string& type, const std::string& name, const LLSD& value = LLSD());
 	void formatElements(const LLSD& substitutions);
-	// appends form elements from another form serialized as LLSD
+	// appends form elements from another form serialized as LLSD.
 	void append(const LLSD& sub_form);
 	std::string getDefaultOption();
 
