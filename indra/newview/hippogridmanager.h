@@ -39,7 +39,7 @@ public:
 
 	explicit HippoGridInfo(const std::string& gridName);
 
-	Platform           getPlatform();
+	Platform getPlatform();
 	bool isOpenSimulator() const;
 	bool isAurora() const;
 	bool isSecondLife() const;
@@ -58,11 +58,16 @@ public:
 	const std::string& getFirstName()       const;
 	const std::string& getLastName()        const;
 	const std::string& getAvatarPassword()  const;
-	const std::string& getVoiceConnector()  const { return mVoiceConnector; }
-	const std::string& getMeshUploadHelper()  const { return mMeshUploadHelper; }
+	const std::string& getVoiceConnector()  const
+	{ 
+		return mVoiceConnector;
+	}
+	const std::string& getMeshUploadHelper()  const { return mMeshUploadHelper;
+	}
 	std::string getSearchUrl(SearchType ty, bool is_web) const;
-	bool isRenderCompat()                   const;
-	int getMaxAgentGroups() const { return mMaxAgentGroups; }
+	bool isRenderCompat() const;
+	int getMaxAgentGroups() const { return mMaxAgentGroups;
+	}
 
 	const std::string& getCurrencySymbol()     const;
 	const std::string& getRealCurrencySymbol() const;
@@ -84,12 +89,21 @@ public:
 	void setSearchUrl(const std::string& url);
 	void setGridMessage(const std::string& message);
 	void setRenderCompat(bool compat);
-	void setMaxAgentGroups(int max)                   { mMaxAgentGroups = max;   }
-	void setMeshUploadHelper(std::string& url)        { mMeshUploadHelper = url;   }
+	void setMaxAgentGroups(int max)
+	{ 
+		mMaxAgentGroups = max;   
+	}
+	void setMeshUploadHelper(std::string& url)
+	{ 
+		mMeshUploadHelper = url;   
+	}
 	void setFirstName(const std::string& firstName);
 	void setLastName(const std::string& lastName);
 	void setAvatarPassword(const std::string& avatarPassword);
-	void setVoiceConnector(const std::string& vc)     { mVoiceConnector = vc;    }
+	void setVoiceConnector(const std::string& vc)
+	{ 
+		mVoiceConnector = vc;   
+	}
 
 	void setCurrencySymbol(const std::string& sym);
 	void setRealCurrencySymbol(const std::string& sym);
@@ -171,8 +185,10 @@ public:
 	void deleteGrid(const std::string& grid);
 
 	typedef std::map<std::string, HippoGridInfo*>::iterator GridIterator;
-	GridIterator beginGrid() { return mGridInfo.begin(); }
-	GridIterator endGrid() { return mGridInfo.end(); }
+	GridIterator beginGrid() { return mGridInfo.begin();
+	}
+	GridIterator endGrid() { return mGridInfo.end();
+	}
 
 private:
 	std::map<std::string, HippoGridInfo*> mGridInfo;

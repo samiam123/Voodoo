@@ -1650,7 +1650,7 @@ void LLTextureCache::purgeTextures(bool validate)
 	}
 	S64 cache_size = mTexturesSizeTotal;
 	//comment out one line below added new one after sams voodoo
-	//S64 purged_cache_size = (sCacheMaxTexturesSize * (S64)((1.f-TEXTURE_CACHE_PURGE_AMOUNT)*100)) / 100;
+	//S64 purged_cache_size = (sCacheMaxTexturesSize * (S64)((1.f-TEXTURE_CACHE_PURGE_AMOUNT)*100.f)) / 100;
 	S64 purged_cache_size = (TEXTURE_PURGED_CACHE_SIZE * sCacheMaxTexturesSize) / (S64)100;
 	S32 purge_count = 0;
 	for (time_idx_set_t::iterator iter = time_idx_set.begin();
@@ -1693,7 +1693,7 @@ void LLTextureCache::purgeTextures(bool validate)
 	}
 	LL_DEBUGS("TextureCache") << "TEXTURE CACHE: Writing Entries: " << num_entries << LL_ENDL;
     //comment out one line below sams voodoo
-	writeEntriesAndClose(entries);
+	//writeEntriesAndClose(entries);
 	if (purge_count > 0)
 	{
 		writeEntriesAndClose(entries);

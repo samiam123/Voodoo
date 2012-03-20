@@ -28,7 +28,7 @@
  * COMPLETENESS OR PERFORMANCE.
  * $/LicenseInfo$
  */
-
+//reverted
 #include "linden_common.h"
 #include "llworkerthread.h"
 #include "llstl.h"

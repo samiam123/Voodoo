@@ -28,7 +28,7 @@
  * COMPLETENESS OR PERFORMANCE.
  * $/LicenseInfo$
  */
-
+//reverted
 #include "linden_common.h"
 #include "llapr.h"
 
@@ -147,7 +147,7 @@ void LLThread::shutdown()
 			// First, set the flag that indicates that we're ready to die
 			setQuitting();
 
-			//llinfos << "LLThread::shutdown() Killing thread " << mName << " Status: " << mStatus << llendl;
+			llinfos << "LLThread::shutdown() Killing thread " << mName << " Status: " << mStatus << llendl;
 			// Now wait a bit for the thread to exit
 			// It's unclear whether I should even bother doing this - this destructor
 			// should netver get called unless we're already stopped, really...
@@ -188,7 +188,8 @@ void LLThread::start()
 	// Set thread state to running
 	mStatus = RUNNING;
 
-	apr_status_t status = apr_thread_create(&mAPRThreadp, NULL, staticRun, (void *)this, tldata().mRootPool());
+	apr_status_t status =
+		apr_thread_create(&mAPRThreadp, NULL, staticRun, (void *)this, tldata().mRootPool());
 
 	if(status == APR_SUCCESS)
 	{	
@@ -213,8 +214,7 @@ void LLThread::pause()
 	if (!mPaused)
 	{
 		// this will cause the thread to stop execution as soon as checkPause() is called
-		//mPaused = 1;		// Does not need to be atomic since this is only set/unset from the main thread
-		mPaused = true;
+		mPaused = 1;		// Does not need to be atomic since this is only set/unset from the main thread
 	}	
 }
 
@@ -222,8 +222,7 @@ void LLThread::unpause()
 {
 	if (mPaused)
 	{
-		//mPaused = 0;
-		mPaused = false;
+		mPaused = 0;
 	}
 
 	wake(); // wake up the thread if necessary
@@ -303,10 +302,7 @@ void LLThread::wakeLocked()
 #ifdef SHOW_ASSERT
 // This allows the use of llassert(is_main_thread()) to assure the current thread is the main thread.
 static apr_os_thread_t main_thread_id;
-LL_COMMON_API bool is_main_thread() 
- { 
-  return apr_os_thread_equal(main_thread_id, apr_os_thread_current());
- }
+LL_COMMON_API bool is_main_thread() { return apr_os_thread_equal(main_thread_id, apr_os_thread_current()); }
 #endif
 
 // The thread private handle to access the AIThreadLocalData instance.
@@ -358,9 +354,7 @@ void AIThreadLocalData::create(LLThread* threadp)
 AIThreadLocalData& AIThreadLocalData::tldata(void)
 {
 	if (!sThreadLocalDataKey)
-	{
 		AIThreadLocalData::init();
-    }
 
 	void* data;
 	apr_status_t status = apr_threadkey_private_get(&data, sThreadLocalDataKey);
@@ -368,7 +362,7 @@ AIThreadLocalData& AIThreadLocalData::tldata(void)
 	return *static_cast<AIThreadLocalData*>(data);
 }
 
- //============================================================================
+//============================================================================
 
 void LLMutexBase::lock() 
 { 
@@ -464,46 +458,7 @@ void LLCondition::broadcast()
 }
 
 //============================================================================
-// added  this block but we have something like this above sams voodoo
-/* LLMutexBase::LLMutexBase() :
-	mLockingThread(NO_THREAD),
-	mCount(0)
-{
-}
 
-void LLMutexBase::lock() 
-{ 
-#if LL_DARWIN
-	if (mLockingThread == LLThread::currentID())
-#else
-	if (mLockingThread == local_thread_ID)
-#endif
-	{ //redundant lock
-		mCount++;
-		return;
-	}
-
-	apr_thread_mutex_lock(mAPRMutexp); 
-
-#if LL_DARWIN
-	mLockingThread = LLThread::currentID();
-#else
-	mLockingThread = local_thread_ID;
-#endif
-}
-
-void LLMutexBase::unlock() 
-{ 
-	if (mCount > 0)
-	{ //not the root unlock
-		mCount--;
-		return;
-	}
-	mLockingThread = NO_THREAD;
-
-	apr_thread_mutex_unlock(mAPRMutexp); 
-}
-*/
 //----------------------------------------------------------------------------
 
 //static

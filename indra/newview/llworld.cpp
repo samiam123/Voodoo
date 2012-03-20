@@ -75,18 +75,10 @@ U32			gAgentPauseSerialNum = 0;
 //
 const S32 MAX_NUMBER_OF_CLOUDS	= 750;
 const S32 WORLD_PATCH_SIZE = 16;
-
 extern LLColor4U MAX_WATER_COLOR;
-
-
-
 U32 LLWorld::mWidth = 256;
-
 // meters/point, therefore mWidth * mScale = meters per edge
 const F32 LLWorld::mScale = 1.f;
-
-
-
 F32 LLWorld::mWidthInMeters = mWidth * mScale;
 
 //
@@ -137,23 +129,12 @@ void LLWorld::destroyClass()
 	}
 	//if(LLVOCache::hasInstance())
 
-
-
-
 	//{
 	//	LLVOCache::getInstance()->destroyClass() ;
 
 	//}
 	//LLViewerPartSim::getInstance()->destroyClass();
 }
-
-
-
-
-
-
-
-
 
 LLViewerRegion* LLWorld::addRegion(const U64 &region_handle, const LLHost &host, const U32 &region_size_x, const U32 &region_size_y)
 {
@@ -195,8 +176,6 @@ LLViewerRegion* LLWorld::addRegion(const U64 &region_handle, const LLHost &host,
 	from_region_handle(region_handle, &iindex, &jindex);
 	S32 x = (S32)(iindex/256);
 	S32 y = (S32)(jindex/256);
-
-
 
 	llinfos << "Adding new region (" << x << ":" << y << ")" << llendl;
 	llinfos << "Host: " << host << llendl;
@@ -413,13 +392,6 @@ LLVector3d	LLWorld::clipToVisibleRegions(const LLVector3d &start_pos, const LLVe
 
 	// clamp to within region dimensions
 	LLVector3d final_region_pos = LLVector3d(region_coord) - (delta_pos * clip_factor);
-
-
-
-
-
-
-
 
 	final_region_pos.mdV[VX] = llclamp(final_region_pos.mdV[VX], 0.0,
 									   (F64)(region_width - F_ALMOST_ZERO));
@@ -861,8 +833,6 @@ F32 LLWorld::getLandFarClip() const
 
 void LLWorld::setLandFarClip(const F32 far_clip)
 {
-
-
 	static S32 const rwidth = (S32)getRegionWidthInMeters();
 	S32 const n1 = (llceil(mLandFarClip) - 1) / rwidth;
 	S32 const n2 = (llceil(far_clip) - 1) / rwidth;
@@ -1313,13 +1283,6 @@ void process_enable_simulator(LLMessageSystem *msg, void **user_data)
 	LLWorld::getInstance()->addRegion(handle, sim, region_size_x, region_size_y);
 
 	// give the simulator a message it can use to get ip and port
-
-
-
-
-
-
-
 	llinfos << "simulator_enable() Enabling " << sim << " with code " << msg->getOurCircuitCode() << llendl;
 
 	msg->newMessageFast(_PREHASH_UseCircuitCode);
@@ -1426,7 +1389,6 @@ void send_agent_pause()
 	gObjectList.mWasPaused = TRUE;
 }
 
-
 void send_agent_resume()
 {
 	// Note: used to check for LLWorld initialization before it became a singleton.
@@ -1441,11 +1403,9 @@ void send_agent_resume()
 	gMessageSystem->nextBlockFast(_PREHASH_AgentData);
 	gMessageSystem->addUUIDFast(_PREHASH_AgentID, gAgentID);
 	gMessageSystem->addUUIDFast(_PREHASH_SessionID, gAgentSessionID);
-
 	gAgentPauseSerialNum++;
 	gMessageSystem->addU32Fast(_PREHASH_SerialNum, gAgentPauseSerialNum);
 	
-
 	for (LLWorld::region_list_t::const_iterator iter = LLWorld::getInstance()->getRegionList().begin();
 		 iter != LLWorld::getInstance()->getRegionList().end(); ++iter)
 	{
@@ -1463,26 +1423,13 @@ static LLVector3d unpackLocalToGlobalPosition(U32 compact_local, const LLVector3
 {
     LLVector3d pos_global(region_origin);
     LLVector3d pos_local;
-
-
     pos_local.mdV[VZ] = (compact_local & 0xFFU) * 4;
     pos_local.mdV[VY] = (compact_local >> 8) & 0xFFU;
     pos_local.mdV[VX] = (compact_local >> 16) & 0xFFU;
-
-
-
-
-
-
-
-
     pos_global += pos_local;
-
-
-
-
-
-    return pos_global;
+	// comment out one line below add in one after should help with tps sams voodoo test
+    //return pos_global;
+	return region_origin + pos_local;
 }
 
 void LLWorld::getAvatars(std::vector<LLUUID>* avatar_ids, std::vector<LLVector3d>* positions, const LLVector3d& relative_to, F32 radius) const
