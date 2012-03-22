@@ -63,7 +63,7 @@
 // [RLVa:KB]
 #include "rlvhandler.h"
 // [/RLVa:KB]
-
+#include "hippogridmanager.h"
 /**
  * @brief How long to keep people who are gone in the list and in memory.
  */
@@ -237,6 +237,16 @@ void LLFloaterAvatarList::createInstance(bool visible)
 	{
 		sInstance->setVisible(FALSE);
 		gSavedSettings.setBOOL("ShowRadar", FALSE);
+	}
+	if(gHippoGridManager->getConnectedGrid()->isSecondLife()){
+LLScrollListCtrl* list = sInstance->getChild<LLScrollListCtrl>("avatar_list");
+list->getColumn(1)->setWidth(0);
+list->getColumn(6)->setWidth(0);
+list->getColumn(6)->mDynamicWidth = FALSE;
+list->getColumn(6)->mRelWidth = 0;
+list->getColumn(1)->mDynamicWidth = TRUE;
+list->getColumn(1)->mRelWidth = -1;
+list->updateLayout();
 	}
 }
 //static
